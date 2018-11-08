@@ -1,3 +1,5 @@
 rootProject.name = 'spring-biz-module'
 include 'win-security'
+include 'example'
+
 

@@ -1,1 +1,6 @@
+description = 'win-security'
+//
+//apply plugin: 'war'
+//apply plugin: 'org.springframework.boot'
+//
 
