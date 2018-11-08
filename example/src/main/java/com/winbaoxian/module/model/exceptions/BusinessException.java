@@ -1,7 +1,7 @@
 package com.winbaoxian.module.model.exceptions;
 
 
-import com.winbaoxian.broker.model.enums.BusinessErrorEnum;
+import com.winbaoxian.module.model.enums.BusinessErrorEnum;
 
 /**
  * @Author DongXL
@@ -17,8 +17,5 @@ public class BusinessException extends RuntimeException {
         super(businessError.getMessage());
     }
 
-    public BusinessException(BusinessErrorEnum businessError, Object... args) {
-        super(String.format(businessError.getMessage(), args));
-    }
 
 }

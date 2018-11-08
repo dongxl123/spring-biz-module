@@ -23,7 +23,7 @@ public class LogAspect {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Around("execution(* com.winbaoxian.module.controller.*.*(..)) && (@annotation(org.springframework.web.bind.annotation.RequestMapping) || @annotation(org.springframework.web.bind.annotation.GetMapping) ||@annotation(org.springframework.web.bind.annotation.PutMapping)||@annotation(org.springframework.web.bind.annotation.PostMapping)||@annotation(org.springframework.web.bind.annotation.DeleteMapping))")
+    @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping) || @annotation(org.springframework.web.bind.annotation.GetMapping) ||@annotation(org.springframework.web.bind.annotation.PutMapping)||@annotation(org.springframework.web.bind.annotation.PostMapping)||@annotation(org.springframework.web.bind.annotation.DeleteMapping)")
     public Object frontIntegrationLog(ProceedingJoinPoint jp) throws Throwable {
         long startTime = System.currentTimeMillis();
         StringBuilder sb = new StringBuilder();

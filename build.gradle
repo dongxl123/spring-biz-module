@@ -1,11 +1,21 @@
 allprojects {
     apply plugin: 'maven'
-    group = 'com.winbaoxian'
+    group = 'com.winbaoxian.module'
     version = '1.0.0'
 }
 
 subprojects {
-
+    buildscript {
+        ext {
+            springBootVersion = '1.5.17.RELEASE'
+        }
+        repositories {
+            mavenCentral()
+        }
+        dependencies {
+            classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        }
+    }
     apply plugin: 'java'
     apply plugin: 'idea'
     sourceCompatibility = 1.8
@@ -18,8 +28,10 @@ subprojects {
     }
 
     dependencies {
-        compile('com.winbaoxian:bxs-service-model:1.0a-SNAPSHOT')
-        compileOnly('org.projectlombok:lombok')
+        compile('org.apache.commons:commons-lang3:3.7')
+        compileOnly('org.mapstruct:mapstruct-jdk8:1.2.0.Final')
+        compileOnly('org.mapstruct:mapstruct-processor:1.2.0.Final')
+        compileOnly('org.projectlombok:lombok:1.16.22')
     }
 
     task "create-dirs" << {

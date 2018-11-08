@@ -25,3 +25,6 @@ spring:
       testOnBorrow: false
       testOnReturn: false
       poolPreparedStatements: false
+logging:
+  level:
+    com.winbaoxian: debug
