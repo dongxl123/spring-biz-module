@@ -19,7 +19,7 @@ public class ResourceController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/resource 增加资源
+     * @api {POST} /api/winSecurity/v1/resource 新增资源
      * @apiGroup resource
      * @apiName addResource
      * @apiParam (请求体) {String} name 名称

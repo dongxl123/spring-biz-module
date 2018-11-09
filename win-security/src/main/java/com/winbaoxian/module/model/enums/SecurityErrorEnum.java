@@ -6,8 +6,10 @@ package com.winbaoxian.module.model.enums;
  */
 public enum SecurityErrorEnum {
 
-    COMMON_DATA_EXISTS("数据已存在"),
-    COMMON_DATA_NOT_EXISTS("数据不存在"),
+    COMMON_RESOURCE_NOT_EXISTS("资源不存在"),
+    COMMON_USER_EXISTS("用户已存在"),
+    COMMON_USER_NOT_EXISTS("用户不存在"),
+    COMMON_ROLE_NOT_EXISTS("角色不存在"),
     ;
 
     private String message;

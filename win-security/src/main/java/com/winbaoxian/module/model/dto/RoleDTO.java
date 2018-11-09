@@ -14,6 +14,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 角色(SECURITY_ROLE)
@@ -47,7 +48,7 @@ public class RoleDTO implements Serializable {
     /** 状态, 0:禁用 , 1:启用, 2:全部放行 */
     private Integer status;
 
-    /**  */
-    private Boolean deleted;
+    /** 关联的资源 */
+    private List<Long> resourceIdList;
 
 }

@@ -8,6 +8,7 @@ import com.winbaoxian.module.model.enums.SecurityErrorEnum;
 import com.winbaoxian.module.model.exceptions.SecurityException;
 import com.winbaoxian.module.model.mapper.ResourceMapper;
 import com.winbaoxian.module.repository.ResourceRepository;
+import com.winbaoxian.module.utils.BeanMergeUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class ResourceService {
     public void deleteResource(Long id) {
         ResourceEntity entity = resourceRepository.findOne(id);
         if (entity == null) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_DATA_NOT_EXISTS);
+            throw new SecurityException(SecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
         entity.setDeleted(Boolean.TRUE);
         resourceRepository.save(entity);
@@ -40,12 +41,12 @@ public class ResourceService {
 
     @Transactional
     public ResourceDTO updateResource(Long id, ResourceDTO dto) {
-        if (!resourceRepository.exists(id)) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_DATA_NOT_EXISTS);
+        ResourceEntity persistent = resourceRepository.findOne(id);
+        if (persistent == null) {
+            throw new SecurityException(SecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
-        ResourceEntity entity = ResourceMapper.INSTANCE.toResourceEntity(dto);
-        entity.setId(id);
-        return ResourceMapper.INSTANCE.toResourceDTO(resourceRepository.save(entity));
+        BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
+        return ResourceMapper.INSTANCE.toResourceDTO(resourceRepository.save(persistent));
     }
 
     public ResourceDTO getResource(Long id) {

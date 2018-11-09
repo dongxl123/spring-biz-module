@@ -1,10 +1,10 @@
 package com.winbaoxian.module.model.dto;/*
  * Welcome to use the TableGo Tools.
- * 
+ *
  * http://vipbooks.iteye.com
  * http://blog.csdn.net/vipbooks
  * http://www.cnblogs.com/vipbooks
- * 
+ *
  * Author:dongxuanliang252
  * Email:edinsker@163.com
  * Version:5.0.0
@@ -14,10 +14,11 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户(SECURITY_USER)
- * 
+ *
  * @author dongxuanliang252
  * @version 1.0.0 2018-11-08
  */
@@ -47,7 +48,7 @@ public class UserDTO implements Serializable {
     /** 用户状态，, 0:禁用 , 1:启用, 2:全部放行 */
     private Integer status;
 
-    /**  */
-    private Boolean deleted;
+    /** 关联的权限 */
+    private List<Long> roleIdList;
 
 }

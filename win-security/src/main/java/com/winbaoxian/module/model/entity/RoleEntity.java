@@ -15,8 +15,11 @@ import java.util.Date;
 import javax.persistence.*;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 /**
  * 角色(SECURITY_ROLE)
@@ -41,10 +44,12 @@ public class RoleEntity implements Serializable {
 
     /** 创建时间 */
     @Column(name = "CREATE_TIME")
+    @CreationTimestamp
     private Date createTime;
 
     /** 更新时间 */
     @Column(name = "UPDATE_TIME")
+    @UpdateTimestamp
     private Date updateTime;
 
     /** 角色名 */

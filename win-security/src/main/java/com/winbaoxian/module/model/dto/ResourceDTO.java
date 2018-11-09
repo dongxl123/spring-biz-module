@@ -65,7 +65,5 @@ public class ResourceDTO implements Serializable {
     /** 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量 */
     private Integer resourceType;
 
-    /**  */
-    private Boolean deleted;
 
 }

@@ -10,10 +10,7 @@ package com.winbaoxian.module.model.entity;/*
  * Version:5.0.0
  */
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
@@ -30,7 +27,7 @@ import java.io.Serializable;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "RESOURCE")
+@Table(name = "ROLE_RESOURCE")
 @Data
 public class RoleResourceEntity implements Serializable {
     /** 版本号 */
@@ -38,6 +35,7 @@ public class RoleResourceEntity implements Serializable {
 
     /** 主键id */
     @Id
+    @GeneratedValue
     @Column(name = "ID")
     private Long id;
 

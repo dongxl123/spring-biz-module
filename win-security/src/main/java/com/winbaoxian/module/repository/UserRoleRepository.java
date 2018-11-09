@@ -1,7 +1,13 @@
 package com.winbaoxian.module.repository;
 
-import com.winbaoxian.module.model.entity.ResourceEntity;
+import com.winbaoxian.module.model.entity.UserRoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRoleRepository extends JpaRepository<ResourceEntity, Long> {
+import java.util.List;
+
+public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Long> {
+
+    void deleteByUserId(Long userId);
+
+    List<UserRoleEntity> findByUserId(Long userId);
 }
