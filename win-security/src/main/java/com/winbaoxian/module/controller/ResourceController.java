@@ -161,41 +161,4 @@ public class ResourceController {
         return JsonResult.createSuccessResult(resourceList);
     }
 
-    /**
-     * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/resource/p 获取资源分页数据
-     * @apiGroup resource
-     * @apiName getResourceP
-     * @apiParam (请求参数) {Number} pageNum 第几页
-     * @apiParam (请求参数) {Number} pageSize 每页数量
-     * @apiParamExample 请求参数示例
-     * ?pageNum=1&pageSize=2
-     * @apiSuccess (响应参数) {Number} pageNum 第几页
-     * @apiSuccess (响应参数) {Number} pageSize 每页数量
-     * @apiSuccess (响应参数) {Number} totalRow 总数据量
-     * @apiSuccess (响应参数) {Number} totalPage 总页数
-     * @apiSuccess (响应参数) {Array} list 列表
-     * @apiSuccess (响应参数) {Number} list.id 主键
-     * @apiSuccess (响应参数) {Number} list.createTime 创建时间
-     * @apiSuccess (响应参数) {Number} list.updateTime 更新时间
-     * @apiSuccess (响应参数) {String} list.name 名称
-     * @apiSuccess (响应参数) {String} list.code 编码
-     * @apiSuccess (响应参数) {String} list.globalCode 全局唯一编码
-     * @apiSuccess (响应参数) {String} list.value 值
-     * @apiSuccess (响应参数) {String} list.description 描述
-     * @apiSuccess (响应参数) {String} list.icon 图标
-     * @apiSuccess (响应参数) {Number} list.pid 上级父ID
-     * @apiSuccess (响应参数) {Number} list.seq 排序
-     * @apiSuccess (响应参数) {Number} list.status 状态，0：失效  1：有效
-     * @apiSuccess (响应参数) {Number} list.resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
-     * @apiSuccess (响应参数) {Number} startRow 本页起始行
-     * @apiSuccessExample 响应示例
-     * {"code":200,"msg":null,"data":{"pageNum":1,"pageSize":2,"totalRow":32,"totalPage":16,"orderProperty":null,"orderDirection":null,"list":[{"id":1,"createTime":1392742800000,"updateTime":1541642350000,"name":"权限管理","code":"","globalCode":"","value":"/resource/treeGrid","description":"系统管理","icon":"glyphicon-folder-open ","pid":11,"seq":0,"status":0,"resourceType":1,"deleted":false},{"id":111,"createTime":1392742800000,"updateTime":1541642350000,"name":"列表","code":"","globalCode":"","value":"/resource/treeGrid","description":"资源列表","icon":"glyphicon-list ","pid":11,"seq":0,"status":0,"resourceType":1,"deleted":false}],"startRow":0}}
-     */
-    @GetMapping(value = "/resource/p")
-    public JsonResult<PaginationDTO<ResourceDTO>> getResourcePage(Pagination pagination) {
-        PaginationDTO<ResourceDTO> paginationDTO = resourceService.getResourcePage(pagination);
-        return JsonResult.createSuccessResult(paginationDTO);
-    }
-
 }
