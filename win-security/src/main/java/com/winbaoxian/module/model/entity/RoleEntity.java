@@ -62,7 +62,7 @@ public class RoleEntity implements Serializable {
 
     /** 排序号 */
     @Column(name = "SEQ")
-    private Integer seq;
+    private Long seq;
 
     /** 状态, 0:禁用 , 1:启用, 2:全部放行 */
     @Column(name = "STATUS")

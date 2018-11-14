@@ -27,10 +27,9 @@ spring:
       testOnBorrow: false
       testOnReturn: false
       poolPreparedStatements: false
-logging:
-  level:
+logging: 
     com.winbaoxian: debug
 security:
-  userClass:
-    dto: com.winbaoxian.module.model.dto.SecurityUserDTO
-    entity: com.winbaoxian.module.model.entity.citymanager.SecurityUserEntity
+  class:
+    userDTO: com.winbaoxian.module.model.dto.SecurityUserDTO
+    userEntity: com.winbaoxian.module.model.entity.citymanager.SecurityUserEntity

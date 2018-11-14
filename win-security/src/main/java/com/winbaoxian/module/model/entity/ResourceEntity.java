@@ -81,7 +81,7 @@ public class ResourceEntity implements Serializable {
 
     /** 排序 */
     @Column(name = "SEQ")
-    private Integer seq;
+    private Long seq;
 
     /** 状态，0：失效  1：有效 */
     @Column(name = "STATUS")

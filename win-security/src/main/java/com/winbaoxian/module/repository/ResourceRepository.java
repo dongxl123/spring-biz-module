@@ -11,8 +11,10 @@ public interface ResourceRepository extends JpaRepository<ResourceEntity, Long> 
 
     List<ResourceEntity> findAllByDeletedFalseOrderBySeqAsc();
 
-    int countByDeletedFalse();
-
     Page<ResourceEntity> findAllByDeletedFalseOrderBySeqAsc(Pageable pageable);
+
+    boolean existsByCodeAndPidAndDeletedFalse(String code, Long pid);
+
+    boolean existsByCodeAndPidAndIdNotAndDeletedFalse(String code, Long pid, Long Id);
 
 }

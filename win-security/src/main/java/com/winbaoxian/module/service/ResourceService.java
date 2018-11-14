@@ -25,8 +25,12 @@ public class ResourceService {
 
     @Transactional
     public ResourceDTO addResource(ResourceDTO dto) {
+
         ResourceEntity entity = ResourceMapper.INSTANCE.toResourceEntity(dto);
-        return ResourceMapper.INSTANCE.toResourceDTO(resourceRepository.save(entity));
+        resourceRepository.save(entity);
+        entity.setSeq(entity.getId());
+        resourceRepository.save(entity);
+        return getResource(entity.getId());
     }
 
     @Transactional
@@ -46,7 +50,8 @@ public class ResourceService {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
-        return ResourceMapper.INSTANCE.toResourceDTO(resourceRepository.save(persistent));
+        resourceRepository.save(persistent);
+        return getResource(id);
     }
 
     public ResourceDTO getResource(Long id) {

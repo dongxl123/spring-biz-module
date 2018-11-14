@@ -37,6 +37,8 @@ public class RoleService {
             List<RoleResourceEntity> roleResourceEntityList = trans2RoleResourceEntityList(entity.getId(), dto.getResourceIdList());
             roleResourceRepository.save(roleResourceEntityList);
         }
+        entity.setSeq(entity.getId());
+        roleRepository.save(entity);
         return getRole(entity.getId());
     }
 
