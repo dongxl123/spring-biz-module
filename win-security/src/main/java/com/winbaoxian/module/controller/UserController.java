@@ -1,21 +1,30 @@
 package com.winbaoxian.module.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.winbaoxian.module.config.UserConfiguration;
 import com.winbaoxian.module.model.common.JsonResult;
 import com.winbaoxian.module.model.common.Pagination;
 import com.winbaoxian.module.model.common.PaginationDTO;
-import com.winbaoxian.module.model.dto.UserDTO;
+import com.winbaoxian.module.model.dto.BaseUserDTO;
+import com.winbaoxian.module.model.entity.BaseUserEntity;
 import com.winbaoxian.module.service.UserService;
+import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Type;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/winSecurity/v1/")
-public class UserController {
+public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
 
     @Resource
-    private UserService userService;
+    private UserService<D, E> userService;
+    @Resource
+    private UserConfiguration userConfiguration;
+
 
     /**
      * @apiVersion 1.0.0
@@ -41,8 +50,9 @@ public class UserController {
      * {"code":200,"msg":null,"data":{"id":16,"createTime":null,"updateTime":null,"userName":"admin1","name":"admin","mobile":"18707173376","status":0,"roleIdList":[1,2]}}
      */
     @PostMapping(value = "/user")
-    public JsonResult<UserDTO> addUser(@RequestBody UserDTO dto) {
-        UserDTO UserDTO = userService.addUser(dto);
+    public JsonResult<D> addUser(@RequestBody String dtoStr) {
+        D dto = JSON.parseObject(dtoStr, (Type) userConfiguration.getUserDTOClass());
+        D UserDTO = userService.addUser(dto);
         return JsonResult.createSuccessResult(UserDTO);
     }
 
@@ -86,8 +96,9 @@ public class UserController {
      * {"code":200,"msg":null,"data":{"id":16,"createTime":1541743881000,"updateTime":1541744132000,"userName":"admin1","name":"admin","mobile":"18707173372","status":0,"roleIdList":[2,3]}}
      */
     @PutMapping(value = "/user/{id}")
-    public JsonResult<UserDTO> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO dto) {
-        UserDTO UserDTO = userService.updateUser(id, dto);
+    public JsonResult<D> updateUser(@PathVariable("id") Long id, @RequestBody String dtoStr) {
+        D dto =   JSON.parseObject(dtoStr, (Type) userConfiguration.getUserDTOClass());
+        D UserDTO = userService.updateUser(id, dto);
         return JsonResult.createSuccessResult(UserDTO);
     }
 
@@ -109,8 +120,8 @@ public class UserController {
      * {"code":200,"msg":null,"data":{"id":16,"createTime":1541743881000,"updateTime":1541744132000,"userName":"admin1","name":"admin","mobile":"18707173372","status":0,"roleIdList":[2,3]}}
      */
     @GetMapping(value = "/user/{id}")
-    public JsonResult<UserDTO> getUser(@PathVariable("id") Long id) {
-        UserDTO UserDTO = userService.getUser(id);
+    public JsonResult<D> getUser(@PathVariable("id") Long id) {
+        D UserDTO = userService.getUser(id);
         return JsonResult.createSuccessResult(UserDTO);
     }
 
@@ -131,8 +142,8 @@ public class UserController {
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1449378845000,"updateTime":1541642528000,"userName":"admin","name":"admin","mobile":"18707173376","status":0,"roleIdList":null},{"id":13,"createTime":1443676327000,"updateTime":1541642528000,"userName":"snoopy","name":"snoopy","mobile":"18707173376","status":0}]}
      */
     @GetMapping(value = "/user")
-    public JsonResult<List<UserDTO>> getUserList() {
-        List<UserDTO> UserList = userService.getUserList();
+    public JsonResult<List<D>> getUserList() {
+        List<D> UserList = userService.getUserList();
         return JsonResult.createSuccessResult(UserList);
     }
 
@@ -165,8 +176,8 @@ public class UserController {
      * {"code":200,"msg":null,"data":{"pageNum":1,"pageSize":2,"totalRow":4,"totalPage":2,"orderProperty":null,"orderDirection":null,"list":[{"id":1,"createTime":1449378845000,"updateTime":1541642528000,"userName":"admin","name":"admin","mobile":"18707173376","status":0,"roleIdList":null},{"id":13,"createTime":1443676327000,"updateTime":1541642528000,"userName":"snoopy","name":"snoopy","mobile":"18707173376","status":0}],"startRow":0}}
      */
     @GetMapping(value = "/user/p")
-    public JsonResult<PaginationDTO<UserDTO>> getUserPage(Pagination pagination) {
-        PaginationDTO<UserDTO> paginationDTO = userService.getUserPage(pagination);
+    public JsonResult<PaginationDTO<D>> getUserPage(Pagination pagination) {
+        PaginationDTO<D> paginationDTO = userService.getUserPage(pagination);
         return JsonResult.createSuccessResult(paginationDTO);
     }
 }

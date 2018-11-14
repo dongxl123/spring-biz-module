@@ -3,20 +3,15 @@ package com.winbaoxian.module.service;
 import com.winbaoxian.module.model.common.Pagination;
 import com.winbaoxian.module.model.common.PaginationDTO;
 import com.winbaoxian.module.model.dto.RoleDTO;
-import com.winbaoxian.module.model.dto.UserDTO;
 import com.winbaoxian.module.model.entity.RoleEntity;
 import com.winbaoxian.module.model.entity.RoleResourceEntity;
-import com.winbaoxian.module.model.entity.UserEntity;
-import com.winbaoxian.module.model.entity.UserRoleEntity;
-import com.winbaoxian.module.model.enums.SecurityErrorEnum;
-import com.winbaoxian.module.model.exceptions.SecurityException;
+import com.winbaoxian.module.model.enums.WinSecurityErrorEnum;
+import com.winbaoxian.module.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.model.mapper.RoleMapper;
-import com.winbaoxian.module.model.mapper.UserMapper;
 import com.winbaoxian.module.repository.RoleRepository;
 import com.winbaoxian.module.repository.RoleResourceRepository;
 import com.winbaoxian.module.utils.BeanMergeUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,7 +44,7 @@ public class RoleService {
     public void deleteRole(Long id) {
         RoleEntity entity = roleRepository.findOne(id);
         if (entity == null) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
         }
         entity.setDeleted(Boolean.TRUE);
         roleRepository.save(entity);
@@ -59,7 +54,7 @@ public class RoleService {
     public RoleDTO updateRole(Long id, RoleDTO dto) {
         RoleEntity persistent = roleRepository.findOne(id);
         if (persistent == null) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
         }
         //更新数据
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);

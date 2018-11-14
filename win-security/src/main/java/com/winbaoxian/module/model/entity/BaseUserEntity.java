@@ -1,10 +1,10 @@
 package com.winbaoxian.module.model.entity;/*
  * Welcome to use the TableGo Tools.
- * 
+ *
  * http://vipbooks.iteye.com
  * http://blog.csdn.net/vipbooks
  * http://www.cnblogs.com/vipbooks
- * 
+ *
  * Author:dongxuanliang252
  * Email:edinsker@163.com
  * Version:5.0.0
@@ -13,16 +13,16 @@ package com.winbaoxian.module.model.entity;/*
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
+import org.springframework.objenesis.instantiator.annotations.Instantiator;
 
 /**
  * 用户(SECURITY_USER)
- * 
+ *
  * @author dongxuanliang252
  * @version 1.0.0 2018-11-08
  */
@@ -31,39 +31,55 @@ import org.hibernate.annotations.UpdateTimestamp;
 @DynamicUpdate
 @Table(name = "USER")
 @Data
-public class UserEntity implements Serializable {
-    /** 版本号 */
+public class BaseUserEntity implements Serializable {
+    /**
+     * 版本号
+     */
     private static final long serialVersionUID = -9002339217989625310L;
 
-    /** 主键id */
+    /**
+     * 主键id
+     */
     @Id
     @GeneratedValue
     @Column(name = "ID")
     private Long id;
 
-    /** 创建时间 */
+    /**
+     * 创建时间
+     */
     @Column(name = "CREATE_TIME")
     @CreationTimestamp
     private Date createTime;
 
-    /** 更新时间 */
+    /**
+     * 更新时间
+     */
     @Column(name = "UPDATE_TIME")
     @UpdateTimestamp
     private Date updateTime;
 
-    /** 登陆名 */
+    /**
+     * 登陆名
+     */
     @Column(name = "USER_NAME")
     private String userName;
 
-    /** 用户名 */
+    /**
+     * 用户名
+     */
     @Column(name = "NAME")
     private String name;
 
-    /** 手机号 */
+    /**
+     * 手机号
+     */
     @Column(name = "MOBILE")
     private String mobile;
 
-    /** 用户状态，, 0:禁用 , 1:启用, 2:全部放行 */
+    /**
+     * 用户状态，, 0:禁用 , 1:启用, 2:全部放行
+     */
     @Column(name = "STATUS")
     private Integer status;
 

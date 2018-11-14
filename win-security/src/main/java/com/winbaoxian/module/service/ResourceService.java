@@ -4,8 +4,8 @@ import com.winbaoxian.module.model.common.Pagination;
 import com.winbaoxian.module.model.common.PaginationDTO;
 import com.winbaoxian.module.model.dto.ResourceDTO;
 import com.winbaoxian.module.model.entity.ResourceEntity;
-import com.winbaoxian.module.model.enums.SecurityErrorEnum;
-import com.winbaoxian.module.model.exceptions.SecurityException;
+import com.winbaoxian.module.model.enums.WinSecurityErrorEnum;
+import com.winbaoxian.module.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.model.mapper.ResourceMapper;
 import com.winbaoxian.module.repository.ResourceRepository;
 import com.winbaoxian.module.utils.BeanMergeUtils;
@@ -33,7 +33,7 @@ public class ResourceService {
     public void deleteResource(Long id) {
         ResourceEntity entity = resourceRepository.findOne(id);
         if (entity == null) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
         entity.setDeleted(Boolean.TRUE);
         resourceRepository.save(entity);
@@ -43,7 +43,7 @@ public class ResourceService {
     public ResourceDTO updateResource(Long id, ResourceDTO dto) {
         ResourceEntity persistent = resourceRepository.findOne(id);
         if (persistent == null) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
         return ResourceMapper.INSTANCE.toResourceDTO(resourceRepository.save(persistent));

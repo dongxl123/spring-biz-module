@@ -1,12 +1,13 @@
 package com.winbaoxian.module.service;
 
+import com.winbaoxian.module.config.UserConfiguration;
 import com.winbaoxian.module.model.common.Pagination;
 import com.winbaoxian.module.model.common.PaginationDTO;
-import com.winbaoxian.module.model.dto.UserDTO;
-import com.winbaoxian.module.model.entity.UserEntity;
+import com.winbaoxian.module.model.dto.BaseUserDTO;
+import com.winbaoxian.module.model.entity.BaseUserEntity;
 import com.winbaoxian.module.model.entity.UserRoleEntity;
-import com.winbaoxian.module.model.enums.SecurityErrorEnum;
-import com.winbaoxian.module.model.exceptions.SecurityException;
+import com.winbaoxian.module.model.enums.WinSecurityErrorEnum;
+import com.winbaoxian.module.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.model.mapper.UserMapper;
 import com.winbaoxian.module.repository.UserRepository;
 import com.winbaoxian.module.repository.UserRoleRepository;
@@ -23,18 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService<D extends BaseUserDTO, E extends BaseUserEntity> {
 
     @Resource
-    private UserRepository userRepository;
+    private UserRepository<E> userRepository;
     @Resource
     private UserRoleRepository userRoleRepository;
+    @Resource
+    private UserConfiguration userConfiguration;
 
-    public UserDTO addUser(UserDTO dto) {
+    public D addUser(D dto) {
         if (userRepository.existsByUserNameAndDeletedFalse(dto.getUserName())) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_USER_EXISTS);
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
-        UserEntity entity = UserMapper.INSTANCE.toUserEntity(dto);
+        E entity = (E) UserMapper.INSTANCE.toUserEntity(dto, userConfiguration.getUserEntityClass());
         userRepository.save(entity);
         //角色
         if (CollectionUtils.isNotEmpty(dto.getRoleIdList())) {
@@ -46,23 +49,23 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long id) {
-        UserEntity entity = userRepository.findOne(id);
+        E entity = userRepository.findOne(id);
         if (entity == null) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_USER_NOT_EXISTS);
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
         entity.setDeleted(Boolean.TRUE);
         userRepository.save(entity);
     }
 
     @Transactional
-    public UserDTO updateUser(Long id, UserDTO dto) {
-        UserEntity persistent = userRepository.findOne(id);
+    public D updateUser(Long id, D dto) {
+        E persistent = userRepository.findOne(id);
         if (persistent == null) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_USER_NOT_EXISTS);
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
         //登录名更新时，判断是否重复
-        if (StringUtils.isNoneBlank(dto.getUserName()) && userRepository.existsByUserNameAndDeletedFalse(dto.getUserName())) {
-            throw new SecurityException(SecurityErrorEnum.COMMON_USER_EXISTS);
+        if (StringUtils.isNoneBlank(dto.getUserName()) && userRepository.existsByUserNameAndIdNotAndDeletedFalse(dto.getUserName(), id)) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
         //更新数据
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
@@ -76,22 +79,21 @@ public class UserService {
         return getUser(id);
     }
 
-    public UserDTO getUser(Long id) {
-        UserDTO userDTO = UserMapper.INSTANCE.toUserDTO(userRepository.findOne(id));
+    public D getUser(Long id) {
+        D userDTO = (D) UserMapper.INSTANCE.toUserDTO(userRepository.findOne(id), userConfiguration.getUserDTOClass());
         List<UserRoleEntity> userRoleEntityList = userRoleRepository.findByUserId(id);
         userDTO.setRoleIdList(trans2RoleIdList(userRoleEntityList));
         return userDTO;
     }
 
-    public List<UserDTO> getUserList() {
-        return UserMapper.INSTANCE.toUserDTOList(userRepository.findAllByDeletedFalse());
-
+    public List<D> getUserList() {
+        return UserMapper.INSTANCE.toUserDTOList(userRepository.findAllByDeletedFalse(), userConfiguration.getUserDTOClass());
     }
 
-    public PaginationDTO<UserDTO> getUserPage(Pagination pagination) {
+    public PaginationDTO<D> getUserPage(Pagination pagination) {
         Pageable pageable = Pagination.createPageable(pagination);
-        Page<UserEntity> page = userRepository.findAllByDeletedFalse(pageable);
-        return PaginationDTO.createNewInstance(page, UserDTO.class);
+        Page<E> page = userRepository.findAllByDeletedFalse(pageable);
+        return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, userConfiguration.getUserDTOClass());
     }
 
     private List<UserRoleEntity> trans2UserRoleEntityList(Long userId, List<Long> roleIdList) {

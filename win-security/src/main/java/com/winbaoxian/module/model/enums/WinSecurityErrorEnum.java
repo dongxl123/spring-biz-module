@@ -4,7 +4,7 @@ package com.winbaoxian.module.model.enums;
  * @Author DongXL
  * @Create 2018-03-26 15:01
  */
-public enum SecurityErrorEnum {
+public enum WinSecurityErrorEnum {
 
     COMMON_RESOURCE_NOT_EXISTS("资源不存在"),
     COMMON_USER_EXISTS("用户已存在"),
@@ -14,7 +14,7 @@ public enum SecurityErrorEnum {
 
     private String message;
 
-    SecurityErrorEnum(String message) {
+    WinSecurityErrorEnum(String message) {
         this.message = message;
     }
 

@@ -19,7 +19,7 @@ public class RoleController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/role 新增角色
+     * @api {POST} /api/winSecurity/v1/role 新增角色
      * @apiGroup role
      * @apiName addRole
      * @apiParam (请求体) {String} name 角色名称
