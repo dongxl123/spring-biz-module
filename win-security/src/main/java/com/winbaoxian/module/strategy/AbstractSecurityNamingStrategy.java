@@ -10,17 +10,18 @@ public abstract class AbstractSecurityNamingStrategy extends SpringPhysicalNamin
     public static final String[] SECURITY_TABLE_LIST = {"USER", "ROLE", "RESOURCE", "USER_ROLE", "ROLE_RESOURCE"};
 
     @Override
-    public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment context) {
+    public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment jdbcEnvironment) {
         String nameText = name.getText().toUpperCase();
         String tablePrefixText = tablePrefix();
         if (StringUtils.isNotBlank(tablePrefixText)) {
             for (String securityTableName : SECURITY_TABLE_LIST) {
                 if (securityTableName.equals(nameText)) {
-                    return new Identifier(tablePrefixText + "_" + name.getText(), name.isQuoted());
+                    Identifier newName = new Identifier(tablePrefixText + "_" + name.getText(), name.isQuoted());
+                    return super.toPhysicalTableName(newName, jdbcEnvironment);
                 }
             }
         }
-        return name;
+        return super.toPhysicalTableName(name, jdbcEnvironment);
     }
 
     public abstract String tablePrefix();
