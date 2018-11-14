@@ -78,7 +78,7 @@ public class BaseUserEntity implements Serializable {
     private String mobile;
 
     /**
-     * 用户状态，, 0:禁用 , 1:启用, 2:全部放行
+     * 用户状态，, 0:无效 , 1:有效
      */
     @Column(name = "STATUS")
     private Integer status;

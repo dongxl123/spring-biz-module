@@ -45,7 +45,7 @@ public class BaseUserDTO implements Serializable {
     /** 手机号 */
     private String mobile;
 
-    /** 用户状态，, 0:禁用 , 1:启用, 2:全部放行 */
+    /** 用户状态，, 0:无效 , 1:有效 */
     private Integer status;
 
     /** 关联的权限 */

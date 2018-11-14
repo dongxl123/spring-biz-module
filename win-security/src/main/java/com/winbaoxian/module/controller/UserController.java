@@ -34,7 +34,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      * @apiParam (请求体) {String} userName 登录名
      * @apiParam (请求体) {String} name 姓名
      * @apiParam (请求体) {String} mobile 手机号
-     * @apiParam (请求体) {Number} status 用户状态，, 0:禁用 , 1:启用, 2:全部放行
+     * @apiParam (请求体) {Number} status 用户状态，, 状态, 0:无效 , 1:有效
      * @apiParam (请求体) {Array} roleIdList 角色ID列表
      * @apiParamExample 请求体示例
      * {"userName":"admin1","name":"admin","mobile":"18707173376","status":0,"roleIdList":[1,2]}
@@ -44,7 +44,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      * @apiSuccess (响应参数) {String} userName 登录名
      * @apiSuccess (响应参数) {String} name 姓名
      * @apiSuccess (响应参数) {String} mobile 手机号
-     * @apiSuccess (响应参数) {Number} status 用户状态，, 0:禁用 , 1:启用, 2:全部放行
+     * @apiSuccess (响应参数) {Number} status 用户状态，, 状态, 0:无效 , 1:有效
      * @apiSuccess (响应参数) {Array} roleIdList 角色ID列表
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":16,"createTime":null,"updateTime":null,"userName":"admin1","name":"admin","mobile":"18707173376","status":0,"roleIdList":[1,2]}}
@@ -80,7 +80,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      * @apiParam (请求体) {String} userName 登录名
      * @apiParam (请求体) {String} name 姓名
      * @apiParam (请求体) {String} mobile 手机号
-     * @apiParam (请求体) {Number} status 用户状态，, 0:禁用 , 1:启用, 2:全部放行
+     * @apiParam (请求体) {Number} status 用户状态，, 状态, 0:无效 , 1:有效
      * @apiParam (请求体) {Array} roleIdList 角色ID列表
      * @apiParamExample 请求体示例
      * {"userName":"admin1","name":"admin","mobile":"18707173372","status":0,"roleIdList":[2,3]}
@@ -90,7 +90,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      * @apiSuccess (响应参数) {String} userName 登录名
      * @apiSuccess (响应参数) {String} name 姓名
      * @apiSuccess (响应参数) {String} mobile 手机号
-     * @apiSuccess (响应参数) {Number} status 用户状态，, 0:禁用 , 1:启用, 2:全部放行
+     * @apiSuccess (响应参数) {Number} status 用户状态，, 状态, 0:无效 , 1:有效
      * @apiSuccess (响应参数) {Array} roleIdList 角色ID列表
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":16,"createTime":1541743881000,"updateTime":1541744132000,"userName":"admin1","name":"admin","mobile":"18707173372","status":0,"roleIdList":[2,3]}}
@@ -114,7 +114,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      * @apiSuccess (响应参数) {String} userName 登录名
      * @apiSuccess (响应参数) {String} name 姓名
      * @apiSuccess (响应参数) {String} mobile 手机号
-     * @apiSuccess (响应参数) {Number} status 用户状态，, 0:禁用 , 1:启用, 2:全部放行
+     * @apiSuccess (响应参数) {Number} status 用户状态，, 状态, 0:无效 , 1:有效
      * @apiSuccess (响应参数) {Array} roleIdList 角色ID列表
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":16,"createTime":1541743881000,"updateTime":1541744132000,"userName":"admin1","name":"admin","mobile":"18707173372","status":0,"roleIdList":[2,3]}}
@@ -137,7 +137,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      * @apiSuccess (响应参数) {String} userName 登录名
      * @apiSuccess (响应参数) {String} name 姓名
      * @apiSuccess (响应参数) {String} mobile 手机号
-     * @apiSuccess (响应参数) {Number} status 用户状态，, 0:禁用 , 1:启用, 2:全部放行
+     * @apiSuccess (响应参数) {Number} status 用户状态，, 状态, 0:无效 , 1:有效
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1449378845000,"updateTime":1541642528000,"userName":"admin","name":"admin","mobile":"18707173376","status":0,"roleIdList":null},{"id":13,"createTime":1443676327000,"updateTime":1541642528000,"userName":"snoopy","name":"snoopy","mobile":"18707173376","status":0}]}
      */
@@ -170,7 +170,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      * @apiSuccess (响应参数) {String} list.userName 登录名
      * @apiSuccess (响应参数) {String} list.name 姓名
      * @apiSuccess (响应参数) {String} list.mobile 手机号
-     * @apiSuccess (响应参数) {Number} list.status 用户状态，, 0:禁用 , 1:启用, 2:全部放行
+     * @apiSuccess (响应参数) {Number} list.status 用户状态，, 状态, 0:无效 , 1:有效
      * @apiSuccess (响应参数) {Number} startRow 本页起始行
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"pageNum":1,"pageSize":2,"totalRow":4,"totalPage":2,"orderProperty":null,"orderDirection":null,"list":[{"id":1,"createTime":1449378845000,"updateTime":1541642528000,"userName":"admin","name":"admin","mobile":"18707173376","status":0,"roleIdList":null},{"id":13,"createTime":1443676327000,"updateTime":1541642528000,"userName":"snoopy","name":"snoopy","mobile":"18707173376","status":0}],"startRow":0}}

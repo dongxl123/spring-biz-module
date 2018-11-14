@@ -45,7 +45,7 @@ public class RoleDTO implements Serializable {
     /** 排序号 */
     private Integer seq;
 
-    /** 状态, 0:禁用 , 1:启用, 2:全部放行 */
+    /** 状态, 0:无效 , 1:有效 */
     private Integer status;
 
     /** 关联的资源 */
