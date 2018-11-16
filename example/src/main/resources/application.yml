@@ -9,7 +9,7 @@ spring:
     hibernate:
       ddl-auto: none
       naming:
-        physical-strategy: com.winbaoxian.module.component.security.SecurityNamingStrategy
+        physical-strategy: com.winbaoxian.module.component.security.SecurityPhysicalNamingStrategy
   datasource:
     citymanager:
       driver-class-name: com.mysql.jdbc.Driver
