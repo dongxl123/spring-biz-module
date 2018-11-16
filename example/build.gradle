@@ -4,6 +4,7 @@ apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    compile project(":win-security")
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-web')
     runtime('mysql:mysql-connector-java')
