@@ -53,7 +53,11 @@ public class RoleService {
     }
 
     @Transactional
-    public RoleDTO updateRole(Long id, RoleDTO dto) {
+    public RoleDTO updateRole(RoleDTO dto) {
+        if (dto == null || dto.getId() == null) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
+        }
+        Long id = dto.getId();
         RoleEntity persistent = roleRepository.findOne(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);

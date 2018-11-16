@@ -19,7 +19,7 @@ public class ResourceController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/resource 新增资源
+     * @api {POST} /api/winSecurity/v1/addResource 新增资源
      * @apiGroup resource
      * @apiName addResource
      * @apiParam (请求体) {String} name 名称
@@ -49,7 +49,7 @@ public class ResourceController {
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
      */
-    @PostMapping(value = "/resource")
+    @PostMapping(value = "/addResource")
     public JsonResult<ResourceDTO> addResource(@RequestBody ResourceDTO dto) {
         ResourceDTO resourceDTO = resourceService.addResource(dto);
         return JsonResult.createSuccessResult(resourceDTO);
@@ -57,21 +57,24 @@ public class ResourceController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {DELETE} /api/winSecurity/v1/resource/{id} 删除资源
+     * @api {POST} /api/winSecurity/v1/deleteResource 删除资源
      * @apiGroup resource
      * @apiName deleteResource
+     * @apiParam (请求参数) {Number} id 主键
+     * @apiParamExample 请求参数示例
+     * ?id=11
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":null}
      */
-    @DeleteMapping(value = "/resource/{id}")
-    public JsonResult deleteResource(@PathVariable("id") Long id) {
+    @PostMapping(value = "/deleteResource")
+    public JsonResult deleteResource(Long id) {
         resourceService.deleteResource(id);
         return JsonResult.createSuccessResult(null);
     }
 
     /**
      * @apiVersion 1.0.0
-     * @api {PUT} /api/winSecurity/v1/resource/{id} 更新资源
+     * @api {POST} /api/winSecurity/v1/updateResource 更新资源
      * @apiGroup resource
      * @apiName updateResource
      * @apiParam (请求体) {String} name 名称
@@ -101,17 +104,20 @@ public class ResourceController {
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
      */
-    @PutMapping(value = "/resource/{id}")
-    public JsonResult<ResourceDTO> updateResource(@PathVariable("id") Long id, @RequestBody ResourceDTO dto) {
-        ResourceDTO resourceDTO = resourceService.updateResource(id, dto);
+    @PostMapping(value = "/updateResource")
+    public JsonResult<ResourceDTO> updateResource(@RequestBody ResourceDTO dto) {
+        ResourceDTO resourceDTO = resourceService.updateResource(dto);
         return JsonResult.createSuccessResult(resourceDTO);
     }
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/resource/{id} 获取资源
+     * @api {GET} /api/winSecurity/v1/getResource 获取资源
      * @apiGroup resource
      * @apiName getResource
+     * @apiParam (请求参数) {Number} id 主键
+     * @apiParamExample 请求参数示例
+     * ?id=11
      * @apiSuccess (响应参数) {Number} id 主键
      * @apiSuccess (响应参数) {Number} createTime 创建时间
      * @apiSuccess (响应参数) {Number} updateTime 更新时间
@@ -128,15 +134,15 @@ public class ResourceController {
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
      */
-    @GetMapping(value = "/resource/{id}")
-    public JsonResult<ResourceDTO> getResource(@PathVariable("id") Long id) {
+    @GetMapping(value = "/getResource")
+    public JsonResult<ResourceDTO> getResource(Long id) {
         ResourceDTO resourceDTO = resourceService.getResource(id);
         return JsonResult.createSuccessResult(resourceDTO);
     }
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/resource 获取资源列表
+     * @api {GET} /api/winSecurity/v1/getResourceList 获取资源列表
      * @apiGroup resource
      * @apiName getResourceList
      * @apiSuccess (响应参数) {Number} id 主键
@@ -155,7 +161,7 @@ public class ResourceController {
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1392742800000,"updateTime":1541642350000,"name":"权限管理","code":"","globalCode":"","value":"/resource/treeGrid","description":"系统管理","icon":"glyphicon-folder-open ","pid":11,"seq":1,"status":0,"resourceType":1,"deleted":false},{"id":111,"createTime":1392742800000,"updateTime":1541642350000,"name":"列表","code":"","globalCode":"","value":"/resource/treeGrid","description":"资源列表","icon":"glyphicon-list ","pid":11,"seq":0,"status":0,"resourceType":1,"deleted":false},{"id":112,"createTime":1392742800000,"updateTime":1541642350000,"name":"添加","code":"","globalCode":"","value":"/resource/add","description":"资源添加","icon":"glyphicon-plus icon-green","pid":11,"seq":0,"status":0,"resourceType":1,"deleted":false},{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}]}
      */
-    @GetMapping(value = "/resource")
+    @GetMapping(value = "/getResourceList")
     public JsonResult<List<ResourceDTO>> getResourceList() {
         List<ResourceDTO> resourceList = resourceService.getResourceList();
         return JsonResult.createSuccessResult(resourceList);

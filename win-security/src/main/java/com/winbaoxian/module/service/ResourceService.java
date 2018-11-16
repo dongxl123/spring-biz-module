@@ -44,7 +44,11 @@ public class ResourceService {
     }
 
     @Transactional
-    public ResourceDTO updateResource(Long id, ResourceDTO dto) {
+    public ResourceDTO updateResource(ResourceDTO dto) {
+        if (dto == null || dto.getId() == null) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
+        }
+        Long id = dto.getId();
         ResourceEntity persistent = resourceRepository.findOne(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);

@@ -58,7 +58,11 @@ public class UserService<D extends BaseUserDTO, E extends BaseUserEntity> {
     }
 
     @Transactional
-    public D updateUser(Long id, D dto) {
+    public D updateUser(D dto) {
+        if (dto == null || dto.getId() == null) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
+        }
+        Long id = dto.getId();
         E persistent = userRepository.findOne(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
