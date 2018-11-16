@@ -9,7 +9,7 @@ spring:
     hibernate:
       ddl-auto: none
       naming:
-        physical-strategy: com.winbaoxian.module.component.security.SecurityPhysicalNamingStrategy
+        physical-strategy: com.winbaoxian.module.example.component.security.SecurityPhysicalNamingStrategy
   datasource:
     citymanager:
       driver-class-name: com.mysql.jdbc.Driver
@@ -31,5 +31,5 @@ logging:
     com.winbaoxian: debug
 security:
   class:
-    userDTO: com.winbaoxian.module.model.dto.SecurityUserDTO
-    userEntity: com.winbaoxian.module.model.entity.citymanager.SecurityUserEntity
+    userDTO: com.winbaoxian.module.security.model.dto.SecurityUserDTO
+    userEntity: com.winbaoxian.module.example.model.entity.citymanager.SecurityUserEntity
