@@ -30,7 +30,7 @@ import org.hibernate.annotations.*;
 @DynamicUpdate
 @Table(name = "USER")
 @Data
-public class BaseUserEntity implements Serializable {
+public class WinSecurityBaseUserEntity implements Serializable {
     /**
      * 版本号
      */

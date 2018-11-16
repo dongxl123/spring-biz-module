@@ -1,9 +1,9 @@
 package com.winbaoxian.module.example.model.dto;
 
-import com.winbaoxian.module.security.model.dto.BaseUserDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import lombok.Data;
 
 @Data
-public class SecurityUserDTO extends BaseUserDTO {
+public class SecurityUserDTO extends WinSecurityBaseUserDTO {
     private String edu;
 }

@@ -22,7 +22,7 @@ import java.util.Date;
  * @version 1.0.0 2018-11-08
  */
 @Data
-public class ResourceDTO implements Serializable {
+public class WinSecurityResourceDTO implements Serializable {
     /** 版本号 */
     private static final long serialVersionUID = -4311421266482800320L;
 

@@ -29,7 +29,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "ROLE_RESOURCE")
 @Data
-public class RoleResourceEntity implements Serializable {
+public class WinSecurityRoleResourceEntity implements Serializable {
     /** 版本号 */
     private static final long serialVersionUID = 4294916243343047672L;
 

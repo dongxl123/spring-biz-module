@@ -3,7 +3,7 @@ package com.winbaoxian.module.security.model.enums;
 /**
  * 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
  */
-public enum ResourceTypeEnum {
+public enum WinSecurityResourceTypeEnum {
     DEFAULT(0, "无特别作用"),
     MENU(1, "菜单"),
     SUB_PAGE(2, "子页面"),
@@ -13,7 +13,7 @@ public enum ResourceTypeEnum {
     private Integer value;
     private String desc;
 
-    ResourceTypeEnum(Integer value, String desc) {
+    WinSecurityResourceTypeEnum(Integer value, String desc) {
         this.value = value;
         this.desc = desc;
     }

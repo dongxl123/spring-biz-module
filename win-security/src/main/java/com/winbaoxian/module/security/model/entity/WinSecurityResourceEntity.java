@@ -31,7 +31,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @DynamicUpdate
 @Table(name = "RESOURCE")
 @Data
-public class ResourceEntity implements Serializable {
+public class WinSecurityResourceEntity implements Serializable {
     /** 版本号 */
     private static final long serialVersionUID = -4311421266482800320L;
 

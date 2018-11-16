@@ -1,8 +1,8 @@
 package com.winbaoxian.module.security.controller;
 
 import com.winbaoxian.module.security.model.common.JsonResult;
-import com.winbaoxian.module.security.model.dto.ResourceDTO;
-import com.winbaoxian.module.security.service.ResourceService;
+import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
+import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -10,10 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/winSecurity/v1/")
-public class ResourceController {
+public class WinSecurityResourceController {
 
     @Resource
-    private ResourceService resourceService;
+    private WinSecurityResourceService winSecurityResourceService;
 
     /**
      * @apiVersion 1.0.0
@@ -48,8 +48,8 @@ public class ResourceController {
      * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
      */
     @PostMapping(value = "/addResource")
-    public JsonResult<ResourceDTO> addResource(@RequestBody ResourceDTO dto) {
-        ResourceDTO resourceDTO = resourceService.addResource(dto);
+    public JsonResult<WinSecurityResourceDTO> addResource(@RequestBody WinSecurityResourceDTO dto) {
+        WinSecurityResourceDTO resourceDTO = winSecurityResourceService.addResource(dto);
         return JsonResult.createSuccessResult(resourceDTO);
     }
 
@@ -66,7 +66,7 @@ public class ResourceController {
      */
     @PostMapping(value = "/deleteResource")
     public JsonResult deleteResource(Long id) {
-        resourceService.deleteResource(id);
+        winSecurityResourceService.deleteResource(id);
         return JsonResult.createSuccessResult(null);
     }
 
@@ -103,8 +103,8 @@ public class ResourceController {
      * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
      */
     @PostMapping(value = "/updateResource")
-    public JsonResult<ResourceDTO> updateResource(@RequestBody ResourceDTO dto) {
-        ResourceDTO resourceDTO = resourceService.updateResource(dto);
+    public JsonResult<WinSecurityResourceDTO> updateResource(@RequestBody WinSecurityResourceDTO dto) {
+        WinSecurityResourceDTO resourceDTO = winSecurityResourceService.updateResource(dto);
         return JsonResult.createSuccessResult(resourceDTO);
     }
 
@@ -133,8 +133,8 @@ public class ResourceController {
      * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
      */
     @GetMapping(value = "/getResource")
-    public JsonResult<ResourceDTO> getResource(Long id) {
-        ResourceDTO resourceDTO = resourceService.getResource(id);
+    public JsonResult<WinSecurityResourceDTO> getResource(Long id) {
+        WinSecurityResourceDTO resourceDTO = winSecurityResourceService.getResource(id);
         return JsonResult.createSuccessResult(resourceDTO);
     }
 
@@ -160,8 +160,8 @@ public class ResourceController {
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1392742800000,"updateTime":1541642350000,"name":"权限管理","code":"","globalCode":"","value":"/resource/treeGrid","description":"系统管理","icon":"glyphicon-folder-open ","pid":11,"seq":1,"status":0,"resourceType":1,"deleted":false},{"id":111,"createTime":1392742800000,"updateTime":1541642350000,"name":"列表","code":"","globalCode":"","value":"/resource/treeGrid","description":"资源列表","icon":"glyphicon-list ","pid":11,"seq":0,"status":0,"resourceType":1,"deleted":false},{"id":112,"createTime":1392742800000,"updateTime":1541642350000,"name":"添加","code":"","globalCode":"","value":"/resource/add","description":"资源添加","icon":"glyphicon-plus icon-green","pid":11,"seq":0,"status":0,"resourceType":1,"deleted":false},{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}]}
      */
     @GetMapping(value = "/getResourceList")
-    public JsonResult<List<ResourceDTO>> getResourceList() {
-        List<ResourceDTO> resourceList = resourceService.getResourceList();
+    public JsonResult<List<WinSecurityResourceDTO>> getResourceList() {
+        List<WinSecurityResourceDTO> resourceList = winSecurityResourceService.getResourceList();
         return JsonResult.createSuccessResult(resourceList);
     }
 

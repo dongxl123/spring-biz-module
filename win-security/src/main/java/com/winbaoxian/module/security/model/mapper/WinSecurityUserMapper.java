@@ -1,15 +1,15 @@
 package com.winbaoxian.module.security.model.mapper;
 
 import com.alibaba.fastjson.JSON;
-import com.winbaoxian.module.security.model.dto.BaseUserDTO;
-import com.winbaoxian.module.security.model.entity.BaseUserEntity;
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
+import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserMapper<D extends BaseUserDTO, E extends BaseUserEntity> {
+public class WinSecurityUserMapper<D extends WinSecurityBaseUserDTO, E extends WinSecurityBaseUserEntity> {
 
-    public static final UserMapper INSTANCE = new UserMapper();
+    public static final WinSecurityUserMapper INSTANCE = new WinSecurityUserMapper();
 
     public E toUserEntity(D dto, Class<E> entityClass) {
         return JSON.parseObject(JSON.toJSONString(dto), entityClass);

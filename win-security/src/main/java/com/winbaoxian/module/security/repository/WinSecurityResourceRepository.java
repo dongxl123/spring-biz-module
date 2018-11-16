@@ -1,17 +1,17 @@
 package com.winbaoxian.module.security.repository;
 
-import com.winbaoxian.module.security.model.entity.ResourceEntity;
+import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ResourceRepository extends JpaRepository<ResourceEntity, Long> {
+public interface WinSecurityResourceRepository extends JpaRepository<WinSecurityResourceEntity, Long> {
 
-    List<ResourceEntity> findAllByDeletedFalseOrderBySeqAsc();
+    List<WinSecurityResourceEntity> findAllByDeletedFalseOrderBySeqAsc();
 
-    Page<ResourceEntity> findAllByDeletedFalseOrderBySeqAsc(Pageable pageable);
+    Page<WinSecurityResourceEntity> findAllByDeletedFalseOrderBySeqAsc(Pageable pageable);
 
     boolean existsByCodeAndPidAndDeletedFalse(String code, Long pid);
 

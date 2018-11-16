@@ -2,13 +2,13 @@ package com.winbaoxian.module.security.service;
 
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
-import com.winbaoxian.module.security.model.dto.ResourceDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
-import com.winbaoxian.module.security.model.entity.ResourceEntity;
-import com.winbaoxian.module.security.model.mapper.ResourceMapper;
-import com.winbaoxian.module.security.repository.ResourceRepository;
+import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
+import com.winbaoxian.module.security.model.mapper.WinSecurityResourceMapper;
+import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,15 +18,15 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class ResourceService {
+public class WinSecurityResourceService {
 
     @Resource
-    private ResourceRepository resourceRepository;
+    private WinSecurityResourceRepository resourceRepository;
 
     @Transactional
-    public ResourceDTO addResource(ResourceDTO dto) {
+    public WinSecurityResourceDTO addResource(WinSecurityResourceDTO dto) {
 
-        ResourceEntity entity = ResourceMapper.INSTANCE.toResourceEntity(dto);
+        WinSecurityResourceEntity entity = WinSecurityResourceMapper.INSTANCE.toResourceEntity(dto);
         resourceRepository.save(entity);
         entity.setSeq(entity.getId());
         resourceRepository.save(entity);
@@ -35,7 +35,7 @@ public class ResourceService {
 
     @Transactional
     public void deleteResource(Long id) {
-        ResourceEntity entity = resourceRepository.findOne(id);
+        WinSecurityResourceEntity entity = resourceRepository.findOne(id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
@@ -44,12 +44,12 @@ public class ResourceService {
     }
 
     @Transactional
-    public ResourceDTO updateResource(ResourceDTO dto) {
+    public WinSecurityResourceDTO updateResource(WinSecurityResourceDTO dto) {
         if (dto == null || dto.getId() == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        ResourceEntity persistent = resourceRepository.findOne(id);
+        WinSecurityResourceEntity persistent = resourceRepository.findOne(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
@@ -58,17 +58,17 @@ public class ResourceService {
         return getResource(id);
     }
 
-    public ResourceDTO getResource(Long id) {
-        return ResourceMapper.INSTANCE.toResourceDTO(resourceRepository.findOne(id));
+    public WinSecurityResourceDTO getResource(Long id) {
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTO(resourceRepository.findOne(id));
     }
 
-    public List<ResourceDTO> getResourceList() {
-        return ResourceMapper.INSTANCE.toResourceDTOList(resourceRepository.findAllByDeletedFalseOrderBySeqAsc());
+    public List<WinSecurityResourceDTO> getResourceList() {
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(resourceRepository.findAllByDeletedFalseOrderBySeqAsc());
     }
 
-    public PaginationDTO<ResourceDTO> getResourcePage(Pagination pagination) {
+    public PaginationDTO<WinSecurityResourceDTO> getResourcePage(Pagination pagination) {
         Pageable pageable = Pagination.createPageable(pagination);
-        Page<ResourceEntity> page = resourceRepository.findAllByDeletedFalseOrderBySeqAsc(pageable);
-        return PaginationDTO.createNewInstance(page, ResourceDTO.class);
+        Page<WinSecurityResourceEntity> page = resourceRepository.findAllByDeletedFalseOrderBySeqAsc(pageable);
+        return PaginationDTO.createNewInstance(page, WinSecurityResourceDTO.class);
     }
 }

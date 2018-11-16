@@ -29,7 +29,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "USER_ROLE")
 @Data
-public class UserRoleEntity implements Serializable {
+public class WinSecurityUserRoleEntity implements Serializable {
     /** 版本号 */
     private static final long serialVersionUID = -529712275466926177L;
 

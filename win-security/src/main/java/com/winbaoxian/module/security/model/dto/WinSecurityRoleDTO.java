@@ -23,7 +23,7 @@ import java.util.List;
  * @version 1.0.0 2018-11-08
  */
 @Data
-public class RoleDTO implements Serializable {
+public class WinSecurityRoleDTO implements Serializable {
     /** 版本号 */
     private static final long serialVersionUID = -8255877523481723896L;
 

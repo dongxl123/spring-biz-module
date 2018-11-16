@@ -1,13 +1,13 @@
 package com.winbaoxian.module.security.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.winbaoxian.module.security.config.UserConfiguration;
+import com.winbaoxian.module.security.config.WinSecurityUserConfiguration;
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
-import com.winbaoxian.module.security.model.dto.BaseUserDTO;
-import com.winbaoxian.module.security.model.entity.BaseUserEntity;
-import com.winbaoxian.module.security.service.UserService;
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
+import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
+import com.winbaoxian.module.security.service.WinSecurityUserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -16,12 +16,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/winSecurity/v1/")
-public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
+public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E extends WinSecurityBaseUserEntity> {
 
     @Resource
-    private UserService<D, E> userService;
+    private WinSecurityUserService<D, E> winSecurityUserService;
     @Resource
-    private UserConfiguration userConfiguration;
+    private WinSecurityUserConfiguration winSecurityUserConfiguration;
 
 
     /**
@@ -49,8 +49,8 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      */
     @PostMapping(value = "/addUser")
     public JsonResult<D> addUser(@RequestBody String dtoStr) {
-        D dto = JSON.parseObject(dtoStr, (Type) userConfiguration.getUserDTOClass());
-        D UserDTO = userService.addUser(dto);
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityUserConfiguration.getUserDTOClass());
+        D UserDTO = winSecurityUserService.addUser(dto);
         return JsonResult.createSuccessResult(UserDTO);
     }
 
@@ -68,7 +68,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      */
     @PostMapping(value = "/deleteUser")
     public JsonResult deleteUser(Long id) {
-        userService.deleteUser(id);
+        winSecurityUserService.deleteUser(id);
         return JsonResult.createSuccessResult(null);
     }
 
@@ -98,8 +98,8 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      */
     @PostMapping(value = "/updateUser")
     public JsonResult<D> updateUser(@RequestBody String dtoStr) {
-        D dto = JSON.parseObject(dtoStr, (Type) userConfiguration.getUserDTOClass());
-        D UserDTO = userService.updateUser(dto);
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityUserConfiguration.getUserDTOClass());
+        D UserDTO = winSecurityUserService.updateUser(dto);
         return JsonResult.createSuccessResult(UserDTO);
     }
 
@@ -125,7 +125,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      */
     @GetMapping(value = "/getUser")
     public JsonResult<D> getUser(Long id) {
-        D UserDTO = userService.getUser(id);
+        D UserDTO = winSecurityUserService.getUser(id);
         return JsonResult.createSuccessResult(UserDTO);
     }
 
@@ -147,7 +147,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      */
     @GetMapping(value = "/getUserList")
     public JsonResult<List<D>> getUserList() {
-        List<D> UserList = userService.getUserList();
+        List<D> UserList = winSecurityUserService.getUserList();
         return JsonResult.createSuccessResult(UserList);
     }
 
@@ -181,7 +181,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      */
     @GetMapping(value = "/getUserPage")
     public JsonResult<PaginationDTO<D>> getUserPage(Pagination pagination) {
-        PaginationDTO<D> paginationDTO = userService.getUserPage(pagination);
+        PaginationDTO<D> paginationDTO = winSecurityUserService.getUserPage(pagination);
         return JsonResult.createSuccessResult(paginationDTO);
     }
 }

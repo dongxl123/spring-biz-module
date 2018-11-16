@@ -1,6 +1,6 @@
 package com.winbaoxian.module.security.model.enums;
 
-public enum StatusEnum {
+public enum WinSecurityStatusEnum {
 
     DISABLED(0, "失效"),
     ENABLED(1, "有效"),
@@ -9,7 +9,7 @@ public enum StatusEnum {
     private Integer value;
     private String desc;
 
-    StatusEnum(Integer value, String desc) {
+    WinSecurityStatusEnum(Integer value, String desc) {
         this.value = value;
         this.desc = desc;
     }

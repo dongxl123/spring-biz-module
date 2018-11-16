@@ -1,6 +1,6 @@
 package com.winbaoxian.module.security.strategy;
 
-import com.winbaoxian.module.security.constant.SecurityConstant;
+import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
@@ -14,7 +14,7 @@ public abstract class AbstractSecurityPhysicalNamingStrategy extends SpringPhysi
         String tablePrefixText = tablePrefix().toUpperCase();
         Identifier newName = name;
         if (StringUtils.isNotBlank(tablePrefixText)) {
-            for (String securityTableName : SecurityConstant.SECURITY_TABLE_LIST) {
+            for (String securityTableName : WinSecurityConstant.SECURITY_TABLE_LIST) {
                 if (securityTableName.equals(nameText)) {
                     newName = new Identifier(tablePrefixText + "_" + name.getText(), name.isQuoted());
                     break;

@@ -15,13 +15,11 @@ import java.util.Date;
 import javax.persistence.*;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * 角色(SECURITY_ROLE)
+ * 系统日志(SECURITY_SYS_LOG)
  * 
  * @author dongxuanliang252
  * @version 1.0.0 2018-11-08
@@ -29,11 +27,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "ROLE")
+@Table(name = "SYS_LOG")
 @Data
-public class RoleEntity implements Serializable {
+public class WinSecuritySysLogEntity implements Serializable {
     /** 版本号 */
-    private static final long serialVersionUID = -8255877523481723896L;
+    private static final long serialVersionUID = -1844554441598762316L;
 
     /** 主键id */
     @Id
@@ -43,32 +41,22 @@ public class RoleEntity implements Serializable {
 
     /** 创建时间 */
     @Column(name = "CREATE_TIME")
-    @CreationTimestamp
     private Date createTime;
 
-    /** 更新时间 */
-    @Column(name = "UPDATE_TIME")
-    @UpdateTimestamp
-    private Date updateTime;
+    /** 登陆名 */
+    @Column(name = "USER_NAME")
+    private String userName;
 
     /** 角色名 */
-    @Column(name = "NAME")
-    private String name;
+    @Column(name = "ROLE_NAME")
+    private String roleName;
 
-    /** 简介 */
-    @Column(name = "DESCRIPTION")
-    private String description;
+    /** 内容 */
+    @Column(name = "OPT_CONTENT")
+    private String optContent;
 
-    /** 排序号 */
-    @Column(name = "SEQ")
-    private Long seq;
-
-    /** 状态, 0:无效 , 1:有效 */
-    @Column(name = "STATUS")
-    private Integer status;
-
-    /**  */
-    @Column(name = "DELETED")
-    private Boolean deleted;
+    /** 客户端ip */
+    @Column(name = "CLIENT_IP")
+    private String clientIp;
 
 }
