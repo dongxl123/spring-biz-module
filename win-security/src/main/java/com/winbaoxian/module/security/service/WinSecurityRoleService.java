@@ -25,31 +25,31 @@ import java.util.List;
 public class WinSecurityRoleService {
 
     @Resource
-    private WinSecurityRoleRepository roleRepository;
+    private WinSecurityRoleRepository winSecurityRoleRepository;
     @Resource
-    private WinSecurityRoleResourceRepository roleResourceRepository;
+    private WinSecurityRoleResourceRepository winSecurityRoleResourceRepository;
 
     public WinSecurityRoleDTO addRole(WinSecurityRoleDTO dto) {
         WinSecurityRoleEntity entity = WinSecurityRoleMapper.INSTANCE.toRoleEntity(dto);
-        roleRepository.save(entity);
+        winSecurityRoleRepository.save(entity);
         //资源
         if (CollectionUtils.isNotEmpty(dto.getResourceIdList())) {
             List<WinSecurityRoleResourceEntity> roleResourceEntityList = trans2RoleResourceEntityList(entity.getId(), dto.getResourceIdList());
-            roleResourceRepository.save(roleResourceEntityList);
+            winSecurityRoleResourceRepository.save(roleResourceEntityList);
         }
         entity.setSeq(entity.getId());
-        roleRepository.save(entity);
+        winSecurityRoleRepository.save(entity);
         return getRole(entity.getId());
     }
 
     @Transactional
     public void deleteRole(Long id) {
-        WinSecurityRoleEntity entity = roleRepository.findOne(id);
+        WinSecurityRoleEntity entity = winSecurityRoleRepository.findOne(id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
         }
         entity.setDeleted(Boolean.TRUE);
-        roleRepository.save(entity);
+        winSecurityRoleRepository.save(entity);
     }
 
     @Transactional
@@ -58,37 +58,37 @@ public class WinSecurityRoleService {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        WinSecurityRoleEntity persistent = roleRepository.findOne(id);
+        WinSecurityRoleEntity persistent = winSecurityRoleRepository.findOne(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
         }
         //更新数据
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
-        roleRepository.save(persistent);
+        winSecurityRoleRepository.save(persistent);
         //资源
         if (CollectionUtils.isNotEmpty(dto.getResourceIdList())) {
-            roleResourceRepository.deleteByRoleId(id);
+            winSecurityRoleResourceRepository.deleteByRoleId(id);
             List<WinSecurityRoleResourceEntity> roleResourceEntityList = trans2RoleResourceEntityList(id, dto.getResourceIdList());
-            roleResourceRepository.save(roleResourceEntityList);
+            winSecurityRoleResourceRepository.save(roleResourceEntityList);
         }
         return getRole(id);
     }
 
     public WinSecurityRoleDTO getRole(Long id) {
-        WinSecurityRoleDTO roleDTO = WinSecurityRoleMapper.INSTANCE.toRoleDTO(roleRepository.findOne(id));
-        List<WinSecurityRoleResourceEntity> roleResourceEntityList = roleResourceRepository.findByRoleId(id);
+        WinSecurityRoleDTO roleDTO = WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.findOne(id));
+        List<WinSecurityRoleResourceEntity> roleResourceEntityList = winSecurityRoleResourceRepository.findByRoleId(id);
         roleDTO.setResourceIdList(trans2ResourceIdList(roleResourceEntityList));
         return roleDTO;
     }
 
     public List<WinSecurityRoleDTO> getRoleList() {
-        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(roleRepository.findAllByDeletedFalseOrderBySeqAsc());
+        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.findAllByDeletedFalseOrderBySeqAsc());
 
     }
 
     public PaginationDTO<WinSecurityRoleDTO> getRolePage(Pagination pagination) {
         Pageable pageable = Pagination.createPageable(pagination);
-        Page<WinSecurityRoleEntity> page = roleRepository.findAllByDeletedFalseOrderBySeqAsc(pageable);
+        Page<WinSecurityRoleEntity> page = winSecurityRoleRepository.findAllByDeletedFalseOrderBySeqAsc(pageable);
         return PaginationDTO.createNewInstance(page, WinSecurityRoleDTO.class);
     }
 

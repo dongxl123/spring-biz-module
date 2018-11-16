@@ -21,26 +21,26 @@ import java.util.List;
 public class WinSecurityResourceService {
 
     @Resource
-    private WinSecurityResourceRepository resourceRepository;
+    private WinSecurityResourceRepository winSecurityResourceRepository;
 
     @Transactional
     public WinSecurityResourceDTO addResource(WinSecurityResourceDTO dto) {
 
         WinSecurityResourceEntity entity = WinSecurityResourceMapper.INSTANCE.toResourceEntity(dto);
-        resourceRepository.save(entity);
+        winSecurityResourceRepository.save(entity);
         entity.setSeq(entity.getId());
-        resourceRepository.save(entity);
+        winSecurityResourceRepository.save(entity);
         return getResource(entity.getId());
     }
 
     @Transactional
     public void deleteResource(Long id) {
-        WinSecurityResourceEntity entity = resourceRepository.findOne(id);
+        WinSecurityResourceEntity entity = winSecurityResourceRepository.findOne(id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
         entity.setDeleted(Boolean.TRUE);
-        resourceRepository.save(entity);
+        winSecurityResourceRepository.save(entity);
     }
 
     @Transactional
@@ -49,26 +49,26 @@ public class WinSecurityResourceService {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        WinSecurityResourceEntity persistent = resourceRepository.findOne(id);
+        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOne(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
-        resourceRepository.save(persistent);
+        winSecurityResourceRepository.save(persistent);
         return getResource(id);
     }
 
     public WinSecurityResourceDTO getResource(Long id) {
-        return WinSecurityResourceMapper.INSTANCE.toResourceDTO(resourceRepository.findOne(id));
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTO(winSecurityResourceRepository.findOne(id));
     }
 
     public List<WinSecurityResourceDTO> getResourceList() {
-        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(resourceRepository.findAllByDeletedFalseOrderBySeqAsc());
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(winSecurityResourceRepository.findAllByDeletedFalseOrderBySeqAsc());
     }
 
     public PaginationDTO<WinSecurityResourceDTO> getResourcePage(Pagination pagination) {
         Pageable pageable = Pagination.createPageable(pagination);
-        Page<WinSecurityResourceEntity> page = resourceRepository.findAllByDeletedFalseOrderBySeqAsc(pageable);
+        Page<WinSecurityResourceEntity> page = winSecurityResourceRepository.findAllByDeletedFalseOrderBySeqAsc(pageable);
         return PaginationDTO.createNewInstance(page, WinSecurityResourceDTO.class);
     }
 }
