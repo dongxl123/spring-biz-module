@@ -87,7 +87,7 @@ public class ResourceController {
      * @apiParam (请求体) {Number} status 状态，0：失效  1：有效
      * @apiParam (请求体) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
      * @apiParamExample 请求体示例
-     * {"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0}
+     * {"id":11,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0}
      * @apiSuccess (响应参数) {Number} id 主键
      * @apiSuccess (响应参数) {Number} createTime 创建时间
      * @apiSuccess (响应参数) {Number} updateTime 更新时间

@@ -86,7 +86,7 @@ public class UserController<D extends BaseUserDTO, E extends BaseUserEntity> {
      * @apiParam (请求体) {Number} status 用户状态，, 状态, 0:无效 , 1:有效
      * @apiParam (请求体) {Array} roleIdList 角色ID列表
      * @apiParamExample 请求体示例
-     * {"userName":"admin1","name":"admin","mobile":"18707173372","status":0,"roleIdList":[2,3]}
+     * {"id":16,"userName":"admin1","name":"admin","mobile":"18707173372","status":0,"roleIdList":[2,3]}
      * @apiSuccess (响应参数) {Number} id 主键
      * @apiSuccess (响应参数) {Number} createTime 创建时间
      * @apiSuccess (响应参数) {Number} updateTime 更新时间

@@ -76,7 +76,7 @@ public class RoleController {
      * @apiParam (请求体) {Number} status 状态, 0:无效 , 1:有效
      * @apiParam (请求体) {Array} resourceIdList 资源ID列表
      * @apiParamExample 请求体示例
-     * {"name":"admin","description":"超级管理2员","seq":0,"status":0,"resourceIdList":[143,144,221,222,223,224,227,228]}
+     * {"id":1,"name":"admin","description":"超级管理2员","seq":0,"status":0,"resourceIdList":[143,144,221,222,223,224,227,228]}
      * @apiSuccess (响应参数) {Number} id 主键
      * @apiSuccess (响应参数) {Number} createTime 创建时间
      * @apiSuccess (响应参数) {Number} updateTime 更新时间
