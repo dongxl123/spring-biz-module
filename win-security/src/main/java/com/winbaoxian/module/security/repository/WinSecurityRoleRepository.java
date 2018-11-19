@@ -1,15 +1,16 @@
 package com.winbaoxian.module.security.repository;
 
-import com.winbaoxian.module.security.model.entity.WinSecurityRoleEntity;
+import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
+import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface WinSecurityRoleRepository extends JpaRepository<WinSecurityRoleEntity, Long> {
+public interface WinSecurityRoleRepository<E extends WinSecurityBaseRoleEntity> extends JpaRepository<E, Long> {
 
-    List<WinSecurityRoleEntity> findAllByDeletedFalseOrderBySeqAsc();
+    List<E> findAllByDeletedFalseOrderBySeqAsc();
 
-    Page<WinSecurityRoleEntity> findAllByDeletedFalseOrderBySeqAsc(Pageable pageable);
+    Page<E> findAllByDeletedFalseOrderBySeqAsc(Pageable pageable);
 }

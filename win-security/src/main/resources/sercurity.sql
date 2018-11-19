@@ -48,6 +48,7 @@ CREATE TABLE `{prefix}_role` (
   `seq` int(5) NOT NULL DEFAULT '0' COMMENT '排序号',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态，0：失效  1：有效',
   `deleted` bit(1) NOT NULL DEFAULT b'0',
+  `dtype` varchar(255) DEFAULT '' COMMENT 'entity间有继承关系时，hibernate需要的type来区分',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色';
 
@@ -87,6 +88,7 @@ CREATE TABLE `{prefix}_user` (
   `mobile` varchar(20) DEFAULT NULL COMMENT '手机号',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态，0：失效  1：有效',
   `deleted` bit(1) NOT NULL DEFAULT b'0',
+  `dtype` varchar(255) DEFAULT '' COMMENT 'entity间有继承关系时，hibernate需要的type来区分',
   PRIMARY KEY (`id`),
   KEY `IDx_user_login_name` (`user_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户';

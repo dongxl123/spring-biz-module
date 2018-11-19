@@ -1,6 +1,8 @@
 package com.winbaoxian.module.security.config;
 
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
+import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +20,15 @@ public class WinSecurityUserConfiguration {
     @Value("${security.class.userEntity:WinSecurityBaseUserEntity}")
     private String userEntityClassName;
 
+    @Value("${security.class.roleDTO:WinSecurityBaseRoleDTO}")
+    private String roleDTOClassName;
+    @Value("${security.class.roleEntity:WinSecurityBaseRoleEntity}")
+    private String roleEntityClassName;
+
     private Class<? extends WinSecurityBaseUserDTO> userDTOClass;
     private Class<? extends WinSecurityBaseUserEntity> userEntityClass;
+    private Class<? extends WinSecurityBaseRoleDTO> roleDTOClass;
+    private Class<? extends WinSecurityBaseRoleEntity> roleEntityClass;
 
     @PostConstruct
     public void init() {
@@ -38,6 +47,22 @@ public class WinSecurityUserConfiguration {
             userEntityClass = WinSecurityBaseUserEntity.class;
         }
         log.info("WinSecurity: UserEntityClass loaded, {}", userEntityClass.getName());
+
+        try {
+            roleDTOClass = (Class<? extends WinSecurityBaseRoleDTO>) ClassUtils.forName(roleDTOClassName, getClass().getClassLoader());
+        } catch (ClassNotFoundException e) {
+            log.error("WinSecurity: security.class.roleDTO not set, prepare to use default class");
+            roleDTOClass = WinSecurityBaseRoleDTO.class;
+        }
+        log.info("WinSecurity: RoleDTOClass loaded, {}", roleDTOClass.getName());
+
+        try {
+            roleEntityClass = (Class<? extends WinSecurityBaseRoleEntity>) ClassUtils.forName(roleEntityClassName, getClass().getClassLoader());
+        } catch (ClassNotFoundException e) {
+            log.error("WinSecurity: security.class.roleEntity not set, prepare to use default class");
+            roleEntityClass = WinSecurityBaseRoleEntity.class;
+        }
+        log.info("WinSecurity: RoleEntityClass loaded, {}", roleEntityClass.getName());
     }
 
     public Class<? extends WinSecurityBaseUserDTO> getUserDTOClass() {
@@ -46,6 +71,14 @@ public class WinSecurityUserConfiguration {
 
     public Class<? extends WinSecurityBaseUserEntity> getUserEntityClass() {
         return userEntityClass;
+    }
+
+    public Class<? extends WinSecurityBaseRoleDTO> getRoleDTOClass() {
+        return roleDTOClass;
+    }
+
+    public Class<? extends WinSecurityBaseRoleEntity> getRoleEntityClass() {
+        return roleEntityClass;
     }
 
 }

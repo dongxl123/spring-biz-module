@@ -11,7 +11,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * @ServletComponentScan 开启listner和filter
  * @EnableHystrix 开启熔断
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.winbaoxian.module")
 @ServletComponentScan
 //@EnableCaching
 public class Application extends SpringBootServletInitializer {

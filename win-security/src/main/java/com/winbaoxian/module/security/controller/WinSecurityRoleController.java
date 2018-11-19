@@ -1,21 +1,27 @@
 package com.winbaoxian.module.security.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.winbaoxian.module.security.config.WinSecurityUserConfiguration;
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
-import com.winbaoxian.module.security.model.dto.WinSecurityRoleDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
+import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
 import com.winbaoxian.module.security.service.WinSecurityRoleService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Type;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/winSecurity/v1/")
-public class WinSecurityRoleController {
+public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E extends WinSecurityBaseRoleEntity> {
 
     @Resource
-    private WinSecurityRoleService winSecurityRoleService;
+    private WinSecurityRoleService<D, E> winSecurityRoleService;
+    @Resource
+    private WinSecurityUserConfiguration winSecurityUserConfiguration;
 
     /**
      * @apiVersion 1.0.0
@@ -41,8 +47,9 @@ public class WinSecurityRoleController {
      * {"code":200,"data":{"createTime":1541753887713,"description":"超级管理2员1111","id":12,"name":"超级管理2员","resourceIdList":[143,144,221,222,223,224,227,228],"seq":0,"status":0,"updateTime":1541753887713}}
      */
     @PostMapping(value = "/addRole")
-    public JsonResult<WinSecurityRoleDTO> addRole(@RequestBody WinSecurityRoleDTO dto) {
-        WinSecurityRoleDTO RoleDTO = winSecurityRoleService.addRole(dto);
+    public JsonResult<D> addRole(@RequestBody String dtoStr) {
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityUserConfiguration.getRoleDTOClass());
+        D RoleDTO = winSecurityRoleService.addRole(dto);
         return JsonResult.createSuccessResult(RoleDTO);
     }
 
@@ -89,8 +96,9 @@ public class WinSecurityRoleController {
      * {"code":200,"msg":null,"data":{"id":1,"createTime":1541642375000,"updateTime":1541642375000,"name":"admin","description":"超级管理2员","seq":0,"status":0,"resourceIdList":[143,144,221,222,223,224,227,228]}}
      */
     @PostMapping(value = "/updateRole")
-    public JsonResult<WinSecurityRoleDTO> updateRole(@RequestBody WinSecurityRoleDTO dto) {
-        WinSecurityRoleDTO RoleDTO = winSecurityRoleService.updateRole(dto);
+    public JsonResult<D> updateRole(@RequestBody String dtoStr) {
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityUserConfiguration.getRoleDTOClass());
+        D RoleDTO = winSecurityRoleService.updateRole(dto);
         return JsonResult.createSuccessResult(RoleDTO);
     }
 
@@ -115,8 +123,8 @@ public class WinSecurityRoleController {
      * {"code":200,"msg":null,"data":{"id":1,"createTime":1541642375000,"updateTime":1541642375000,"name":"admin","description":"超级管理员","seq":0,"status":0,"resourceIdList":[1,11,12,13,14]}}
      */
     @GetMapping(value = "/getRole")
-    public JsonResult<WinSecurityRoleDTO> getRole(Long id) {
-        WinSecurityRoleDTO RoleDTO = winSecurityRoleService.getRole(id);
+    public JsonResult<D> getRole(Long id) {
+        D RoleDTO = winSecurityRoleService.getRole(id);
         return JsonResult.createSuccessResult(RoleDTO);
     }
 
@@ -137,8 +145,8 @@ public class WinSecurityRoleController {
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1541642375000,"updateTime":1541642375000,"name":"admin","description":"超级管理员","seq":0,"status":0},{"id":2,"createTime":1541642375000,"updateTime":1541642375000,"name":"de","description":"技术部经理","seq":0,"status":0}]}
      */
     @GetMapping(value = "/getRoleList")
-    public JsonResult<List<WinSecurityRoleDTO>> getRoleList() {
-        List<WinSecurityRoleDTO> RoleList = winSecurityRoleService.getRoleList();
+    public JsonResult<List<D>> getRoleList() {
+        List<D> RoleList = winSecurityRoleService.getRoleList();
         return JsonResult.createSuccessResult(RoleList);
     }
 
@@ -171,8 +179,8 @@ public class WinSecurityRoleController {
      * {"code":200,"msg":null,"data":{"pageNum":1,"pageSize":2,"totalRow":4,"totalPage":2,"orderProperty":null,"orderDirection":null,"list":[{"id":8,"createTime":1541642375000,"updateTime":1541642375000,"name":"test","description":"测试账户","seq":0,"status":0},{"id":2,"createTime":1541642375000,"updateTime":1541642375000,"name":"de","description":"技术部经理","seq":0,"status":0}],"startRow":0}}
      */
     @GetMapping(value = "/getRolePage")
-    public JsonResult<PaginationDTO<WinSecurityRoleDTO>> getRolePage(Pagination pagination) {
-        PaginationDTO<WinSecurityRoleDTO> paginationDTO = winSecurityRoleService.getRolePage(pagination);
+    public JsonResult<PaginationDTO<D>> getRolePage(Pagination pagination) {
+        PaginationDTO<D> paginationDTO = winSecurityRoleService.getRolePage(pagination);
         return JsonResult.createSuccessResult(paginationDTO);
     }
 }

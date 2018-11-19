@@ -31,5 +31,7 @@ logging:
     com.winbaoxian: debug
 security:
   class:
-    userDTO: com.winbaoxian.module.security.model.dto.SecurityUserDTO
+    userDTO: com.winbaoxian.module.example.model.dto.SecurityUserDTO
     userEntity: com.winbaoxian.module.example.model.entity.citymanager.SecurityUserEntity
+    roleDTO: com.winbaoxian.module.example.model.dto.SecurityRoleDTO
+    roleEntity: com.winbaoxian.module.example.model.entity.citymanager.SecurityRoleEntity
