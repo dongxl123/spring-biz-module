@@ -33,7 +33,10 @@ CREATE TABLE `{prefix}_resource` (
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态，0：失效  1：有效',
   `resource_type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量',
   `deleted` bit(1) NOT NULL DEFAULT b'0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_value` (`value`),
+  KEY `idx_pid_code` (`pid`,`code`) USING BTREE,
+  KEY `idx_seq` (`seq`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资源';
 
 -- ----------------------------
@@ -49,7 +52,8 @@ CREATE TABLE `{prefix}_role` (
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态，0：失效  1：有效',
   `deleted` bit(1) NOT NULL DEFAULT b'0',
   `dtype` varchar(255) DEFAULT '' COMMENT 'entity间有继承关系时，hibernate需要的type来区分',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_seq` (`seq`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色';
 
 -- ----------------------------
@@ -90,7 +94,8 @@ CREATE TABLE `{prefix}_user` (
   `deleted` bit(1) NOT NULL DEFAULT b'0',
   `dtype` varchar(255) DEFAULT '' COMMENT 'entity间有继承关系时，hibernate需要的type来区分',
   PRIMARY KEY (`id`),
-  KEY `IDx_user_login_name` (`user_name`) USING BTREE
+  KEY `idx_mobile` (`mobile`),
+  KEY `idx_user_login_name` (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户';
 
 -- ----------------------------
@@ -101,5 +106,5 @@ CREATE TABLE `{prefix}_user_role` (
   `user_id` bigint(20) NOT NULL COMMENT '用户id',
   `role_id` bigint(20) NOT NULL COMMENT '角色id',
   PRIMARY KEY (`id`),
-  KEY `idx_user_role_ids` (`user_id`,`role_id`) USING BTREE
+  KEY `idx_user_role_ids` (`user_id`,`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色';

@@ -79,6 +79,9 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
 
     public D getRole(Long id) {
         D roleDTO = (D) WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.findOne(id), winSecurityUserConfiguration.getRoleDTOClass());
+        if (roleDTO == null) {
+            return null;
+        }
         List<WinSecurityRoleResourceEntity> roleResourceEntityList = winSecurityRoleResourceRepository.findByRoleId(id);
         roleDTO.setResourceIdList(trans2ResourceIdList(roleResourceEntityList));
         return roleDTO;

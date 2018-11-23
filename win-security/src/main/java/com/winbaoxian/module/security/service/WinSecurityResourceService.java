@@ -1,16 +1,12 @@
 package com.winbaoxian.module.security.service;
 
-import com.winbaoxian.module.security.model.common.Pagination;
-import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
+import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
-import com.winbaoxian.module.security.utils.BeanMergeUtils;
-import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import com.winbaoxian.module.security.model.mapper.WinSecurityResourceMapper;
 import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,12 +59,7 @@ public class WinSecurityResourceService {
     }
 
     public List<WinSecurityResourceDTO> getResourceList() {
-        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(winSecurityResourceRepository.findAllByDeletedFalseOrderBySeqAsc());
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(winSecurityResourceRepository.findAllByDeletedFalse());
     }
 
-    public PaginationDTO<WinSecurityResourceDTO> getResourcePage(Pagination pagination) {
-        Pageable pageable = Pagination.createPageable(pagination);
-        Page<WinSecurityResourceEntity> page = winSecurityResourceRepository.findAllByDeletedFalseOrderBySeqAsc(pageable);
-        return PaginationDTO.createNewInstance(page, WinSecurityResourceDTO.class);
-    }
 }

@@ -3,9 +3,10 @@ description = 'win-security'
 //apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
 //
-dependencies{
+dependencies {
 
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.apache.shiro:shiro-spring:1.4.0')
 
 }

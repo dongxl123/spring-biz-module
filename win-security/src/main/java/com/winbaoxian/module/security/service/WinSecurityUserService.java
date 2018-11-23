@@ -85,6 +85,9 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
 
     public D getUser(Long id) {
         D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOne(id), winSecurityUserConfiguration.getUserDTOClass());
+        if (userDTO == null) {
+            return null;
+        }
         List<WinSecurityUserRoleEntity> userRoleEntityList = winSecurityUserRoleRepository.findByUserId(id);
         userDTO.setRoleIdList(trans2RoleIdList(userRoleEntityList));
         return userDTO;

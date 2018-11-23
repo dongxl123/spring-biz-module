@@ -27,11 +27,15 @@ spring:
       testOnBorrow: false
       testOnReturn: false
       poolPreparedStatements: false
-logging: 
+logging:
+  level:
+    root: debug
+    org.apache.shiro: debug
     com.winbaoxian: debug
-security:
-  class:
-    userDTO: com.winbaoxian.module.example.model.dto.SecurityUserDTO
-    userEntity: com.winbaoxian.module.example.model.entity.citymanager.SecurityUserEntity
-    roleDTO: com.winbaoxian.module.example.model.dto.SecurityRoleDTO
-    roleEntity: com.winbaoxian.module.example.model.entity.citymanager.SecurityRoleEntity
+win:
+  security:
+    class:
+      userDTO: com.winbaoxian.module.example.model.dto.SecurityUserDTO
+      userEntity: com.winbaoxian.module.example.model.entity.citymanager.SecurityUserEntity
+      roleDTO: com.winbaoxian.module.example.model.dto.SecurityRoleDTO
+      roleEntity: com.winbaoxian.module.example.model.entity.citymanager.SecurityRoleEntity

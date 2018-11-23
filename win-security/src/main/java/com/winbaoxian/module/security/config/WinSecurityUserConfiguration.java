@@ -5,24 +5,52 @@ import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
+import org.apache.shiro.realm.jdbc.JdbcRealm;
+import org.apache.shiro.realm.text.TextConfigurationRealm;
+import org.apache.shiro.session.mgt.DefaultSessionManager;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
+import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.ShiroFilter;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.servlet.Filter;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Configuration
 @Slf4j
 public class WinSecurityUserConfiguration {
 
-    @Value("${security.class.userDTO:WinSecurityBaseUserDTO}")
+    @Value("${win.security.class.userDTO:WinSecurityBaseUserDTO}")
     private String userDTOClassName;
-    @Value("${security.class.userEntity:WinSecurityBaseUserEntity}")
+    @Value("${win.security.class.userEntity:WinSecurityBaseUserEntity}")
     private String userEntityClassName;
 
-    @Value("${security.class.roleDTO:WinSecurityBaseRoleDTO}")
+    @Value("${win.security.class.roleDTO:WinSecurityBaseRoleDTO}")
     private String roleDTOClassName;
-    @Value("${security.class.roleEntity:WinSecurityBaseRoleEntity}")
+    @Value("${win.security.class.roleEntity:WinSecurityBaseRoleEntity}")
     private String roleEntityClassName;
 
     private Class<? extends WinSecurityBaseUserDTO> userDTOClass;
@@ -35,7 +63,7 @@ public class WinSecurityUserConfiguration {
         try {
             userDTOClass = (Class<? extends WinSecurityBaseUserDTO>) ClassUtils.forName(userDTOClassName, getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
-            log.error("WinSecurity: security.class.userDTO not set, prepare to use default class");
+            log.error("WinSecurity: win.security.class.userDTO not set, prepare to use default class");
             userDTOClass = WinSecurityBaseUserDTO.class;
         }
         log.info("WinSecurity: UserDTOClass loaded, {}", userDTOClass.getName());
@@ -43,7 +71,7 @@ public class WinSecurityUserConfiguration {
         try {
             userEntityClass = (Class<? extends WinSecurityBaseUserEntity>) ClassUtils.forName(userEntityClassName, getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
-            log.error("WinSecurity: security.class.userEntity not set, prepare to use default class");
+            log.error("WinSecurity: win.security.class.userEntity not set, prepare to use default class");
             userEntityClass = WinSecurityBaseUserEntity.class;
         }
         log.info("WinSecurity: UserEntityClass loaded, {}", userEntityClass.getName());
@@ -51,7 +79,7 @@ public class WinSecurityUserConfiguration {
         try {
             roleDTOClass = (Class<? extends WinSecurityBaseRoleDTO>) ClassUtils.forName(roleDTOClassName, getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
-            log.error("WinSecurity: security.class.roleDTO not set, prepare to use default class");
+            log.error("WinSecurity: win.security.class.roleDTO not set, prepare to use default class");
             roleDTOClass = WinSecurityBaseRoleDTO.class;
         }
         log.info("WinSecurity: RoleDTOClass loaded, {}", roleDTOClass.getName());
@@ -59,10 +87,16 @@ public class WinSecurityUserConfiguration {
         try {
             roleEntityClass = (Class<? extends WinSecurityBaseRoleEntity>) ClassUtils.forName(roleEntityClassName, getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
-            log.error("WinSecurity: security.class.roleEntity not set, prepare to use default class");
+            log.error("WinSecurity: win.security.class.roleEntity not set, prepare to use default class");
             roleEntityClass = WinSecurityBaseRoleEntity.class;
         }
         log.info("WinSecurity: RoleEntityClass loaded, {}", roleEntityClass.getName());
+        try {
+            SecurityUtils.setSecurityManager(securityManager());
+        } catch (Exception e) {
+            log.error("WinSecurity: SecurityUtils.setSecurityManager failed");
+        }
+        log.info("WinSecurity: SecurityUtils.setSecurityManager successful");
     }
 
     public Class<? extends WinSecurityBaseUserDTO> getUserDTOClass() {
@@ -81,4 +115,38 @@ public class WinSecurityUserConfiguration {
         return roleEntityClass;
     }
 
+    @Resource
+    private WinSecurityRealm winSecurityRealm;
+
+    @Bean
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        // 设置realm.
+        securityManager.setRealm(winSecurityRealm);
+        securityManager.setSessionManager(sessionManager());
+        return securityManager;
+    }
+
+    @Bean
+    public SessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(sessionDAO());
+        return sessionManager;
+    }
+
+    @Bean
+    public SessionDAO sessionDAO() {
+        return new MemorySessionDAO();
+    }
+
+    @Bean
+    public ShiroFilterFactoryBean shirFilter() {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        // 获取filters
+        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
+        // 将自定义 的FormAuthenticationFilter注入shiroFilter中
+        filters.put("shiroFilter", new ShiroFilter());
+        shiroFilterFactoryBean.setSecurityManager(securityManager());
+        return shiroFilterFactoryBean;
+    }
 }
