@@ -2,8 +2,8 @@ package com.winbaoxian.module.security.model.enums;
 
 public enum WinSecurityStatusEnum {
 
-    DISABLED(0, "失效"),
-    ENABLED(1, "有效"),
+    ENABLED(0, "有效"),
+    DISABLED(1, "失效"),
     ;
 
     private Integer value;

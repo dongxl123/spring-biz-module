@@ -16,4 +16,6 @@ public interface WinSecurityUserRepository<E extends WinSecurityBaseUserEntity> 
     List<E> findAllByDeletedFalse();
 
     Page<E> findAllByDeletedFalse(Pageable pageable);
+
+    E findOneByUserNameAndDeletedFalse(String userName);
 }

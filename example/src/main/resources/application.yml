@@ -29,9 +29,12 @@ spring:
       poolPreparedStatements: false
 logging:
   level:
-    root: debug
+    root: info
     org.apache.shiro: debug
     com.winbaoxian: debug
+    org.hibernate: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.winbaoxian.broker.component.log.LogAspect: DEBUG
 win:
   security:
     class:

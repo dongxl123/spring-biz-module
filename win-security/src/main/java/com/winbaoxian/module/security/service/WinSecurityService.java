@@ -6,11 +6,13 @@ import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.mapper.WinSecurityResourceMapper;
 import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,7 +33,21 @@ public class WinSecurityService {
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
     }
 
+    public void login(String userName) {
+        this.login(userName, null);
+    }
+
     public void login(String userName, String password) {
+        if (StringUtils.isBlank(userName)) {
+            throw new WinSecurityException("账号不能为空");
+        }
+        if (StringUtils.isBlank(password)) {
+            throw new WinSecurityException("密码不能为空");
+        }
+        String validPassword = StringUtils.upperCase(DigestUtils.md5DigestAsHex(new String(userName + "@winbaoxian.com").getBytes()));
+        if (!password.equals(validPassword)) {
+            throw new WinSecurityException("密码不正确");
+        }
         try {
             Subject subject = SecurityUtils.getSubject();
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password);
