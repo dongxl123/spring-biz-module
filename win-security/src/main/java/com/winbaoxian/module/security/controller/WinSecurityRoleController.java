@@ -31,7 +31,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * @apiParam (请求体) {String} name 角色名称
      * @apiParam (请求体) {String} description 描述
      * @apiParam (请求体) {Number} seq 排序
-     * @apiParam (请求体) {Number} status 状态, 0:无效 , 1:有效
+     * @apiParam (请求体) {Number} status 状态, 0:有效 , 1:无效
      * @apiParam (请求体) {Array} resourceIdList 资源ID列表
      * @apiParamExample 请求体示例
      * {"name":"超级管理2员","description":"超级管理2员1111","seq":0,"status":0,"resourceIdList":[143,144,221,222,223,224,227,228]}
@@ -41,7 +41,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * @apiSuccess (响应参数) {String} name 角色名称
      * @apiSuccess (响应参数) {Array} resourceIdList 资源ID列表
      * @apiSuccess (响应参数) {Number} seq 排序
-     * @apiSuccess (响应参数) {Number} status 状态, 0:无效 , 1:有效
+     * @apiSuccess (响应参数) {Number} status 状态, 0:有效 , 1:无效
      * @apiSuccess (响应参数) {Number} updateTime 更新时间
      * @apiSuccessExample 响应示例
      * {"code":200,"data":{"createTime":1541753887713,"description":"超级管理2员1111","id":12,"name":"超级管理2员","resourceIdList":[143,144,221,222,223,224,227,228],"seq":0,"status":0,"updateTime":1541753887713}}
@@ -80,7 +80,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * @apiParam (请求体) {String} name 角色名称
      * @apiParam (请求体) {String} description 描述
      * @apiParam (请求体) {Number} seq 排序
-     * @apiParam (请求体) {Number} status 状态, 0:无效 , 1:有效
+     * @apiParam (请求体) {Number} status 状态, 0:有效 , 1:无效
      * @apiParam (请求体) {Array} resourceIdList 资源ID列表
      * @apiParamExample 请求体示例
      * {"id":1,"name":"admin","description":"超级管理2员","seq":0,"status":0,"resourceIdList":[143,144,221,222,223,224,227,228]}
@@ -90,7 +90,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * @apiSuccess (响应参数) {String} name 角色名称
      * @apiSuccess (响应参数) {String} description 描述
      * @apiSuccess (响应参数) {Number} seq 排序
-     * @apiSuccess (响应参数) {Number} status 状态, 0:无效 , 1:有效
+     * @apiSuccess (响应参数) {Number} status 状态, 0:有效 , 1:无效
      * @apiSuccess (响应参数) {Array} resourceIdList 资源ID列表
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":1,"createTime":1541642375000,"updateTime":1541642375000,"name":"admin","description":"超级管理2员","seq":0,"status":0,"resourceIdList":[143,144,221,222,223,224,227,228]}}
@@ -117,7 +117,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * @apiSuccess (响应参数) {String} name 角色名称
      * @apiSuccess (响应参数) {String} description 描述
      * @apiSuccess (响应参数) {Number} seq 排序
-     * @apiSuccess (响应参数) {Number} status 状态, 0:无效 , 1:有效
+     * @apiSuccess (响应参数) {Number} status 状态, 0:有效 , 1:无效
      * @apiSuccess (响应参数) {Array} resourceIdList 资源ID列表
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":1,"createTime":1541642375000,"updateTime":1541642375000,"name":"admin","description":"超级管理员","seq":0,"status":0,"resourceIdList":[1,11,12,13,14]}}
@@ -140,7 +140,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * @apiSuccess (响应参数) {String} name 角色名称
      * @apiSuccess (响应参数) {String} description 描述
      * @apiSuccess (响应参数) {Number} seq 排序
-     * @apiSuccess (响应参数) {Number} status 状态, 0:无效 , 1:有效
+     * @apiSuccess (响应参数) {Number} status 状态, 0:有效 , 1:无效
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1541642375000,"updateTime":1541642375000,"name":"admin","description":"超级管理员","seq":0,"status":0},{"id":2,"createTime":1541642375000,"updateTime":1541642375000,"name":"de","description":"技术部经理","seq":0,"status":0}]}
      */
@@ -173,7 +173,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * @apiSuccess (响应参数) {String} list.name 角色名称
      * @apiSuccess (响应参数) {String} list.description 描述
      * @apiSuccess (响应参数) {Number} list.seq 排序
-     * @apiSuccess (响应参数) {Number} list.status 状态, 0:无效 , 1:有效
+     * @apiSuccess (响应参数) {Number} list.status 状态, 0:有效 , 1:无效
      * @apiSuccess (响应参数) {Number} startRow 本页起始行
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"pageNum":1,"pageSize":2,"totalRow":4,"totalPage":2,"orderProperty":null,"orderDirection":null,"list":[{"id":8,"createTime":1541642375000,"updateTime":1541642375000,"name":"test","description":"测试账户","seq":0,"status":0},{"id":2,"createTime":1541642375000,"updateTime":1541642375000,"name":"de","description":"技术部经理","seq":0,"status":0}],"startRow":0}}

@@ -63,7 +63,7 @@ public class WinSecurityBaseRoleEntity implements Serializable {
     @Column(name = "SEQ")
     private Long seq;
 
-    /** 状态, 0:无效 , 1:有效 */
+    /** 状态, 0:有效 , 1:无效 */
     @Column(name = "STATUS")
     private Integer status;
 
