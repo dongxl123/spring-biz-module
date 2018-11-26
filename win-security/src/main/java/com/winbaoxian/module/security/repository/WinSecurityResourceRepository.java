@@ -16,4 +16,7 @@ public interface WinSecurityResourceRepository extends JpaRepository<WinSecurity
 
     @Query("select a from WinSecurityResourceEntity a,WinSecurityRoleResourceEntity b,WinSecurityUserRoleEntity c, WinSecurityBaseUserEntity d WHERE a.id= b.resourceId and b.roleId = c.roleId and c.userId = d.id and d.userName=?1 and a.deleted=false")
     List<WinSecurityResourceEntity> getUserResourceList(String userName);
+
+    List<WinSecurityResourceEntity> findByPidAndDeletedFalse(Long pid);
+
 }

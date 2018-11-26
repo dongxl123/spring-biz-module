@@ -7,6 +7,8 @@ import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.mapper.WinSecurityResourceMapper;
 import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +23,39 @@ public class WinSecurityResourceService {
 
     @Transactional
     public WinSecurityResourceDTO addResource(WinSecurityResourceDTO dto) {
-
+        if (dto.getPid() == null) {
+            dto.setPid(0L);
+        }
+        if (StringUtils.isNotBlank(dto.getCode())) {
+            if (winSecurityResourceRepository.existsByCodeAndPidAndDeletedFalse(dto.getCode(), dto.getPid())) {
+                throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_EXISTS);
+            }
+            dto.setGlobalCode(getGlobalCode(dto.getCode(), dto.getPid()));
+        }
         WinSecurityResourceEntity entity = WinSecurityResourceMapper.INSTANCE.toResourceEntity(dto);
         winSecurityResourceRepository.save(entity);
         entity.setSeq(entity.getId());
         winSecurityResourceRepository.save(entity);
         return getResource(entity.getId());
+    }
+
+    private String getGlobalCode(String thisCode, Long pid) {
+        String globalCode = thisCode;
+        Long thisPid = pid;
+        while (thisPid != null && thisPid > 0) {
+            WinSecurityResourceEntity pEntity = winSecurityResourceRepository.findOne(pid);
+            if (pEntity != null) {
+                if (StringUtils.isNotBlank(pEntity.getCode())) {
+                    globalCode = String.format("%s.%s", pEntity.getCode(), globalCode);
+                } else {
+                    globalCode = String.format("%s.%s", pEntity.getId(), globalCode);
+                }
+                thisPid = pEntity.getId();
+            } else {
+                break;
+            }
+        }
+        return globalCode;
     }
 
     @Transactional
@@ -37,6 +66,19 @@ public class WinSecurityResourceService {
         }
         entity.setDeleted(Boolean.TRUE);
         winSecurityResourceRepository.save(entity);
+        //删除下级所有数据
+        deleteResourceByPid(id);
+    }
+
+    private void deleteResourceByPid(Long thisId) {
+        List<WinSecurityResourceEntity> nextList = winSecurityResourceRepository.findByPidAndDeletedFalse(thisId);
+        if (CollectionUtils.isNotEmpty(nextList)) {
+            for (WinSecurityResourceEntity entity : nextList) {
+                entity.setDeleted(false);
+                deleteResourceByPid(entity.getId());
+            }
+            winSecurityResourceRepository.save(nextList);
+        }
     }
 
     @Transactional
@@ -50,8 +92,27 @@ public class WinSecurityResourceService {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
+        if (StringUtils.isNotBlank(dto.getCode()) && !dto.getCode().equals(persistent.getCode())) {
+            if (winSecurityResourceRepository.existsByCodeAndPidAndIdNotAndDeletedFalse(dto.getCode(), dto.getPid(), dto.getId())) {
+                throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_EXISTS);
+            }
+            dto.setGlobalCode(getGlobalCode(dto.getCode(), dto.getPid()));
+            //更新下级所有的globalCode
+            updateGlobalCodeByPid(dto.getId());
+        }
         winSecurityResourceRepository.save(persistent);
         return getResource(id);
+    }
+
+    private void updateGlobalCodeByPid(Long thisId) {
+        List<WinSecurityResourceEntity> nextList = winSecurityResourceRepository.findByPidAndDeletedFalse(thisId);
+        if (CollectionUtils.isNotEmpty(nextList)) {
+            for (WinSecurityResourceEntity entity : nextList) {
+                entity.setGlobalCode(getGlobalCode(entity.getCode(), entity.getPid()));
+                updateGlobalCodeByPid(entity.getId());
+            }
+            winSecurityResourceRepository.save(nextList);
+        }
     }
 
     public WinSecurityResourceDTO getResource(Long id) {

@@ -8,6 +8,7 @@ public enum WinSecurityErrorEnum {
 
     COMMON_PARAM_NOT_EXISTS("缺少参数"),
     COMMON_RESOURCE_NOT_EXISTS("资源不存在"),
+    COMMON_RESOURCE_EXISTS("资源已存在"),
     COMMON_USER_EXISTS("用户已存在"),
     COMMON_USER_NOT_EXISTS("用户不存在"),
     COMMON_ROLE_NOT_EXISTS("角色不存在"),
