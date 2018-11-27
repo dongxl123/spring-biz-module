@@ -41,7 +41,7 @@ import java.util.Map;
 
 @Configuration
 @Slf4j
-public class WinSecurityUserConfiguration {
+public class WinSecurityClassConfiguration {
 
     @Value("${win.security.class.userDTO:WinSecurityBaseUserDTO}")
     private String userDTOClassName;
@@ -91,12 +91,6 @@ public class WinSecurityUserConfiguration {
             roleEntityClass = WinSecurityBaseRoleEntity.class;
         }
         log.info("WinSecurity: RoleEntityClass loaded, {}", roleEntityClass.getName());
-        try {
-            SecurityUtils.setSecurityManager(securityManager());
-        } catch (Exception e) {
-            log.error("WinSecurity: SecurityUtils.setSecurityManager failed");
-        }
-        log.info("WinSecurity: SecurityUtils.setSecurityManager successful");
     }
 
     public Class<? extends WinSecurityBaseUserDTO> getUserDTOClass() {
@@ -115,38 +109,4 @@ public class WinSecurityUserConfiguration {
         return roleEntityClass;
     }
 
-    @Resource
-    private WinSecurityRealm winSecurityRealm;
-
-    @Bean
-    public SecurityManager securityManager() {
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        // 设置realm.
-        securityManager.setRealm(winSecurityRealm);
-        securityManager.setSessionManager(sessionManager());
-        return securityManager;
-    }
-
-    @Bean
-    public SessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(sessionDAO());
-        return sessionManager;
-    }
-
-    @Bean
-    public SessionDAO sessionDAO() {
-        return new MemorySessionDAO();
-    }
-
-    @Bean
-    public ShiroFilterFactoryBean shirFilter() {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        // 获取filters
-        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
-        // 将自定义 的FormAuthenticationFilter注入shiroFilter中
-        filters.put("shiroFilter", new ShiroFilter());
-        shiroFilterFactoryBean.setSecurityManager(securityManager());
-        return shiroFilterFactoryBean;
-    }
 }

@@ -1,7 +1,7 @@
 package com.winbaoxian.module.security.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.winbaoxian.module.security.config.WinSecurityUserConfiguration;
+import com.winbaoxian.module.security.config.WinSecurityClassConfiguration;
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
@@ -21,7 +21,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
     @Resource
     private WinSecurityUserService<D, E> winSecurityUserService;
     @Resource
-    private WinSecurityUserConfiguration winSecurityUserConfiguration;
+    private WinSecurityClassConfiguration winSecurityClassConfiguration;
 
 
     /**
@@ -49,7 +49,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      */
     @PostMapping(value = "/addUser")
     public JsonResult<D> addUser(@RequestBody String dtoStr) {
-        D dto = JSON.parseObject(dtoStr, (Type) winSecurityUserConfiguration.getUserDTOClass());
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassConfiguration.getUserDTOClass());
         D UserDTO = winSecurityUserService.addUser(dto);
         return JsonResult.createSuccessResult(UserDTO);
     }
@@ -98,7 +98,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      */
     @PostMapping(value = "/updateUser")
     public JsonResult<D> updateUser(@RequestBody String dtoStr) {
-        D dto = JSON.parseObject(dtoStr, (Type) winSecurityUserConfiguration.getUserDTOClass());
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassConfiguration.getUserDTOClass());
         D UserDTO = winSecurityUserService.updateUser(dto);
         return JsonResult.createSuccessResult(UserDTO);
     }

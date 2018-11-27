@@ -53,13 +53,28 @@ public class WinSecurityController {
         return JsonResult.createSuccessResult(resourceDTOList);
     }
 
+    /**
+     * @apiVersion 1.0.0
+     * @api {POST} /api/winSecurity/v1/login 模拟登陆
+     * @apiGroup winSecurity
+     * @apiName login
+     * @apiParam (请求体) {String} userName 登陆名
+     * @apiParam (请求体) {String} password 密码，{userName}@winbaoxian.com 的md5值（字母大写）
+     * @apiParamExample 请求体示例
+     * {"userName":"dd","password":"5968DE8F7018AD7C6A44932BF5917C8D"}
+     */
     @PostMapping(value = "/login")
     public JsonResult login(@RequestBody WinSecurityUserTokenDTO user) {
         winSecurityService.login(user.getUserName(), user.getPassword());
         return JsonResult.createSuccessResult("登录成功");
     }
 
-
+    /**
+     * @apiVersion 1.0.0
+     * @api {POST} /api/winSecurity/v1/logout 模拟登出
+     * @apiGroup winSecurity
+     * @apiName logout
+     */
     @PostMapping(value = "/logout")
     public JsonResult logout() {
         winSecurityService.logout();
