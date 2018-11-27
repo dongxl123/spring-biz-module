@@ -55,7 +55,7 @@ public class WinSecurityController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/login 模拟登陆
+     * @api {POST} /api/winSecurity/v1/login 模拟登陆(非正式接口)
      * @apiGroup winSecurity
      * @apiName login
      * @apiParam (请求体) {String} userName 登陆名
@@ -71,7 +71,7 @@ public class WinSecurityController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/logout 模拟登出
+     * @api {POST} /api/winSecurity/v1/logout 模拟登出(非正式接口)
      * @apiGroup winSecurity
      * @apiName logout
      */
