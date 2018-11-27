@@ -1,10 +1,9 @@
 package com.winbaoxian.module.security.service;
 
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
-import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
+import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
-import com.winbaoxian.module.security.model.mapper.WinSecurityResourceMapper;
-import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -26,15 +25,24 @@ import java.util.List;
 public class WinSecurityService {
 
     @Resource
-    private WinSecurityResourceRepository winSecurityResourceRepository;
+    private WinSecurityResourceService winSecurityResourceService;
+    @Resource
+    private WinSecurityUserService winSecurityUserService;
 
     public List<WinSecurityResourceDTO> getUserResourceList(String userName) {
-        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.getUserResourceList(userName);
-        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
+        return winSecurityResourceService.getValidResourceListByUserName(userName);
     }
 
     public void login(String userName) {
-        this.login(userName, null);
+        loginInternal(userName, null);
+    }
+
+    public void login(Long userId) {
+        WinSecurityBaseUserDTO userDTO = winSecurityUserService.getUser(userId);
+        if (userDTO == null) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
+        }
+        loginInternal(userDTO.getUserName(), null);
     }
 
     public void login(String userName, String password) {
@@ -48,6 +56,10 @@ public class WinSecurityService {
         if (!password.equals(validPassword)) {
             throw new WinSecurityException("密码不正确");
         }
+        loginInternal(userName, password);
+    }
+
+    private void loginInternal(String userName, String password) {
         try {
             Subject subject = SecurityUtils.getSubject();
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password);
@@ -75,7 +87,8 @@ public class WinSecurityService {
         if (subject == null || !subject.isAuthenticated()) {
             throw new WinSecurityException("用户未认证");
         }
-        return (String) subject.getPrincipal();
+        WinSecurityBaseUserDTO user = (WinSecurityBaseUserDTO) subject.getPrincipal();
+        return user.getUserName();
     }
 
     public boolean logout() {

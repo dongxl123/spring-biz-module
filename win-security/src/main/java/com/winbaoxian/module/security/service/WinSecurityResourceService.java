@@ -126,4 +126,14 @@ public class WinSecurityResourceService {
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(winSecurityResourceRepository.findAllByDeletedFalse());
     }
 
+    public List<WinSecurityResourceDTO> getValidResourceListByUserName(String userName) {
+        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.getValidResourceListByUserName(userName);
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
+    }
+
+    public List<WinSecurityResourceDTO> getValidResourceListByUserId(Long userId) {
+        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.getValidResourceListByUserId(userId);
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
+    }
+
 }

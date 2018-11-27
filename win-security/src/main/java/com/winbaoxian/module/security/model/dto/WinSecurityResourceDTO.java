@@ -59,7 +59,7 @@ public class WinSecurityResourceDTO implements Serializable {
     /** 排序 */
     private Integer seq;
 
-    /** 状态，0：有效  1：失效 */
+    /** 状态，0:无效 , 1:有效 */
     private Integer status;
 
     /** 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量 */

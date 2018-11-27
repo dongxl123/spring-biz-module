@@ -120,5 +120,8 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         return resourceIdList;
     }
 
+    public List<WinSecurityBaseRoleDTO> getRoleListByUserId(Long userId) {
+        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.getRoleListByUserId(userId), winSecurityUserConfiguration.getRoleDTOClass());
+    }
 
 }

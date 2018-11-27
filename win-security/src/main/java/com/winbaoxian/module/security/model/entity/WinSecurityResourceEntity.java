@@ -83,7 +83,7 @@ public class WinSecurityResourceEntity implements Serializable {
     @Column(name = "SEQ")
     private Long seq;
 
-    /** 状态，0：有效  1：失效 */
+    /** 状态，0:无效 , 1:有效 */
     @Column(name = "STATUS")
     private Integer status;
 

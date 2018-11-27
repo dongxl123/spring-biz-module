@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends WinSecurityBaseUserEntity> {
@@ -118,10 +119,16 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         if (CollectionUtils.isEmpty(userRoleEntityList)) {
             return null;
         }
-        List<Long> roleIdList = new ArrayList<>();
-        for (WinSecurityUserRoleEntity entity : userRoleEntityList) {
-            roleIdList.add(entity.getRoleId());
+        return userRoleEntityList.stream().map(o -> o.getRoleId()).collect(Collectors.toList());
+    }
+
+    public D getUserByUserName(String userName) {
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByUserNameAndDeletedFalse(userName), winSecurityUserConfiguration.getUserDTOClass());
+        if (userDTO == null) {
+            return null;
         }
-        return roleIdList;
+        List<WinSecurityUserRoleEntity> userRoleEntityList = winSecurityUserRoleRepository.findByUserId(userDTO.getId());
+        userDTO.setRoleIdList(trans2RoleIdList(userRoleEntityList));
+        return userDTO;
     }
 }
