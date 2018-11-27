@@ -43,14 +43,14 @@ public class WinSecurityResourceService {
         String globalCode = thisCode;
         Long thisPid = pid;
         while (thisPid != null && thisPid > 0) {
-            WinSecurityResourceEntity pEntity = winSecurityResourceRepository.findOne(pid);
+            WinSecurityResourceEntity pEntity = winSecurityResourceRepository.findOne(thisPid);
             if (pEntity != null) {
                 if (StringUtils.isNotBlank(pEntity.getCode())) {
                     globalCode = String.format("%s.%s", pEntity.getCode(), globalCode);
                 } else {
                     globalCode = String.format("%s.%s", pEntity.getId(), globalCode);
                 }
-                thisPid = pEntity.getId();
+                thisPid = pEntity.getPid();
             } else {
                 break;
             }
@@ -74,7 +74,7 @@ public class WinSecurityResourceService {
         List<WinSecurityResourceEntity> nextList = winSecurityResourceRepository.findByPidAndDeletedFalse(thisId);
         if (CollectionUtils.isNotEmpty(nextList)) {
             for (WinSecurityResourceEntity entity : nextList) {
-                entity.setDeleted(false);
+                entity.setDeleted(true);
                 deleteResourceByPid(entity.getId());
             }
             winSecurityResourceRepository.save(nextList);
@@ -91,14 +91,15 @@ public class WinSecurityResourceService {
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
+        String preCode = persistent.getCode();
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
-        if (StringUtils.isNotBlank(dto.getCode()) && !dto.getCode().equals(persistent.getCode())) {
-            if (winSecurityResourceRepository.existsByCodeAndPidAndIdNotAndDeletedFalse(dto.getCode(), dto.getPid(), dto.getId())) {
+        if (StringUtils.isNotBlank(persistent.getCode()) && !persistent.getCode().equals(preCode)) {
+            if (winSecurityResourceRepository.existsByCodeAndPidAndIdNotAndDeletedFalse(persistent.getCode(), persistent.getPid(), persistent.getId())) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_EXISTS);
             }
-            dto.setGlobalCode(getGlobalCode(dto.getCode(), dto.getPid()));
+            persistent.setGlobalCode(getGlobalCode(persistent.getCode(), persistent.getPid()));
             //更新下级所有的globalCode
-            updateGlobalCodeByPid(dto.getId());
+            updateGlobalCodeByPid(persistent.getId());
         }
         winSecurityResourceRepository.save(persistent);
         return getResource(id);
@@ -108,7 +109,9 @@ public class WinSecurityResourceService {
         List<WinSecurityResourceEntity> nextList = winSecurityResourceRepository.findByPidAndDeletedFalse(thisId);
         if (CollectionUtils.isNotEmpty(nextList)) {
             for (WinSecurityResourceEntity entity : nextList) {
-                entity.setGlobalCode(getGlobalCode(entity.getCode(), entity.getPid()));
+                if (StringUtils.isNotBlank(entity.getCode())) {
+                    entity.setGlobalCode(getGlobalCode(entity.getCode(), entity.getPid()));
+                }
                 updateGlobalCodeByPid(entity.getId());
             }
             winSecurityResourceRepository.save(nextList);
