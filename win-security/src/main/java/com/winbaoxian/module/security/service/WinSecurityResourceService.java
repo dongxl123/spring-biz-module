@@ -126,8 +126,8 @@ public class WinSecurityResourceService {
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(winSecurityResourceRepository.findAllByDeletedFalse());
     }
 
-    public List<WinSecurityResourceDTO> getValidResourceListByUserName(String userName) {
-        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.getValidResourceListByUserName(userName);
+    public List<WinSecurityResourceDTO> getResourceListByStatus(Integer status) {
+        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAllByStatusAndDeletedFalse(status);
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
     }
 

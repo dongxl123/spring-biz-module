@@ -30,7 +30,7 @@ spring:
 logging:
   level:
     root: info
-    org.apache.shiro: debug
+    org.apache.shiro: INFO
     com.winbaoxian: debug
     org.hibernate: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE

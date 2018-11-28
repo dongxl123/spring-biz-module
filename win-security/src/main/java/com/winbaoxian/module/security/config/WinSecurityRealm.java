@@ -72,7 +72,7 @@ public class WinSecurityRealm extends AuthorizingRealm {
         }
         List<WinSecurityResourceDTO> resourceDTOList = winSecurityResourceService.getValidResourceListByUserId(userDTO.getId());
         if (!CollectionUtils.isEmpty(resourceDTOList)) {
-            permissions = resourceDTOList.stream().filter(o -> WinSecurityResourceTypeEnum.BUTTON.getValue().equals(o.getResourceType()) && StringUtils.isNotBlank(o.getValue())).map(o -> o.getValue()).collect(Collectors.toSet());
+            permissions = resourceDTOList.stream().filter(o -> WinSecurityResourceTypeEnum.BUTTON.getValue().equals(o.getResourceType()) && StringUtils.isNotBlank(o.getValue())).map(o -> String.valueOf(o.getId())).collect(Collectors.toSet());
         }
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roleNames);
         info.setStringPermissions(permissions);

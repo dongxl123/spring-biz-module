@@ -1,16 +1,13 @@
 package com.winbaoxian.module.security.controller;
 
 import com.winbaoxian.module.security.model.common.JsonResult;
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityUserTokenDTO;
-import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
-import com.winbaoxian.module.security.service.WinSecurityService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import com.winbaoxian.module.security.service.WinSecurityAccessService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -20,10 +17,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/winSecurity/v1/")
-public class WinSecurityController {
+public class WinSecurityAccessController {
 
     @Resource
-    private WinSecurityService winSecurityService;
+    private WinSecurityAccessService winSecurityAccessService;
 
     /**
      * @apiVersion 1.0.0
@@ -48,8 +45,8 @@ public class WinSecurityController {
      */
     @GetMapping(value = "/getUserResourceList")
     public JsonResult<List<WinSecurityResourceDTO>> getUserResourceList() {
-        String userName = winSecurityService.getLoginUserName();
-        List<WinSecurityResourceDTO> resourceDTOList = winSecurityService.getUserResourceList(userName);
+        WinSecurityBaseUserDTO userDTO = winSecurityAccessService.getLoginUser();
+        List<WinSecurityResourceDTO> resourceDTOList = winSecurityAccessService.getUserResourceList(userDTO.getId());
         return JsonResult.createSuccessResult(resourceDTOList);
     }
 
@@ -65,7 +62,7 @@ public class WinSecurityController {
      */
     @PostMapping(value = "/login")
     public JsonResult login(@RequestBody WinSecurityUserTokenDTO user) {
-        winSecurityService.login(user.getUserName(), user.getPassword());
+        winSecurityAccessService.login(user.getUserName(), user.getPassword());
         return JsonResult.createSuccessResult("登录成功");
     }
 
@@ -77,7 +74,7 @@ public class WinSecurityController {
      */
     @PostMapping(value = "/logout")
     public JsonResult logout() {
-        winSecurityService.logout();
+        winSecurityAccessService.logout();
         return JsonResult.createSuccessResult(null);
     }
 
