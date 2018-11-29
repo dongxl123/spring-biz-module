@@ -1,5 +1,6 @@
 package com.winbaoxian.module.security.filter;
 
+import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import com.winbaoxian.module.security.utils.MemoryExpirationCache;
@@ -42,7 +43,7 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
         this.winSecurityResourceService = winSecurityResourceService;
     }
 
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response) throws Exception {
+    private boolean isAccessAllowed(ServletRequest request, ServletResponse response) throws Exception {
 
         List<WinSecurityResourceDTO> resourceList = cache.get(RESOURCE_CACHE_KEY);
         if (CollectionUtils.isEmpty(resourceList)) {
@@ -50,9 +51,9 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
             cache.put(RESOURCE_CACHE_KEY, resourceList);
             log.info("WinSecurityUrlFilter, 时间:{}, 从数据库获取数据", new Date());
         }
+        String path = WebUtils.toHttp(request).getRequestURI();
         Long resourceId = null;
         if (CollectionUtils.isNotEmpty(resourceList)) {
-            String path = WebUtils.toHttp(request).getRequestURI();
             for (WinSecurityResourceDTO resourceDTO : resourceList) {
                 if (pathsMatch(resourceDTO.getValue(), path)) {
                     resourceId = resourceDTO.getId();
@@ -60,19 +61,43 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
                 }
             }
         }
+        Subject subject = SecurityUtils.getSubject();
+        //无权限配置
         if (resourceId == null) {
+            if (isSpecialResource(path)) {
+                //无权限配置（特殊路径），登录用户有权访问
+                if (subject != null && subject.isAuthenticated()) {
+                    return true;
+                }
+                return false;
+            }
+            //无权限配置（非特殊路径），直接通过
             return true;
         }
-        Subject subject = SecurityUtils.getSubject();
+        //有权限配置，登录用户有该权限通过
         if (subject != null && subject.isAuthenticated()) {
             return subject.isPermitted(String.valueOf(resourceId));
         }
         return false;
     }
 
+    private boolean isSpecialResource(String path) {
+        for (String specialUrl : WinSecurityConstant.RESOURCE_SPECIAL_URL_ARRAY) {
+            if (pathsMatch(specialUrl, path)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        WebUtils.toHttp(response).sendError(401);
+
+    private boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject != null && subject.isAuthenticated()) {
+            WebUtils.toHttp(response).sendError(403);
+        } else {
+            WebUtils.toHttp(response).sendError(401);
+        }
         return false;
     }
 

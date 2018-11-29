@@ -51,4 +51,6 @@ public class WinSecurityBaseUserDTO implements Serializable {
     /** 关联的权限 */
     private List<Long> roleIdList;
 
+    private Boolean deleted;
+
 }

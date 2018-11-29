@@ -9,8 +9,10 @@ import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.mapper.WinSecurityResourceMapper;
 import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
+import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,8 +127,10 @@ public class WinSecurityResourceService {
         return WinSecurityResourceMapper.INSTANCE.toResourceDTO(winSecurityResourceRepository.findOne(id));
     }
 
-    public List<WinSecurityResourceDTO> getResourceList() {
-        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(winSecurityResourceRepository.findAllByDeletedFalse());
+    public List<WinSecurityResourceDTO> getResourceList(WinSecurityResourceDTO params) {
+        Specification<WinSecurityResourceEntity> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
+        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAll(specification);
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
     }
 
     public List<WinSecurityResourceDTO> getValidResourceListByUserId(Long userId) {

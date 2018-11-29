@@ -8,14 +8,18 @@ import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
 import com.winbaoxian.module.security.service.WinSecurityUserService;
+import com.winbaoxian.module.security.utils.TransformerUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api/winSecurity/v1/")
+@RequestMapping(value = "/api/winSecurity/v1/user/")
 public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E extends WinSecurityBaseUserEntity> {
 
     @Resource
@@ -26,7 +30,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/addUser 新增用户
+     * @api {POST} /api/winSecurity/v1/user/addUser 新增用户
      * @apiGroup user
      * @apiName addUser
      * @apiParam (请求体) {String} userName 登录名
@@ -57,7 +61,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/deleteUser 删除用户
+     * @api {POST} /api/winSecurity/v1/user/deleteUser 删除用户
      * @apiGroup user
      * @apiName deleteUser
      * @apiParam (请求参数) {Number} id 主键
@@ -75,7 +79,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/updateUser 更新用户
+     * @api {POST} /api/winSecurity/v1/user/updateUser 更新用户
      * @apiGroup user
      * @apiName updateUser
      * @apiParam (请求体) {String} userName 登录名
@@ -106,7 +110,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getUser 获取用户
+     * @api {GET} /api/winSecurity/v1/user/getUser 获取用户
      * @apiGroup user
      * @apiName getUser
      * @apiParam (请求参数) {Number} id 主键
@@ -132,7 +136,8 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getUserList 获取用户列表
+     * @api {GET} /api/winSecurity/v1/user/getUserList 获取用户列表
+     * @apiDescription 支持动态查询数据，参数放到URL中
      * @apiGroup user
      * @apiName getUserList
      * @apiSuccess (响应参数) {Number} id 主键
@@ -146,15 +151,17 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1449378845000,"updateTime":1541642528000,"userName":"admin","name":"admin","mobile":"18707173376","status":0,"roleIdList":null},{"id":13,"createTime":1443676327000,"updateTime":1541642528000,"userName":"snoopy","name":"snoopy","mobile":"18707173376","status":0}]}
      */
     @GetMapping(value = "/getUserList")
-    public JsonResult<List<D>> getUserList() {
-        List<D> UserList = winSecurityUserService.getUserList();
+    public JsonResult<List<D>> getUserList(@RequestParam Map<String, Object> paramsMap) {
+        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassConfiguration.getUserDTOClass());
+        List<D> UserList = winSecurityUserService.getUserList(params);
         return JsonResult.createSuccessResult(UserList);
     }
 
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getUserPage 获取用户分页数据
+     * @api {GET} /api/winSecurity/v1/user/getUserPage 获取用户分页数据
+     * @apiDescription 支持动态查询数据，参数放到URL中
      * @apiGroup user
      * @apiName getUserP
      * @apiParam (请求参数) {Number} pageNum 第几页
@@ -180,8 +187,9 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      * {"code":200,"msg":null,"data":{"pageNum":1,"pageSize":2,"totalRow":4,"totalPage":2,"orderProperty":null,"orderDirection":null,"list":[{"id":1,"createTime":1449378845000,"updateTime":1541642528000,"userName":"admin","name":"admin","mobile":"18707173376","status":0,"roleIdList":null},{"id":13,"createTime":1443676327000,"updateTime":1541642528000,"userName":"snoopy","name":"snoopy","mobile":"18707173376","status":0}],"startRow":0}}
      */
     @GetMapping(value = "/getUserPage")
-    public JsonResult<PaginationDTO<D>> getUserPage(Pagination pagination) {
-        PaginationDTO<D> paginationDTO = winSecurityUserService.getUserPage(pagination);
+    public JsonResult<PaginationDTO<D>> getUserPage(@RequestParam Map<String, Object> paramsMap, Pagination pagination) {
+        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassConfiguration.getUserDTOClass());
+        PaginationDTO<D> paginationDTO = winSecurityUserService.getUserPage(params, pagination);
         return JsonResult.createSuccessResult(paginationDTO);
     }
 }

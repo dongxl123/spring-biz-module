@@ -95,7 +95,7 @@ CREATE TABLE `{prefix}_user` (
   `dtype` varchar(255) DEFAULT '' COMMENT 'entity间有继承关系时，hibernate需要的type来区分',
   PRIMARY KEY (`id`),
   KEY `idx_mobile` (`mobile`),
-  KEY `idx_user_login_name` (`user_name`)
+  KEY `idx_user_name` (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户';
 
 -- ----------------------------

@@ -12,14 +12,17 @@ import com.winbaoxian.module.security.model.mapper.WinSecurityUserMapper;
 import com.winbaoxian.module.security.repository.WinSecurityUserRepository;
 import com.winbaoxian.module.security.repository.WinSecurityUserRoleRepository;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
+import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.management.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,13 +97,16 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         return userDTO;
     }
 
-    public List<D> getUserList() {
-        return WinSecurityUserMapper.INSTANCE.toUserDTOList(winSecurityUserRepository.findAllByDeletedFalse(), winSecurityClassConfiguration.getUserDTOClass());
+    public List<D> getUserList(D params) {
+        Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
+        List<E> userList = winSecurityUserRepository.findAll(specification);
+        return WinSecurityUserMapper.INSTANCE.toUserDTOList(userList, winSecurityClassConfiguration.getUserDTOClass());
     }
 
-    public PaginationDTO<D> getUserPage(Pagination pagination) {
+    public PaginationDTO<D> getUserPage(D params, Pagination pagination) {
+        Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
         Pageable pageable = Pagination.createPageable(pagination);
-        Page<E> page = winSecurityUserRepository.findAllByDeletedFalse(pageable);
+        Page<E> page = winSecurityUserRepository.findAll(specification, pageable);
         return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassConfiguration.getUserDTOClass());
     }
 
@@ -142,11 +148,4 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         return userDTO;
     }
 
-//TODO
-//    public PaginationDTO<D> getUserPage(Specification<E> specification,) {
-//        Pageable pageable = Pagination.createPageable(pagination);
-//        Page<E> page = winSecurityUserRepository.findAllByDeletedFalse(pageable);
-//        return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassConfiguration.getUserDTOClass());
-//
-//    }
 }

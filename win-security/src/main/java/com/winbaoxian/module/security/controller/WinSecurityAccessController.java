@@ -3,7 +3,6 @@ package com.winbaoxian.module.security.controller;
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.dto.*;
 import com.winbaoxian.module.security.service.WinSecurityAccessService;
-import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -15,19 +14,17 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping(value = "/api/winSecurity/v1/")
+@RequestMapping(value = "/api/winSecurity/v1/access/")
 public class WinSecurityAccessController {
 
     @Resource
     private WinSecurityAccessService winSecurityAccessService;
-    @Resource
-    private WinSecurityResourceService winSecurityResourceService;
 
     /**
      * /**
      *
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getLoginUserInfo 获取登录用户信息
+     * @api {GET} /api/winSecurity/v1/access/getLoginUserInfo 获取登录用户信息
      * @apiGroup winSecurity
      * @apiName getLoginUserInfo
      * @apiSuccess (响应参数) {Number} id 主键
@@ -51,7 +48,7 @@ public class WinSecurityAccessController {
      * /**
      *
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getLoginUserRoleList 获取登录用户角色列表
+     * @api {GET} /api/winSecurity/v1/access/getLoginUserRoleList 获取登录用户角色列表
      * @apiGroup winSecurity
      * @apiName getLoginUserRoleList
      * @apiSuccess (响应参数) {Number} id 主键
@@ -72,7 +69,7 @@ public class WinSecurityAccessController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getLoginUserResourceList 获取登录用户资源
+     * @api {GET} /api/winSecurity/v1/access/getLoginUserResourceList 获取登录用户资源列表
      * @apiGroup winSecurity
      * @apiName getUserResourceList
      * @apiSuccess (响应参数) {Number} id 主键
@@ -100,7 +97,7 @@ public class WinSecurityAccessController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getLoginUserAllInfo 获取登录用户所有信息
+     * @api {GET} /api/winSecurity/v1/access/getLoginUserAllInfo 获取登录用户所有信息
      * @apiGroup winSecurity
      * @apiName getLoginUserAllInfo
      * @apiSuccess (响应参数) {Object} userInfo 用户信息
@@ -145,7 +142,7 @@ public class WinSecurityAccessController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/login 模拟登陆(非正式接口)
+     * @api {POST} /api/winSecurity/v1/access/login 模拟登陆(非正式接口)
      * @apiGroup winSecurity
      * @apiName login
      * @apiParam (请求体) {String} userName 登陆名
@@ -161,7 +158,7 @@ public class WinSecurityAccessController {
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/logout 模拟登出(非正式接口)
+     * @api {POST} /api/winSecurity/v1/access/logout 模拟登出(非正式接口)
      * @apiGroup winSecurity
      * @apiName logout
      */

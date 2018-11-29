@@ -8,14 +8,16 @@ import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
 import com.winbaoxian.module.security.service.WinSecurityRoleService;
+import com.winbaoxian.module.security.utils.TransformerUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api/winSecurity/v1/")
+@RequestMapping(value = "/api/winSecurity/v1/role/")
 public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E extends WinSecurityBaseRoleEntity> {
 
     @Resource
@@ -25,7 +27,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/addRole 新增角色
+     * @api {POST} /api/winSecurity/v1/role/addRole 新增角色
      * @apiGroup role
      * @apiName addRole
      * @apiParam (请求体) {String} name 角色名称
@@ -56,7 +58,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/deleteRole 删除角色
+     * @api {POST} /api/winSecurity/v1/role/deleteRole 删除角色
      * @apiGroup role
      * @apiName deleteRole
      * @apiParam (请求参数) {Number} id 主键
@@ -74,7 +76,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {POST} /api/winSecurity/v1/updateRole 更新角色
+     * @api {POST} /api/winSecurity/v1/role/updateRole 更新角色
      * @apiGroup role
      * @apiName updateRole
      * @apiParam (请求体) {String} name 角色名称
@@ -105,7 +107,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getRole 获取角色
+     * @api {GET} /api/winSecurity/v1/role/getRole 获取角色
      * @apiGroup role
      * @apiName getRole
      * @apiParam (请求参数) {Number} id 主键
@@ -131,7 +133,8 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getRoleList 获取角色列表
+     * @api {GET} /api/winSecurity/v1/role/getRoleList 获取角色列表
+     * @apiDescription 支持动态查询数据，参数放到URL中
      * @apiGroup role
      * @apiName getRoleList
      * @apiSuccess (响应参数) {Number} id 主键
@@ -145,15 +148,17 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1541642375000,"updateTime":1541642375000,"name":"admin","description":"超级管理员","seq":0,"status":0},{"id":2,"createTime":1541642375000,"updateTime":1541642375000,"name":"de","description":"技术部经理","seq":0,"status":0}]}
      */
     @GetMapping(value = "/getRoleList")
-    public JsonResult<List<D>> getRoleList() {
-        List<D> RoleList = winSecurityRoleService.getRoleList();
+    public JsonResult<List<D>> getRoleList(@RequestParam Map<String, Object> paramsMap) {
+        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassConfiguration.getRoleDTOClass());
+        List<D> RoleList = winSecurityRoleService.getRoleList(params);
         return JsonResult.createSuccessResult(RoleList);
     }
 
 
     /**
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/getRolePage 获取角色分页数据
+     * @api {GET} /api/winSecurity/v1/role/getRolePage 获取角色分页数据
+     * @apiDescription 支持动态查询数据，参数放到URL中
      * @apiGroup role
      * @apiName getRolePage
      * @apiParam (请求参数) {Number} pageNum 第几页
@@ -179,8 +184,9 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * {"code":200,"msg":null,"data":{"pageNum":1,"pageSize":2,"totalRow":4,"totalPage":2,"orderProperty":null,"orderDirection":null,"list":[{"id":8,"createTime":1541642375000,"updateTime":1541642375000,"name":"test","description":"测试账户","seq":0,"status":0},{"id":2,"createTime":1541642375000,"updateTime":1541642375000,"name":"de","description":"技术部经理","seq":0,"status":0}],"startRow":0}}
      */
     @GetMapping(value = "/getRolePage")
-    public JsonResult<PaginationDTO<D>> getRolePage(Pagination pagination) {
-        PaginationDTO<D> paginationDTO = winSecurityRoleService.getRolePage(pagination);
+    public JsonResult<PaginationDTO<D>> getRolePage(@RequestParam Map<String, Object> paramsMap, Pagination pagination) {
+        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassConfiguration.getRoleDTOClass());
+        PaginationDTO<D> paginationDTO = winSecurityRoleService.getRolePage(params, pagination);
         return JsonResult.createSuccessResult(paginationDTO);
     }
 }

@@ -54,8 +54,15 @@ public class WinSecurityErrorController implements ErrorController {
     @RequestMapping(value = ERROR_PATH)
     public JsonResult error(HttpServletRequest request, HttpServletResponse response) {
         String errorMsg = "winSecurity internal error";
-        if (response.getStatus() == 401) {
-            errorMsg = "未授权";
+        int status = response.getStatus();
+        if (status == 401) {
+            errorMsg = "未登录";
+        } if (status == 403) {
+            errorMsg = "访问无权限";
+        }  else if (status == 404) {
+            errorMsg = "请求URL不存在";
+        } else if (status == 500) {
+            errorMsg = "服务器内部错误";
         }
         return JsonResult.createErrorResult(errorMsg);
     }

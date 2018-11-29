@@ -51,4 +51,6 @@ public class WinSecurityBaseRoleDTO implements Serializable {
     /** 关联的资源 */
     private List<Long> resourceIdList;
 
+    private Boolean deleted;
+
 }

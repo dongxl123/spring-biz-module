@@ -1,6 +1,7 @@
 package com.winbaoxian.module.security.service;
 
 import com.winbaoxian.module.security.config.WinSecurityClassConfiguration;
+import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
@@ -9,12 +10,16 @@ import com.winbaoxian.module.security.model.entity.WinSecurityRoleResourceEntity
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.mapper.WinSecurityRoleMapper;
+import com.winbaoxian.module.security.model.mapper.WinSecurityUserMapper;
 import com.winbaoxian.module.security.repository.WinSecurityRoleRepository;
 import com.winbaoxian.module.security.repository.WinSecurityRoleResourceRepository;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
+import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,14 +92,18 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         return roleDTO;
     }
 
-    public List<D> getRoleList() {
-        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.findAllByDeletedFalseOrderBySeqAsc(), winSecurityClassConfiguration.getRoleDTOClass());
+    public List<D> getRoleList(D params) {
+        Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
+        Sort sort = new Sort(Sort.Direction.ASC, WinSecurityConstant.SORT_COLUMN_SEQ);
+        List<E> roleList = winSecurityRoleRepository.findAll(specification, sort);
+        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(roleList, winSecurityClassConfiguration.getRoleDTOClass());
 
     }
 
-    public PaginationDTO<D> getRolePage(Pagination pagination) {
-        Pageable pageable = Pagination.createPageable(pagination);
-        Page<E> page = winSecurityRoleRepository.findAllByDeletedFalseOrderBySeqAsc(pageable);
+    public PaginationDTO<D> getRolePage(D params, Pagination pagination) {
+        Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
+        Pageable pageable = Pagination.createPageable(pagination, WinSecurityConstant.SORT_COLUMN_SEQ, Sort.Direction.ASC.name());
+        Page<E> page = winSecurityRoleRepository.findAll(specification, pageable);
         return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassConfiguration.getRoleDTOClass());
     }
 

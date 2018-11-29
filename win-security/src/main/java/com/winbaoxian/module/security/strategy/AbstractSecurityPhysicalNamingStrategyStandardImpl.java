@@ -14,7 +14,7 @@ public abstract class AbstractSecurityPhysicalNamingStrategyStandardImpl extends
         String tablePrefixText = tablePrefix().toUpperCase();
         Identifier newName = name;
         if (StringUtils.isNotBlank(tablePrefixText)) {
-            for (String securityTableName : WinSecurityConstant.SECURITY_TABLE_LIST) {
+            for (String securityTableName : WinSecurityConstant.SECURITY_TABLE_ARRAY) {
                 if (securityTableName.equals(nameText)) {
                     newName = new Identifier(tablePrefixText + "_" + name.getText(), name.isQuoted());
                     break;
