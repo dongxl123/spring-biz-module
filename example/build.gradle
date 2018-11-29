@@ -11,7 +11,7 @@ dependencies {
     compile('com.winbaoxian:bxs-service-model:1.0a-SNAPSHOT') {
         exclude module: 'spring-data-mongodb'
     }
-    compile('com.winbaoxian.module:win-security:1.0.0')
+    compile('com.winbaoxian.module:win-security:1.0.0-SNAPSHOT')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
