@@ -3,6 +3,8 @@ package com.winbaoxian.module.security.service;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
+import com.winbaoxian.module.security.model.enums.WinSecurityResourceTypeEnum;
+import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.mapper.WinSecurityResourceMapper;
 import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WinSecurityResourceService {
@@ -126,14 +129,18 @@ public class WinSecurityResourceService {
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(winSecurityResourceRepository.findAllByDeletedFalse());
     }
 
-    public List<WinSecurityResourceDTO> getResourceListByStatus(Integer status) {
-        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAllByStatusAndDeletedFalse(status);
-        return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
-    }
-
     public List<WinSecurityResourceDTO> getValidResourceListByUserId(Long userId) {
         List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.getValidResourceListByUserId(userId);
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
+    }
+
+    public List<WinSecurityResourceDTO> getAllValidResourceList() {
+        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAllByStatusAndDeletedFalse(WinSecurityStatusEnum.ENABLED.getValue());
+        List<WinSecurityResourceDTO> resourceList = WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
+        if (CollectionUtils.isEmpty(resourceList)) {
+            return null;
+        }
+        return resourceList.stream().filter(o -> WinSecurityResourceTypeEnum.BUTTON.getValue().equals(o.getResourceType()) && StringUtils.isNotBlank(o.getValue())).collect(Collectors.toList());
     }
 
 }

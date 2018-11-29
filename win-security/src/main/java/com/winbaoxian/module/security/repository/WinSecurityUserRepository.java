@@ -4,10 +4,11 @@ import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface WinSecurityUserRepository<E extends WinSecurityBaseUserEntity> extends JpaRepository<E, Long> {
+public interface WinSecurityUserRepository<E extends WinSecurityBaseUserEntity> extends JpaRepository<E, Long>, JpaSpecificationExecutor<E> {
 
     boolean existsByUserNameAndDeletedFalse(String userName);
 
@@ -18,4 +19,7 @@ public interface WinSecurityUserRepository<E extends WinSecurityBaseUserEntity> 
     Page<E> findAllByDeletedFalse(Pageable pageable);
 
     E findOneByUserNameAndDeletedFalse(String userName);
+
+    E findOneByMobileAndDeletedFalse(String mobile);
+
 }

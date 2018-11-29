@@ -120,8 +120,20 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         return resourceIdList;
     }
 
-    public List<WinSecurityBaseRoleDTO> getRoleListByUserId(Long userId) {
+    public List<D> getRoleListByUserId(Long userId) {
         return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.getRoleListByUserId(userId), winSecurityClassConfiguration.getRoleDTOClass());
+    }
+
+    public List<D> getValidRoleListByUserId(Long userId) {
+        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.getValidRoleListByUserId(userId), winSecurityClassConfiguration.getRoleDTOClass());
+    }
+
+    public D getRoleByName(String name) {
+        return (D) WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.findByNameAndDeletedFalse(name), winSecurityClassConfiguration.getRoleDTOClass());
+    }
+
+    public D getRoleByUserId(Long userId) {
+        return (D) WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.getRoleByUserId(userId), winSecurityClassConfiguration.getRoleDTOClass());
     }
 
 }

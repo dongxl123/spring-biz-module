@@ -2,11 +2,12 @@ package com.winbaoxian.module.security.repository;
 
 import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface WinSecurityResourceRepository extends JpaRepository<WinSecurityResourceEntity, Long> {
+public interface WinSecurityResourceRepository extends JpaRepository<WinSecurityResourceEntity, Long>, JpaSpecificationExecutor<WinSecurityResourceEntity> {
 
     List<WinSecurityResourceEntity> findAllByDeletedFalse();
 

@@ -1,10 +1,10 @@
 package com.winbaoxian.module.security.service;
 
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityUserAllInfoDTO;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
-import com.winbaoxian.module.security.model.enums.WinSecurityResourceTypeEnum;
-import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,13 +13,10 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author dongxuanliang252
@@ -32,11 +29,9 @@ public class WinSecurityAccessService {
     @Resource
     private WinSecurityResourceService winSecurityResourceService;
     @Resource
+    private WinSecurityRoleService winSecurityRoleService;
+    @Resource
     private WinSecurityUserService winSecurityUserService;
-
-    public List<WinSecurityResourceDTO> getUserResourceList(Long userId) {
-        return winSecurityResourceService.getValidResourceListByUserId(userId);
-    }
 
     public void login(String userName) {
         loginInternal(userName, null);
@@ -87,15 +82,6 @@ public class WinSecurityAccessService {
         }
     }
 
-    public WinSecurityBaseUserDTO getLoginUser() {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject == null || !subject.isAuthenticated()) {
-            throw new WinSecurityException("用户未认证");
-        }
-        WinSecurityBaseUserDTO user = (WinSecurityBaseUserDTO) subject.getPrincipal();
-        return user;
-    }
-
     public boolean logout() {
         try {
             Subject subject = SecurityUtils.getSubject();
@@ -107,12 +93,31 @@ public class WinSecurityAccessService {
         return true;
     }
 
-    public List<WinSecurityResourceDTO> getAllValidResourceList() {
-        List<WinSecurityResourceDTO> resourceList = winSecurityResourceService.getResourceListByStatus(WinSecurityStatusEnum.ENABLED.getValue());
-        if (CollectionUtils.isEmpty(resourceList)) {
-            return null;
+    public WinSecurityBaseUserDTO getLoginUserInfo() {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject == null || !subject.isAuthenticated()) {
+            throw new WinSecurityException("用户未认证");
         }
-        return resourceList.stream().filter(o -> WinSecurityResourceTypeEnum.BUTTON.getValue().equals(o.getResourceType()) && StringUtils.isNotBlank(o.getValue())).collect(Collectors.toList());
+        return (WinSecurityBaseUserDTO) subject.getPrincipal();
+    }
+
+    public List<WinSecurityBaseRoleDTO> getLoginUserRoleList() {
+        WinSecurityBaseUserDTO userDTO = getLoginUserInfo();
+        return winSecurityRoleService.getValidRoleListByUserId(userDTO.getId());
+    }
+
+    public List<WinSecurityResourceDTO> getLoginUserResourceList() {
+        WinSecurityBaseUserDTO userDTO = getLoginUserInfo();
+        return winSecurityResourceService.getValidResourceListByUserId(userDTO.getId());
+    }
+
+    public WinSecurityUserAllInfoDTO getLoginUserAllInfo() {
+        WinSecurityBaseUserDTO userDTO = getLoginUserInfo();
+        WinSecurityUserAllInfoDTO allInfoDTO = new WinSecurityUserAllInfoDTO();
+        allInfoDTO.setUserInfo(userDTO);
+        allInfoDTO.setRoleList(winSecurityRoleService.getValidRoleListByUserId(userDTO.getId()));
+        allInfoDTO.setResourceList(winSecurityResourceService.getValidResourceListByUserId(userDTO.getId()));
+        return allInfoDTO;
     }
 
 }

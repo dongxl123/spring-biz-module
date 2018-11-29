@@ -3,11 +3,11 @@ package com.winbaoxian.module.security.service;
 import com.winbaoxian.module.security.config.WinSecurityClassConfiguration;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
+import com.winbaoxian.module.security.model.entity.WinSecurityUserRoleEntity;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
-import com.winbaoxian.module.security.model.entity.WinSecurityUserRoleEntity;
 import com.winbaoxian.module.security.model.mapper.WinSecurityUserMapper;
 import com.winbaoxian.module.security.repository.WinSecurityUserRepository;
 import com.winbaoxian.module.security.repository.WinSecurityUserRoleRepository;
@@ -131,4 +131,22 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         userDTO.setRoleIdList(trans2RoleIdList(userRoleEntityList));
         return userDTO;
     }
+
+    public D getUserByMobile(String mobile) {
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByMobileAndDeletedFalse(mobile), winSecurityClassConfiguration.getUserDTOClass());
+        if (userDTO == null) {
+            return null;
+        }
+        List<WinSecurityUserRoleEntity> userRoleEntityList = winSecurityUserRoleRepository.findByUserId(userDTO.getId());
+        userDTO.setRoleIdList(trans2RoleIdList(userRoleEntityList));
+        return userDTO;
+    }
+
+//TODO
+//    public PaginationDTO<D> getUserPage(Specification<E> specification,) {
+//        Pageable pageable = Pagination.createPageable(pagination);
+//        Page<E> page = winSecurityUserRepository.findAllByDeletedFalse(pageable);
+//        return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassConfiguration.getUserDTOClass());
+//
+//    }
 }

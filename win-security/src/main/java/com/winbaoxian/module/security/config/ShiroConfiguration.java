@@ -1,7 +1,7 @@
 package com.winbaoxian.module.security.config;
 
 import com.winbaoxian.module.security.filter.WinSecurityUrlFilter;
-import com.winbaoxian.module.security.service.WinSecurityAccessService;
+import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.SecurityManager;
@@ -41,7 +41,7 @@ public class ShiroConfiguration {
     @Resource
     private WinSecurityRealm winSecurityRealm;
     @Resource
-    private WinSecurityAccessService winSecurityAccessService;
+    private WinSecurityResourceService winSecurityResourceService;
 
     @Bean
     public SecurityManager securityManager() {
@@ -80,7 +80,7 @@ public class ShiroConfiguration {
         // 获取filters
         Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
         // 将自定义的Filter注入shiroFilter中
-        filters.put("urlFilter", new WinSecurityUrlFilter(winSecurityAccessService));
+        filters.put("urlFilter", new WinSecurityUrlFilter(winSecurityResourceService));
         shiroFilterFactoryBean.setSecurityManager(securityManager());
         return shiroFilterFactoryBean;
     }

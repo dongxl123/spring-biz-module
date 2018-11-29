@@ -66,7 +66,7 @@ public class WinSecurityRealm extends AuthorizingRealm {
         WinSecurityBaseUserDTO userDTO = (WinSecurityBaseUserDTO) getAvailablePrincipal(principals);
         Set<String> roleNames = null;
         Set<String> permissions = null;
-        List<WinSecurityBaseRoleDTO> roleDTOList = winSecurityRoleService.getRoleListByUserId(userDTO.getId());
+        List<WinSecurityBaseRoleDTO> roleDTOList = winSecurityRoleService.getValidRoleListByUserId(userDTO.getId());
         if (!CollectionUtils.isEmpty(roleDTOList)) {
             roleNames = roleDTOList.stream().map(o -> o.getName()).collect(Collectors.toSet());
         }
