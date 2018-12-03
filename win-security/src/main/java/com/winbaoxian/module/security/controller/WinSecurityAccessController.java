@@ -71,7 +71,7 @@ public class WinSecurityAccessController {
      * @apiVersion 1.0.0
      * @api {GET} /api/winSecurity/v1/access/getLoginUserResourceList 获取登录用户资源列表
      * @apiGroup winSecurity
-     * @apiName getUserResourceList
+     * @apiName getLoginUserResourceList
      * @apiSuccess (响应参数) {Number} id 主键
      * @apiSuccess (响应参数) {Number} createTime 创建时间
      * @apiSuccess (响应参数) {Number} updateTime 更新时间
