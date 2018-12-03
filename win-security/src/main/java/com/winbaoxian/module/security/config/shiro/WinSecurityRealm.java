@@ -1,7 +1,8 @@
-package com.winbaoxian.module.security.config;
+package com.winbaoxian.module.security.config.shiro;
 
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityPrincipal;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.model.enums.WinSecurityResourceTypeEnum;
 import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
@@ -18,9 +19,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,15 +28,17 @@ import java.util.stream.Collectors;
  * @author dongxuanliang252
  * @date 2018-11-23 20:39
  */
-@Component
 public class WinSecurityRealm extends AuthorizingRealm {
 
-    @Resource
     private WinSecurityUserService winSecurityUserService;
-    @Resource
     private WinSecurityRoleService winSecurityRoleService;
-    @Resource
     private WinSecurityResourceService winSecurityResourceService;
+
+    public WinSecurityRealm(WinSecurityUserService winSecurityUserService, WinSecurityRoleService winSecurityRoleService, WinSecurityResourceService winSecurityResourceService) {
+        this.winSecurityUserService = winSecurityUserService;
+        this.winSecurityRoleService = winSecurityRoleService;
+        this.winSecurityResourceService = winSecurityResourceService;
+    }
 
     @Override
     public CredentialsMatcher getCredentialsMatcher() {
@@ -54,7 +55,10 @@ public class WinSecurityRealm extends AuthorizingRealm {
         if (WinSecurityStatusEnum.DISABLED.getValue().equals(user.getStatus())) {
             throw new DisabledAccountException("account is disables for user [" + token.getUsername() + "]");
         }
-        return new SimpleAuthenticationInfo(user, null, getName());
+        WinSecurityPrincipal principal = new WinSecurityPrincipal();
+        principal.setId(user.getId());
+        principal.setUserName(user.getUserName());
+        return new SimpleAuthenticationInfo(principal, null, getName());
     }
 
     @Override
@@ -63,14 +67,14 @@ public class WinSecurityRealm extends AuthorizingRealm {
         if (principals == null) {
             throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
         }
-        WinSecurityBaseUserDTO userDTO = (WinSecurityBaseUserDTO) getAvailablePrincipal(principals);
+        WinSecurityPrincipal principal = (WinSecurityPrincipal) getAvailablePrincipal(principals);
         Set<String> roleNames = null;
         Set<String> permissions = null;
-        List<WinSecurityBaseRoleDTO> roleDTOList = winSecurityRoleService.getValidRoleListByUserId(userDTO.getId());
+        List<WinSecurityBaseRoleDTO> roleDTOList = winSecurityRoleService.getValidRoleListByUserId(principal.getId());
         if (!CollectionUtils.isEmpty(roleDTOList)) {
             roleNames = roleDTOList.stream().map(o -> o.getName()).collect(Collectors.toSet());
         }
-        List<WinSecurityResourceDTO> resourceDTOList = winSecurityResourceService.getValidResourceListByUserId(userDTO.getId());
+        List<WinSecurityResourceDTO> resourceDTOList = winSecurityResourceService.getValidResourceListByUserId(principal.getId());
         if (!CollectionUtils.isEmpty(resourceDTOList)) {
             permissions = resourceDTOList.stream().filter(o -> WinSecurityResourceTypeEnum.BUTTON.getValue().equals(o.getResourceType()) && StringUtils.isNotBlank(o.getValue())).map(o -> String.valueOf(o.getId())).collect(Collectors.toSet());
         }

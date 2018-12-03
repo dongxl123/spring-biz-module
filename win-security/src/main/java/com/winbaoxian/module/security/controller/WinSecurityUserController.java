@@ -1,7 +1,7 @@
 package com.winbaoxian.module.security.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.winbaoxian.module.security.config.WinSecurityClassConfiguration;
+import com.winbaoxian.module.security.config.loader.WinSecurityClassLoaderConfiguration;
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
@@ -12,9 +12,7 @@ import com.winbaoxian.module.security.utils.TransformerUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +23,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
     @Resource
     private WinSecurityUserService<D, E> winSecurityUserService;
     @Resource
-    private WinSecurityClassConfiguration winSecurityClassConfiguration;
+    private WinSecurityClassLoaderConfiguration winSecurityClassLoaderConfiguration;
 
 
     /**
@@ -53,7 +51,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      */
     @PostMapping(value = "/addUser")
     public JsonResult<D> addUser(@RequestBody String dtoStr) {
-        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassConfiguration.getUserDTOClass());
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassLoaderConfiguration.getUserDTOClass());
         D UserDTO = winSecurityUserService.addUser(dto);
         return JsonResult.createSuccessResult(UserDTO);
     }
@@ -102,7 +100,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      */
     @PostMapping(value = "/updateUser")
     public JsonResult<D> updateUser(@RequestBody String dtoStr) {
-        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassConfiguration.getUserDTOClass());
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassLoaderConfiguration.getUserDTOClass());
         D UserDTO = winSecurityUserService.updateUser(dto);
         return JsonResult.createSuccessResult(UserDTO);
     }
@@ -152,7 +150,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      */
     @GetMapping(value = "/getUserList")
     public JsonResult<List<D>> getUserList(@RequestParam Map<String, Object> paramsMap) {
-        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassConfiguration.getUserDTOClass());
+        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getUserDTOClass());
         List<D> UserList = winSecurityUserService.getUserList(params);
         return JsonResult.createSuccessResult(UserList);
     }
@@ -188,7 +186,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      */
     @GetMapping(value = "/getUserPage")
     public JsonResult<PaginationDTO<D>> getUserPage(@RequestParam Map<String, Object> paramsMap, Pagination pagination) {
-        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassConfiguration.getUserDTOClass());
+        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getUserDTOClass());
         PaginationDTO<D> paginationDTO = winSecurityUserService.getUserPage(params, pagination);
         return JsonResult.createSuccessResult(paginationDTO);
     }

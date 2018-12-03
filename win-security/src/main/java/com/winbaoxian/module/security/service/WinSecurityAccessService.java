@@ -1,9 +1,6 @@
 package com.winbaoxian.module.security.service;
 
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
-import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
-import com.winbaoxian.module.security.model.dto.WinSecurityUserAllInfoDTO;
+import com.winbaoxian.module.security.model.dto.*;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +16,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author dongxuanliang252
+ * @author dongxuanliang252getValidResourceListByUserId
  * @date 2018-11-19 14:04
  */
 @Service
@@ -93,30 +90,35 @@ public class WinSecurityAccessService {
         return true;
     }
 
-    public WinSecurityBaseUserDTO getLoginUserInfo() {
+    public WinSecurityPrincipal getWinSecurityPrincipal() {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             throw new WinSecurityException("用户未认证");
         }
-        return (WinSecurityBaseUserDTO) subject.getPrincipal();
+        return (WinSecurityPrincipal) subject.getPrincipal();
+    }
+
+    public WinSecurityBaseUserDTO getLoginUserInfo() {
+        WinSecurityPrincipal principal = getWinSecurityPrincipal();
+        return winSecurityUserService.getUser(principal.getId());
     }
 
     public List<WinSecurityBaseRoleDTO> getLoginUserRoleList() {
-        WinSecurityBaseUserDTO userDTO = getLoginUserInfo();
-        return winSecurityRoleService.getValidRoleListByUserId(userDTO.getId());
+        WinSecurityPrincipal principal = getWinSecurityPrincipal();
+        return winSecurityRoleService.getValidRoleListByUserId(principal.getId());
     }
 
     public List<WinSecurityResourceDTO> getLoginUserResourceList() {
-        WinSecurityBaseUserDTO userDTO = getLoginUserInfo();
-        return winSecurityResourceService.getValidResourceListByUserId(userDTO.getId());
+        WinSecurityPrincipal principal = getWinSecurityPrincipal();
+        return winSecurityResourceService.getValidResourceListByUserId(principal.getId());
     }
 
     public WinSecurityUserAllInfoDTO getLoginUserAllInfo() {
-        WinSecurityBaseUserDTO userDTO = getLoginUserInfo();
+        WinSecurityPrincipal principal = getWinSecurityPrincipal();
         WinSecurityUserAllInfoDTO allInfoDTO = new WinSecurityUserAllInfoDTO();
-        allInfoDTO.setUserInfo(userDTO);
-        allInfoDTO.setRoleList(winSecurityRoleService.getValidRoleListByUserId(userDTO.getId()));
-        allInfoDTO.setResourceList(winSecurityResourceService.getValidResourceListByUserId(userDTO.getId()));
+        allInfoDTO.setUserInfo(winSecurityUserService.getUser(principal.getId()));
+        allInfoDTO.setRoleList(winSecurityRoleService.getValidRoleListByUserId(principal.getId()));
+        allInfoDTO.setResourceList(winSecurityResourceService.getValidResourceListByUserId(principal.getId()));
         return allInfoDTO;
     }
 

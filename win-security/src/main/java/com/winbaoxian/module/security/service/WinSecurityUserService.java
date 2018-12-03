@@ -1,6 +1,6 @@
 package com.winbaoxian.module.security.service;
 
-import com.winbaoxian.module.security.config.WinSecurityClassConfiguration;
+import com.winbaoxian.module.security.config.loader.WinSecurityClassLoaderConfiguration;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.management.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,13 +34,13 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     @Resource
     private WinSecurityUserRoleRepository winSecurityUserRoleRepository;
     @Resource
-    private WinSecurityClassConfiguration winSecurityClassConfiguration;
+    private WinSecurityClassLoaderConfiguration winSecurityClassLoaderConfiguration;
 
     public D addUser(D dto) {
         if (winSecurityUserRepository.existsByUserNameAndDeletedFalse(dto.getUserName())) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
-        E entity = (E) WinSecurityUserMapper.INSTANCE.toUserEntity(dto, winSecurityClassConfiguration.getUserEntityClass());
+        E entity = (E) WinSecurityUserMapper.INSTANCE.toUserEntity(dto, winSecurityClassLoaderConfiguration.getUserEntityClass());
         winSecurityUserRepository.save(entity);
         //角色
         if (CollectionUtils.isNotEmpty(dto.getRoleIdList())) {
@@ -88,7 +87,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public D getUser(Long id) {
-        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOne(id), winSecurityClassConfiguration.getUserDTOClass());
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOne(id), winSecurityClassLoaderConfiguration.getUserDTOClass());
         if (userDTO == null) {
             return null;
         }
@@ -100,14 +99,14 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     public List<D> getUserList(D params) {
         Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
         List<E> userList = winSecurityUserRepository.findAll(specification);
-        return WinSecurityUserMapper.INSTANCE.toUserDTOList(userList, winSecurityClassConfiguration.getUserDTOClass());
+        return WinSecurityUserMapper.INSTANCE.toUserDTOList(userList, winSecurityClassLoaderConfiguration.getUserDTOClass());
     }
 
     public PaginationDTO<D> getUserPage(D params, Pagination pagination) {
         Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
         Pageable pageable = Pagination.createPageable(pagination);
         Page<E> page = winSecurityUserRepository.findAll(specification, pageable);
-        return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassConfiguration.getUserDTOClass());
+        return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassLoaderConfiguration.getUserDTOClass());
     }
 
     private List<WinSecurityUserRoleEntity> trans2UserRoleEntityList(Long userId, List<Long> roleIdList) {
@@ -129,7 +128,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public D getUserByUserName(String userName) {
-        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByUserNameAndDeletedFalse(userName), winSecurityClassConfiguration.getUserDTOClass());
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByUserNameAndDeletedFalse(userName), winSecurityClassLoaderConfiguration.getUserDTOClass());
         if (userDTO == null) {
             return null;
         }
@@ -139,7 +138,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public D getUserByMobile(String mobile) {
-        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByMobileAndDeletedFalse(mobile), winSecurityClassConfiguration.getUserDTOClass());
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByMobileAndDeletedFalse(mobile), winSecurityClassLoaderConfiguration.getUserDTOClass());
         if (userDTO == null) {
             return null;
         }

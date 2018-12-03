@@ -1,18 +1,17 @@
-package com.winbaoxian.module.security.config;
+package com.winbaoxian.module.security.config.shiro;
 
 import com.winbaoxian.module.security.filter.WinSecurityUrlFilter;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
-import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -22,16 +21,19 @@ import java.util.Map;
 
 /**
  * @author dongxuanliang252
- * @date 2018-11-27 18:06
+ * @date 2018-12-03 14:44
  */
 @Configuration
 @Slf4j
-public class ShiroConfiguration {
+public class ShiroFilterConfiguration {
+
+    @Autowired
+    private SecurityManager securityManager;
 
     @PostConstruct
     public void init() {
         try {
-            SecurityUtils.setSecurityManager(securityManager());
+            SecurityUtils.setSecurityManager(securityManager);
         } catch (Exception e) {
             log.error("WinSecurity: SecurityUtils.setSecurityManager failed");
         }
@@ -39,30 +41,7 @@ public class ShiroConfiguration {
     }
 
     @Resource
-    private WinSecurityRealm winSecurityRealm;
-    @Resource
     private WinSecurityResourceService winSecurityResourceService;
-
-    @Bean
-    public SecurityManager securityManager() {
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        // 设置realm.
-        securityManager.setRealm(winSecurityRealm);
-        securityManager.setSessionManager(sessionManager());
-        return securityManager;
-    }
-
-    @Bean
-    public SessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(sessionDAO());
-        return sessionManager;
-    }
-
-    @Bean
-    public SessionDAO sessionDAO() {
-        return new MemorySessionDAO();
-    }
 
     /**
      * @return
@@ -81,8 +60,8 @@ public class ShiroConfiguration {
         Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
         // 将自定义的Filter注入shiroFilter中
         filters.put("urlFilter", new WinSecurityUrlFilter(winSecurityResourceService));
-        shiroFilterFactoryBean.setSecurityManager(securityManager());
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
         return shiroFilterFactoryBean;
     }
-
 }
+

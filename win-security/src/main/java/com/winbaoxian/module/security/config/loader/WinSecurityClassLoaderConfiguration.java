@@ -1,4 +1,4 @@
-package com.winbaoxian.module.security.config;
+package com.winbaoxian.module.security.config.loader;
 
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
@@ -41,7 +41,7 @@ import java.util.Map;
 
 @Configuration
 @Slf4j
-public class WinSecurityClassConfiguration {
+public class WinSecurityClassLoaderConfiguration {
 
     @Value("${win.security.class.userDTO:WinSecurityBaseUserDTO}")
     private String userDTOClassName;

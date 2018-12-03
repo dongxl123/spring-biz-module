@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.winbaoxian.module.security.controller;
+package com.winbaoxian.module.security.config.shiro;
 
 import com.winbaoxian.module.security.model.common.JsonResult;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;

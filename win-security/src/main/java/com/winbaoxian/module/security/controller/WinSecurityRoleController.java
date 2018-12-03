@@ -1,7 +1,7 @@
 package com.winbaoxian.module.security.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.winbaoxian.module.security.config.WinSecurityClassConfiguration;
+import com.winbaoxian.module.security.config.loader.WinSecurityClassLoaderConfiguration;
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
@@ -23,7 +23,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
     @Resource
     private WinSecurityRoleService<D, E> winSecurityRoleService;
     @Resource
-    private WinSecurityClassConfiguration winSecurityClassConfiguration;
+    private WinSecurityClassLoaderConfiguration winSecurityClassLoaderConfiguration;
 
     /**
      * @apiVersion 1.0.0
@@ -50,7 +50,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      */
     @PostMapping(value = "/addRole")
     public JsonResult<D> addRole(@RequestBody String dtoStr) {
-        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassConfiguration.getRoleDTOClass());
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassLoaderConfiguration.getRoleDTOClass());
         D RoleDTO = winSecurityRoleService.addRole(dto);
         return JsonResult.createSuccessResult(RoleDTO);
     }
@@ -99,7 +99,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      */
     @PostMapping(value = "/updateRole")
     public JsonResult<D> updateRole(@RequestBody String dtoStr) {
-        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassConfiguration.getRoleDTOClass());
+        D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassLoaderConfiguration.getRoleDTOClass());
         D RoleDTO = winSecurityRoleService.updateRole(dto);
         return JsonResult.createSuccessResult(RoleDTO);
     }
@@ -149,7 +149,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      */
     @GetMapping(value = "/getRoleList")
     public JsonResult<List<D>> getRoleList(@RequestParam Map<String, Object> paramsMap) {
-        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassConfiguration.getRoleDTOClass());
+        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getRoleDTOClass());
         List<D> RoleList = winSecurityRoleService.getRoleList(params);
         return JsonResult.createSuccessResult(RoleList);
     }
@@ -185,7 +185,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      */
     @GetMapping(value = "/getRolePage")
     public JsonResult<PaginationDTO<D>> getRolePage(@RequestParam Map<String, Object> paramsMap, Pagination pagination) {
-        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassConfiguration.getRoleDTOClass());
+        D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getRoleDTOClass());
         PaginationDTO<D> paginationDTO = winSecurityRoleService.getRolePage(params, pagination);
         return JsonResult.createSuccessResult(paginationDTO);
     }
