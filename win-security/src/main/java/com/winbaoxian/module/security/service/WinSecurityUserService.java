@@ -11,10 +11,13 @@ import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.mapper.WinSecurityUserMapper;
 import com.winbaoxian.module.security.repository.WinSecurityUserRepository;
 import com.winbaoxian.module.security.repository.WinSecurityUserRoleRepository;
+import com.winbaoxian.module.security.service.iface.IUserAddProcessor;
+import com.winbaoxian.module.security.service.iface.IUserUpdateProcessor;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -35,19 +38,33 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     private WinSecurityUserRoleRepository winSecurityUserRoleRepository;
     @Resource
     private WinSecurityClassLoaderConfiguration winSecurityClassLoaderConfiguration;
+    @Autowired(required = false)
+    private IUserAddProcessor<D, E> iUserAddProcessor;
+    @Autowired(required = false)
+    private IUserUpdateProcessor<D, E> iUserUpdateProcessor;
 
     public D addUser(D dto) {
+        if (iUserAddProcessor != null) {
+            iUserAddProcessor.preProcess(dto);
+        }
         if (winSecurityUserRepository.existsByUserNameAndDeletedFalse(dto.getUserName())) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
         E entity = (E) WinSecurityUserMapper.INSTANCE.toUserEntity(dto, winSecurityClassLoaderConfiguration.getUserEntityClass());
+        if (iUserAddProcessor != null) {
+            iUserAddProcessor.preSqlProcess(entity);
+        }
         winSecurityUserRepository.save(entity);
         //角色
         if (CollectionUtils.isNotEmpty(dto.getRoleIdList())) {
             List<WinSecurityUserRoleEntity> userRoleEntityList = trans2UserRoleEntityList(entity.getId(), dto.getRoleIdList());
             winSecurityUserRoleRepository.save(userRoleEntityList);
         }
-        return getUser(entity.getId());
+        D retDto = getUser(entity.getId());
+        if (iUserAddProcessor != null) {
+            iUserAddProcessor.postProcess(retDto);
+        }
+        return retDto;
     }
 
     @Transactional
@@ -62,6 +79,9 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
 
     @Transactional
     public D updateUser(D dto) {
+        if (iUserUpdateProcessor != null) {
+            iUserUpdateProcessor.preProcess(dto);
+        }
         if (dto == null || dto.getId() == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
@@ -76,6 +96,9 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         }
         //更新数据
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
+        if (iUserUpdateProcessor != null) {
+            iUserUpdateProcessor.preSqlProcess(persistent);
+        }
         winSecurityUserRepository.save(persistent);
         //角色
         if (CollectionUtils.isNotEmpty(dto.getRoleIdList())) {
@@ -83,7 +106,11 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
             List<WinSecurityUserRoleEntity> userRoleEntityList = trans2UserRoleEntityList(id, dto.getRoleIdList());
             winSecurityUserRoleRepository.save(userRoleEntityList);
         }
-        return getUser(id);
+        D retDto = getUser(id);
+        if (iUserUpdateProcessor != null) {
+            iUserUpdateProcessor.postProcess(retDto);
+        }
+        return retDto;
     }
 
     public D getUser(Long id) {

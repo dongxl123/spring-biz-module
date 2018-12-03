@@ -29,7 +29,7 @@ spring:
       poolPreparedStatements: false
     tob:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://testwinbx.mysql.rds.aliyuncs.com:3306/tob?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+      url: jdbc:mysql://testwinbx.mysql.rds.aliyuncs.com:3306/baoxian2b?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
       username: winbx_test
       password: funcitypt001
       initialSize: 1

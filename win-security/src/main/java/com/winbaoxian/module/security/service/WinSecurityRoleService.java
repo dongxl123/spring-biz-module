@@ -12,9 +12,12 @@ import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.mapper.WinSecurityRoleMapper;
 import com.winbaoxian.module.security.repository.WinSecurityRoleRepository;
 import com.winbaoxian.module.security.repository.WinSecurityRoleResourceRepository;
+import com.winbaoxian.module.security.service.iface.IRoleAddProcessor;
+import com.winbaoxian.module.security.service.iface.IRoleUpdateProcessor;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,9 +38,19 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     private WinSecurityRoleResourceRepository winSecurityRoleResourceRepository;
     @Resource
     private WinSecurityClassLoaderConfiguration winSecurityClassLoaderConfiguration;
+    @Autowired(required = false)
+    private IRoleAddProcessor<D, E> iRoleAddProcessor;
+    @Autowired(required = false)
+    private IRoleUpdateProcessor<D, E> iRoleUpdateProcessor;
 
     public D addRole(D dto) {
+        if (iRoleAddProcessor != null) {
+            iRoleAddProcessor.preProcess(dto);
+        }
         E entity = (E) WinSecurityRoleMapper.INSTANCE.toRoleEntity(dto, winSecurityClassLoaderConfiguration.getRoleEntityClass());
+        if (iRoleAddProcessor != null) {
+            iRoleAddProcessor.preSqlProcess(entity);
+        }
         winSecurityRoleRepository.save(entity);
         //资源
         if (CollectionUtils.isNotEmpty(dto.getResourceIdList())) {
@@ -46,7 +59,11 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         }
         entity.setSeq(entity.getId());
         winSecurityRoleRepository.save(entity);
-        return getRole(entity.getId());
+        D retDto = getRole(entity.getId());
+        if (iRoleAddProcessor != null) {
+            iRoleAddProcessor.postProcess(retDto);
+        }
+        return retDto;
     }
 
     @Transactional
@@ -61,6 +78,9 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
 
     @Transactional
     public D updateRole(D dto) {
+        if (iRoleUpdateProcessor != null) {
+            iRoleUpdateProcessor.preProcess(dto);
+        }
         if (dto == null || dto.getId() == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
@@ -71,6 +91,9 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         }
         //更新数据
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
+        if (iRoleUpdateProcessor != null) {
+            iRoleUpdateProcessor.preSqlProcess(persistent);
+        }
         winSecurityRoleRepository.save(persistent);
         //资源
         if (CollectionUtils.isNotEmpty(dto.getResourceIdList())) {
@@ -78,7 +101,11 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
             List<WinSecurityRoleResourceEntity> roleResourceEntityList = trans2RoleResourceEntityList(id, dto.getResourceIdList());
             winSecurityRoleResourceRepository.save(roleResourceEntityList);
         }
-        return getRole(id);
+        D retDto = getRole(id);
+        if (iRoleUpdateProcessor != null) {
+            iRoleUpdateProcessor.postProcess(retDto);
+        }
+        return retDto;
     }
 
     public D getRole(Long id) {

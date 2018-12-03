@@ -23,7 +23,7 @@ CREATE TABLE `{prefix}_resource` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `name` varchar(64) NOT NULL COMMENT '资源名称',
-  `code` varchar(64) NOT NULL DEFAULT '' COMMENT '编码',
+  `code` varchar(64) DEFAULT '' COMMENT '编码',
   `global_code` varchar(1024) DEFAULT '' COMMENT '全局编码, 格式: 系统code.菜单code.thisCode',
   `value` varchar(100) DEFAULT NULL COMMENT '资源路径',
   `description` varchar(255) DEFAULT NULL COMMENT '资源介绍',
