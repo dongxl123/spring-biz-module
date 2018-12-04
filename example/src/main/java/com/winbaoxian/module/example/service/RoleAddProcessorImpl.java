@@ -2,7 +2,6 @@ package com.winbaoxian.module.example.service;
 
 import com.winbaoxian.module.example.model.dto.SecurityRoleDTO;
 import com.winbaoxian.module.example.model.entity.citymanager.SecurityRoleEntity;
-import com.winbaoxian.module.security.annotation.ServiceExtension;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.service.extension.IRoleAddProcessor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author dongxuanliang252
  * @date 2018-12-03 19:50
  */
-@ServiceExtension
 @Slf4j
 public class RoleAddProcessorImpl implements IRoleAddProcessor<SecurityRoleDTO, SecurityRoleEntity> {
 

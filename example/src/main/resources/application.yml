@@ -44,7 +44,7 @@ spring:
       testOnReturn: false
       poolPreparedStatements: false
   aop:
-    proxy-target-class: false
+    proxy-target-class: true
 logging:
   level:
     root: info
@@ -53,10 +53,3 @@ logging:
     org.hibernate: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.winbaoxian.broker.component.log.LogAspect: DEBUG
-win:
-  security:
-    class:
-      userDTO: com.winbaoxian.module.example.model.dto.SecurityUserDTO
-      userEntity: com.winbaoxian.module.example.model.entity.citymanager.SecurityUserEntity
-      roleDTO: com.winbaoxian.module.example.model.dto.SecurityRoleDTO
-      roleEntity: com.winbaoxian.module.example.model.entity.citymanager.SecurityRoleEntity
