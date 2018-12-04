@@ -2,8 +2,7 @@ package com.winbaoxian.module.example.service;
 
 import com.winbaoxian.module.example.model.dto.SecurityUserDTO;
 import com.winbaoxian.module.example.model.entity.citymanager.SecurityUserEntity;
-import com.winbaoxian.module.security.service.iface.IUserAddProcessor;
-import com.winbaoxian.module.security.service.iface.IUserUpdateProcessor;
+import com.winbaoxian.module.security.service.extension.IUserUpdateProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

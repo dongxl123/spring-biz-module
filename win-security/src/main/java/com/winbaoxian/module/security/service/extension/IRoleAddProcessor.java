@@ -1,4 +1,4 @@
-package com.winbaoxian.module.security.service.iface;
+package com.winbaoxian.module.security.service.extension;
 
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;

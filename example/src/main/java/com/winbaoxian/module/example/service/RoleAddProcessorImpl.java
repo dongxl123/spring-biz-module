@@ -2,7 +2,7 @@ package com.winbaoxian.module.example.service;
 
 import com.winbaoxian.module.example.model.dto.SecurityRoleDTO;
 import com.winbaoxian.module.example.model.entity.citymanager.SecurityRoleEntity;
-import com.winbaoxian.module.security.service.iface.IRoleAddProcessor;
+import com.winbaoxian.module.security.service.extension.IRoleAddProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.winbaoxian.module.security.service.iface;
+package com.winbaoxian.module.security.service.extension;
 
 /**
  * @author dongxuanliang252
