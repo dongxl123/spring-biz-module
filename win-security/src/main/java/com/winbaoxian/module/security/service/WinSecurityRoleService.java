@@ -47,9 +47,12 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         if (iRoleAddProcessor != null) {
             iRoleAddProcessor.preProcess(dto);
         }
+        if (iRoleAddProcessor != null) {
+            iRoleAddProcessor.customValidateAfterCommon(dto);
+        }
         E entity = (E) WinSecurityRoleMapper.INSTANCE.toRoleEntity(dto, winSecurityClassLoaderConfiguration.getRoleEntityClass());
         if (iRoleAddProcessor != null) {
-            iRoleAddProcessor.preSqlProcess(entity);
+            iRoleAddProcessor.customMappingAfterCommon(dto, entity);
         }
         winSecurityRoleRepository.save(entity);
         //资源
@@ -89,10 +92,13 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
         }
+        if (iRoleUpdateProcessor != null) {
+            iRoleUpdateProcessor.customValidateAfterCommon(dto);
+        }
         //更新数据
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
         if (iRoleUpdateProcessor != null) {
-            iRoleUpdateProcessor.preSqlProcess(persistent);
+            iRoleUpdateProcessor.customMappingAfterCommon(dto, persistent);
         }
         winSecurityRoleRepository.save(persistent);
         //资源

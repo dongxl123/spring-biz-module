@@ -50,9 +50,12 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         if (winSecurityUserRepository.existsByUserNameAndDeletedFalse(dto.getUserName())) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
+        if (iUserAddProcessor != null) {
+            iUserAddProcessor.customValidateAfterCommon(dto);
+        }
         E entity = (E) WinSecurityUserMapper.INSTANCE.toUserEntity(dto, winSecurityClassLoaderConfiguration.getUserEntityClass());
         if (iUserAddProcessor != null) {
-            iUserAddProcessor.preSqlProcess(entity);
+            iUserAddProcessor.customMappingAfterCommon(dto, entity);
         }
         winSecurityUserRepository.save(entity);
         //角色
@@ -94,10 +97,13 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         if (StringUtils.isNoneBlank(dto.getUserName()) && winSecurityUserRepository.existsByUserNameAndIdNotAndDeletedFalse(dto.getUserName(), id)) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
+        if (iUserUpdateProcessor != null) {
+            iUserUpdateProcessor.customValidateAfterCommon(dto);
+        }
         //更新数据
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
         if (iUserUpdateProcessor != null) {
-            iUserUpdateProcessor.preSqlProcess(persistent);
+            iUserUpdateProcessor.customMappingAfterCommon(dto, persistent);
         }
         winSecurityUserRepository.save(persistent);
         //角色

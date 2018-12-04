@@ -1,32 +1,39 @@
 package com.winbaoxian.module.example.service;
 
+import com.winbaoxian.module.example.model.dto.SecurityRoleDTO;
 import com.winbaoxian.module.example.model.dto.SecurityUserDTO;
 import com.winbaoxian.module.example.model.entity.citymanager.SecurityUserEntity;
+import com.winbaoxian.module.security.annotation.ServiceExtension;
+import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.service.extension.IUserUpdateProcessor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 /**
  * @author dongxuanliang252
  * @date 2018-12-03 19:50
  */
-@Component
+@ServiceExtension
 @Slf4j
 public class UserUpdateProcessorImpl implements IUserUpdateProcessor<SecurityUserDTO, SecurityUserEntity> {
 
 
     @Override
-    public void preProcess(SecurityUserDTO dto) {
+    public void preProcess(SecurityUserDTO dto) throws WinSecurityException {
         log.info("update user preProcess");
     }
 
     @Override
-    public void preSqlProcess(SecurityUserEntity entity) {
-        log.info("update user preSqlProcess");
+    public void customValidateAfterCommon(SecurityUserDTO dto) throws WinSecurityException {
+        log.info("update user customValidateAfterCommon");
     }
 
     @Override
-    public void postProcess(SecurityUserDTO dto) {
+    public void customMappingAfterCommon(SecurityUserDTO dto, SecurityUserEntity entity) throws WinSecurityException {
+        log.info("update user customMappingAfterCommon");
+    }
+
+    @Override
+    public void postProcess(SecurityUserDTO dto) throws WinSecurityException {
         log.info("update user postProcess");
     }
 }

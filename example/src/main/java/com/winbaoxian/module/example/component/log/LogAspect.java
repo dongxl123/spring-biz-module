@@ -28,32 +28,35 @@ public class LogAspect {
         long startTime = System.currentTimeMillis();
         StringBuilder sb = new StringBuilder();
         if (logger.isDebugEnabled() && needLog(jp.getSignature().getName())) {
-            sb.append("execute method : ").append(jp.getSignature()).append("\n");
+            sb.append("execute method : ").append(jp.getSignature());
             Object[] args = jp.getArgs();
             for (Object arg : args) {
                 if (arg instanceof MultipartFile) {
-                    sb.append("args: ").append(((MultipartFile) arg).getOriginalFilename()).append("\n");
+                    sb.append("\n").append("args: ").append(((MultipartFile) arg).getOriginalFilename()).append("\n");
                 } else if (!(arg instanceof HttpServletRequest || arg instanceof HttpServletResponse)) {
-                    sb.append("args: ").append(JSON.toJSONString(arg)).append("\n");
+                    sb.append("\n").append("args: ").append(JSON.toJSONString(arg));
                 }
             }
         }
         Object ret;
         try {
+            if (logger.isDebugEnabled() && needLog(jp.getSignature().getName())) {
+                logger.debug("start "+ sb.toString());
+            }
             ret = jp.proceed();
             if (logger.isDebugEnabled() && needLog(jp.getSignature().getName())) {
-                sb.append("return: ").append(JSON.toJSONString(ret)).append("\n");
+                sb.append("\n").append("return: ").append(JSON.toJSONString(ret));
             }
         } catch (Exception e) {
             if (logger.isDebugEnabled() && needLog(jp.getSignature().getName())) {
-                sb.append("throw exception: ").append(e.getMessage()).append("\n");
+                sb.append("\n").append("throw exception: ").append(e.getMessage());
             }
             throw e;
         } finally {
             long costTime = System.currentTimeMillis() - startTime;
             if (logger.isDebugEnabled() && needLog(jp.getSignature().getName())) {
-                sb.append("costTime: [").append(costTime).append("]ms");
-                logger.debug(sb.toString());
+                sb.append("\n").append("costTime: [").append(costTime).append("]ms");
+                logger.debug("finish "+ sb.toString());
             }
         }
         return ret;

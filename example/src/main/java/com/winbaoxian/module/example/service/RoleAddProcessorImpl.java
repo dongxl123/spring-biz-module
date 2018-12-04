@@ -2,31 +2,37 @@ package com.winbaoxian.module.example.service;
 
 import com.winbaoxian.module.example.model.dto.SecurityRoleDTO;
 import com.winbaoxian.module.example.model.entity.citymanager.SecurityRoleEntity;
+import com.winbaoxian.module.security.annotation.ServiceExtension;
+import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.service.extension.IRoleAddProcessor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 /**
  * @author dongxuanliang252
  * @date 2018-12-03 19:50
  */
-@Component
+@ServiceExtension
 @Slf4j
 public class RoleAddProcessorImpl implements IRoleAddProcessor<SecurityRoleDTO, SecurityRoleEntity> {
 
     @Override
-    public void preProcess(SecurityRoleDTO dto) {
+    public void preProcess(SecurityRoleDTO dto) throws WinSecurityException {
         log.info("add role preProcess");
     }
 
     @Override
-    public void preSqlProcess(SecurityRoleEntity entity) {
-        log.info("add role preSqlProcess");
+    public void customValidateAfterCommon(SecurityRoleDTO dto) throws WinSecurityException {
+        log.info("add role customValidateAfterCommon");
+    }
+
+    @Override
+    public void customMappingAfterCommon(SecurityRoleDTO dto, SecurityRoleEntity entity) throws WinSecurityException {
+        log.info("add role customMappingAfterCommon");
     }
 
 
     @Override
-    public void postProcess(SecurityRoleDTO dto) {
+    public void postProcess(SecurityRoleDTO dto) throws WinSecurityException {
         log.info("add role postProcess");
     }
 }
