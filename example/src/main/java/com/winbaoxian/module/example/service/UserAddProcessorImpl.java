@@ -15,22 +15,22 @@ public class UserAddProcessorImpl implements IUserAddProcessor<SecurityUserDTO, 
 
 
     @Override
-    public void preProcess(SecurityUserDTO dto) throws WinSecurityException {
+    public void preProcess(SecurityUserDTO params) throws WinSecurityException {
         log.info("add user preProcess");
     }
 
     @Override
-    public void customValidateAfterCommon(SecurityUserDTO dto) throws WinSecurityException {
+    public void customValidateAfterCommon(SecurityUserDTO params) throws WinSecurityException {
         log.info("add user customValidateAfterCommon");
     }
 
     @Override
-    public void customMappingAfterCommon(SecurityUserDTO dto, SecurityUserEntity entity) throws WinSecurityException {
+    public void customMappingAfterCommon(SecurityUserDTO params, SecurityUserEntity entity) throws WinSecurityException {
         log.info("add user customMappingAfterCommon");
     }
 
     @Override
-    public void postProcess(SecurityUserDTO dto) throws WinSecurityException {
+    public void postProcess(SecurityUserDTO result) throws WinSecurityException {
         log.info("add user postProcess");
     }
 }

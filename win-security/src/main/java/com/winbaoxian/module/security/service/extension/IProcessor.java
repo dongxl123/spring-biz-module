@@ -11,34 +11,35 @@ interface IProcessor<D, E> {
     /**
      * 执行业务逻辑前处理
      *
-     * @param dto 前端参数
+     * @param params 前端参数
      * @throws WinSecurityException
      */
-    void preProcess(D dto) throws WinSecurityException;
+    void preProcess(D params) throws WinSecurityException;
 
 
     /**
      * 业务验证逻辑
-     * @param dto
+     *
+     * @param params
      * @throws WinSecurityException
      */
-    void customValidateAfterCommon(D dto) throws WinSecurityException;
+    void customValidateAfterCommon(D params) throws WinSecurityException;
 
     /**
      * 执行sql前处理, dto到entity映射特殊处理
      *
-     * @param dto    前端参数
+     * @param params 前端参数
      * @param entity 最新entity
      * @throws WinSecurityException
      */
-    void customMappingAfterCommon(D dto, E entity) throws WinSecurityException;
+    void customMappingAfterCommon(D params, E entity) throws WinSecurityException;
 
 
     /**
      * 执行业务逻辑后处理
      *
-     * @param dto 返回结果
+     * @param result 返回结果
      * @throws WinSecurityException
      */
-    void postProcess(D dto) throws WinSecurityException;
+    void postProcess(D result) throws WinSecurityException;
 }

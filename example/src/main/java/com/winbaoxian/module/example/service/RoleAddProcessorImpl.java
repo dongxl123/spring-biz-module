@@ -14,23 +14,23 @@ import lombok.extern.slf4j.Slf4j;
 public class RoleAddProcessorImpl implements IRoleAddProcessor<SecurityRoleDTO, SecurityRoleEntity> {
 
     @Override
-    public void preProcess(SecurityRoleDTO dto) throws WinSecurityException {
+    public void preProcess(SecurityRoleDTO params) throws WinSecurityException {
         log.info("add role preProcess");
     }
 
     @Override
-    public void customValidateAfterCommon(SecurityRoleDTO dto) throws WinSecurityException {
+    public void customValidateAfterCommon(SecurityRoleDTO params) throws WinSecurityException {
         log.info("add role customValidateAfterCommon");
     }
 
     @Override
-    public void customMappingAfterCommon(SecurityRoleDTO dto, SecurityRoleEntity entity) throws WinSecurityException {
+    public void customMappingAfterCommon(SecurityRoleDTO params, SecurityRoleEntity entity) throws WinSecurityException {
         log.info("add role customMappingAfterCommon");
     }
 
 
     @Override
-    public void postProcess(SecurityRoleDTO dto) throws WinSecurityException {
+    public void postProcess(SecurityRoleDTO result) throws WinSecurityException {
         log.info("add role postProcess");
     }
 }

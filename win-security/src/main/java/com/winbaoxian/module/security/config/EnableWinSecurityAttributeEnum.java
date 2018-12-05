@@ -1,11 +1,15 @@
-package com.winbaoxian.module.security.constant;
+package com.winbaoxian.module.security.config;
 
 /**
  * @author dongxuanliang252
  * @date 2018-12-04 18:15
  */
-public enum EnableWinSecurityEnum {
+public enum EnableWinSecurityAttributeEnum {
 
+    ENTITY_MANAGER_FACTORY_REF("entityManagerFactoryRef"),
+    TRANSACTION_MANAGER_REF("transactionManagerRef"),
+    ENTITY_SCAN_PACKAGES("entityScanPackages"),
+    CONTROLLER_SCOPES("controllerScopes"),
     EXTENSION_USER_DTO("extensionUserDTO"),
     EXTENSION_USER_ENTITY("extensionUserEntity"),
     EXTENSION_ROLE_DTO("extensionRoleDTO"),
@@ -15,7 +19,7 @@ public enum EnableWinSecurityEnum {
 
     private final String value;
 
-    EnableWinSecurityEnum(String value) {
+    EnableWinSecurityAttributeEnum(String value) {
         this.value = value;
     }
 
