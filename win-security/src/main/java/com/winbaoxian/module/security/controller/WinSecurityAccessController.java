@@ -4,6 +4,7 @@ import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.dto.*;
 import com.winbaoxian.module.security.service.WinSecurityAccessService;
 import com.winbaoxian.module.security.service.extension.IUserAddProcessor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,7 +22,8 @@ public class WinSecurityAccessController {
     @Resource
     private WinSecurityAccessService winSecurityAccessService;
     @Resource
-    private IUserAddProcessor iUserAddProcessor;
+    private ApplicationContext applicationContext;
+
     /**
      * /**
      *
@@ -43,7 +45,7 @@ public class WinSecurityAccessController {
     @GetMapping(value = "/getLoginUserInfo")
     public JsonResult<WinSecurityBaseUserDTO> getLoginUserInfo() {
         WinSecurityBaseUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
-         return JsonResult.createSuccessResult(userDTO);
+        return JsonResult.createSuccessResult(userDTO);
     }
 
     /**

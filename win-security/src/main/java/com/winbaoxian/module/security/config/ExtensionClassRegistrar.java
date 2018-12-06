@@ -2,6 +2,10 @@ package com.winbaoxian.module.security.config;
 
 import com.winbaoxian.module.security.annotation.EnableWinSecurity;
 import com.winbaoxian.module.security.config.loader.WinSecurityClassLoaderConfiguration;
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
+import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
+import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,21 +30,21 @@ public class ExtensionClassRegistrar implements ImportBeanDefinitionRegistrar {
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         Map<String, Object> annotationAttributesMap = importingClassMetadata
                 .getAnnotationAttributes(EnableWinSecurity.class.getName());
-        AnnotationAttributes annotationAttributes = new AnnotationAttributes(annotationAttributesMap);
+        AnnotationAttributes annotationAttributes = AnnotationAttributes.fromMap(annotationAttributesMap);
         //注册WinSecurityClassLoaderConfiguration
         AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder
                 .genericBeanDefinition(WinSecurityClassLoaderConfiguration.class)
-                .addPropertyValue(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_USER_DTO.getValue(), annotationAttributes.getClass(EnableWinSecurityAttributeEnum.EXTENSION_USER_DTO.getValue()))
-                .addPropertyValue(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_USER_ENTITY.getValue(), annotationAttributes.getClass(EnableWinSecurityAttributeEnum.EXTENSION_USER_ENTITY.getValue()))
-                .addPropertyValue(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_ROLE_DTO.getValue(), annotationAttributes.getClass(EnableWinSecurityAttributeEnum.EXTENSION_ROLE_DTO.getValue()))
-                .addPropertyValue(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_ROLE_ENTITY.getValue(), annotationAttributes.getClass(EnableWinSecurityAttributeEnum.EXTENSION_ROLE_ENTITY.getValue()))
+                .addPropertyValue(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_USER_DTO.getValue(), annotationAttributes.getOrDefault(EnableWinSecurityAttributeEnum.EXTENSION_USER_DTO.getValue(), WinSecurityBaseUserDTO.class))
+                .addPropertyValue(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_USER_ENTITY.getValue(), annotationAttributes.getOrDefault(EnableWinSecurityAttributeEnum.EXTENSION_USER_ENTITY.getValue(), WinSecurityBaseUserEntity.class))
+                .addPropertyValue(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_ROLE_DTO.getValue(), annotationAttributes.getOrDefault(EnableWinSecurityAttributeEnum.EXTENSION_ROLE_DTO.getValue(), WinSecurityBaseRoleDTO.class))
+                .addPropertyValue(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_ROLE_ENTITY.getValue(), annotationAttributes.getOrDefault(EnableWinSecurityAttributeEnum.EXTENSION_ROLE_ENTITY.getValue(), WinSecurityBaseRoleEntity.class))
                 .getBeanDefinition();
         registry.registerBeanDefinition(WinSecurityClassLoaderConfiguration.class.getName(),
                 beanDefinition);
-        log.debug("WinSecurity: ExtensionClassRegistrar, class is set, {}", annotationAttributes.getClass(EnableWinSecurityAttributeEnum.EXTENSION_USER_DTO.getValue()));
-        log.debug("WinSecurity: ExtensionClassRegistrar, class is set, {}", annotationAttributes.getClass(EnableWinSecurityAttributeEnum.EXTENSION_USER_ENTITY.getValue()));
-        log.debug("WinSecurity: ExtensionClassRegistrar, class is set, {}", annotationAttributes.getClass(EnableWinSecurityAttributeEnum.EXTENSION_ROLE_DTO.getValue()));
-        log.debug("WinSecurity: ExtensionClassRegistrar, class is set, {}", annotationAttributes.getClass(EnableWinSecurityAttributeEnum.EXTENSION_ROLE_ENTITY.getValue()));
+        log.debug("WinSecurity: ExtensionClassRegistrar, userDTOClass is set, {}", beanDefinition.getPropertyValues().get(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_USER_DTO.getValue()));
+        log.debug("WinSecurity: ExtensionClassRegistrar, userEntityClass is set, {}", beanDefinition.getPropertyValues().get(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_USER_ENTITY.getValue()));
+        log.debug("WinSecurity: ExtensionClassRegistrar, roleDTOClass is set, {}", beanDefinition.getPropertyValues().get(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_ROLE_DTO.getValue()));
+        log.debug("WinSecurity: ExtensionClassRegistrar, roleEntityClass is set, {}", beanDefinition.getPropertyValues().get(WinSecurityClassLoaderConfiguration.ClassNameEnum.CLASS_EXTENSION_ROLE_ENTITY.getValue()));
         log.debug("WinSecurity: ExtensionClassRegistrar, beanDefinition is register, {}", WinSecurityClassLoaderConfiguration.class);
         //注册 serviceProcessorClass
         Class<?>[] serviceProcessorClassArray = annotationAttributes.getClassArray(EnableWinSecurityAttributeEnum.EXTENSION_SERVICE_PROCESSORS.getValue());

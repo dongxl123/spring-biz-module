@@ -8,8 +8,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
-      naming:
-        physical-strategy: com.winbaoxian.module.example.component.security.SecurityPhysicalNamingStrategy
   datasource:
     citymanager:
       driver-class-name: com.mysql.jdbc.Driver

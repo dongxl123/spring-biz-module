@@ -47,7 +47,7 @@ public class TobDataSourceConfiguration {
     }
 
     @Bean
-    PlatformTransactionManager transactionManagerCitymanager(EntityManagerFactoryBuilder builder) {
+    PlatformTransactionManager transactionManagerTob(EntityManagerFactoryBuilder builder) {
         return new JpaTransactionManager(entityManagerFactoryTob(builder).getObject());
     }
 

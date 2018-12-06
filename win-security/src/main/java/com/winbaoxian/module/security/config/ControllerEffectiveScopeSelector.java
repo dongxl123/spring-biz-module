@@ -28,7 +28,7 @@ public class ControllerEffectiveScopeSelector implements ImportSelector {
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
         Map<String, Object> annotationAttributesMap = importingClassMetadata
                 .getAnnotationAttributes(EnableWinSecurity.class.getName());
-        AnnotationAttributes annotationAttributes = new AnnotationAttributes(annotationAttributesMap);
+        AnnotationAttributes annotationAttributes = AnnotationAttributes.fromMap(annotationAttributesMap);
         ControllerEffectiveScope[] scopes = (ControllerEffectiveScope[]) annotationAttributes.get(EnableWinSecurityAttributeEnum.CONTROLLER_SCOPES.getValue());
         if (ArrayUtils.isEmpty(scopes)) {
             scopes = new ControllerEffectiveScope[]{ControllerEffectiveScope.NONE};

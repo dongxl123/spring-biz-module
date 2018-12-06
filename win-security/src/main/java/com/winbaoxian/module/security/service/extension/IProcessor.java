@@ -6,7 +6,7 @@ import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
  * @author dongxuanliang252
  * @date 2018-12-03 19:40
  */
-interface IProcessor<D, E> {
+public interface IProcessor<D, E> {
 
     /**
      * 执行业务逻辑前处理

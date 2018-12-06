@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = {"com.winbaoxian.module.example.repository.citymanager", "com.winbaoxian.module.security.repository"},
+        basePackages = {"com.winbaoxian.module.example.repository.citymanager"},
         entityManagerFactoryRef = "entityManagerFactoryCitymanager",
         transactionManagerRef = "transactionManagerCitymanager")
 public class CityManagerDataSourceConfiguration {
@@ -42,7 +42,7 @@ public class CityManagerDataSourceConfiguration {
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryCitymanager(EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(dataSourceCitymanager())
-                .packages(new String[]{"com.winbaoxian.module.example.model.entity.citymanager", "com.winbaoxian.module.security.model.entity"})
+                .packages(new String[]{"com.winbaoxian.module.example.model.entity.citymanagerddd"})
                 .properties(jpaProperties.getHibernateProperties(dataSourceCitymanager()))
                 .persistenceUnit("citymanager")
                 .build();

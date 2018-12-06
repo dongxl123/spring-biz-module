@@ -9,6 +9,7 @@ public enum EnableWinSecurityAttributeEnum {
     ENTITY_MANAGER_FACTORY_REF("entityManagerFactoryRef"),
     TRANSACTION_MANAGER_REF("transactionManagerRef"),
     ENTITY_SCAN_PACKAGES("entityScanPackages"),
+    TABLE_PREFIX("tablePrefix"),
     CONTROLLER_SCOPES("controllerScopes"),
     EXTENSION_USER_DTO("extensionUserDTO"),
     EXTENSION_USER_ENTITY("extensionUserEntity"),
