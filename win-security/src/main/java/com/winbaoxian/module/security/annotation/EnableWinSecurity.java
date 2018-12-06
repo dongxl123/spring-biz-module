@@ -36,16 +36,33 @@ import java.lang.annotation.*;
 @ServletComponentScan
 public @interface EnableWinSecurity {
 
+    /**
+     * winSecurity entityManagerFactory
+     */
     @AliasFor(annotation = EnableJpaRepositories.class)
     String entityManagerFactoryRef() default "entityManagerFactory";
 
+    /**
+     * winSecurity transactionManager
+     */
     @AliasFor(annotation = EnableJpaRepositories.class)
     String transactionManagerRef() default "transactionManager";
 
+    /**
+     * winSecurity entityScanPackages
+     */
     String[] entityScanPackages() default {};
 
+    /**
+     * 表前缀
+     */
     String tablePrefix() default "";
 
+    /**
+     * controller层代码生效范围
+     *
+     * @see ControllerEffectiveScope
+     */
     ControllerEffectiveScope[] controllerScopes() default ControllerEffectiveScope.ALL;
 
     /**
