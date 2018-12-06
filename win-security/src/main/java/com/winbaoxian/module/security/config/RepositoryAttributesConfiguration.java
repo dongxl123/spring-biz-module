@@ -1,6 +1,5 @@
 package com.winbaoxian.module.security.config;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.winbaoxian.module.security.annotation.EnableWinSecurity;
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.strategy.AbstractSecurityPhysicalNamingStrategy;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
-import org.springframework.beans.PropertyValue;
 import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
@@ -26,12 +24,10 @@ import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
-import sun.security.util.SecurityConstants;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
