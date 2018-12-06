@@ -4,6 +4,7 @@ import com.winbaoxian.module.security.annotation.EnableWinSecurity;
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.strategy.AbstractSecurityPhysicalNamingStrategy;
 import com.winbaoxian.module.security.strategy.AbstractSecurityPhysicalNamingStrategyStandardImpl;
+import com.winbaoxian.module.security.strategy.DefaultSecurityPhysicalNamingStrategyStandardImpl;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -95,7 +96,6 @@ public class RepositoryAttributesConfiguration {
         @Override
         public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeansException {
             if (bean instanceof LocalContainerEntityManagerFactoryBean && matchedBeanName(beanName)) {
-                LocalContainerEntityManagerFactoryBean factoryBean = (LocalContainerEntityManagerFactoryBean) bean;
                 pvs = new MutablePropertyValues();
                 for (PropertyDescriptor pd : pds) {
                     if (PACKAGES_TO_SCAN.equals(pd.getName())) {
@@ -104,12 +104,14 @@ public class RepositoryAttributesConfiguration {
                         String[] annotationEntityScanPackages = enableWinSecurity.getStringArray(EnableWinSecurityAttributeEnum.ENTITY_SCAN_PACKAGES.getValue());
                         if (ArrayUtils.isNotEmpty(annotationEntityScanPackages)) {
                             allEntityScanPackages = ArrayUtils.addAll(allEntityScanPackages, annotationEntityScanPackages);
+                        }
+                        if (ArrayUtils.isNotEmpty(allEntityScanPackages)) {
                             String[] basePackages = getPackages(bean, pd.getName());
                             if (ArrayUtils.isNotEmpty(basePackages)) {
                                 allEntityScanPackages = ArrayUtils.addAll(allEntityScanPackages, basePackages);
                             }
+                            ((MutablePropertyValues) pvs).add(pd.getName(), allEntityScanPackages);
                         }
-                        ((MutablePropertyValues) pvs).add(pd.getName(), allEntityScanPackages);
                     } else if (JPA_PROPERTY_MAP.equals(pd.getName())) {
                         //apply @EnableWinSecurity tablePrefix
                         String tablePrefix = enableWinSecurity.getString(EnableWinSecurityAttributeEnum.TABLE_PREFIX.getValue());
@@ -126,9 +128,8 @@ public class RepositoryAttributesConfiguration {
                                 } else {
                                     try {
                                         Class cls = ClassUtils.forName(physicalNamingStrategyClassName, getClass().getClassLoader());
-
                                         if (!ClassUtils.isAssignable(AbstractSecurityPhysicalNamingStrategy.class, cls) && !ClassUtils.isAssignable(AbstractSecurityPhysicalNamingStrategyStandardImpl.class, cls)) {
-                                                needChange = true;
+                                            needChange = true;
                                         }
                                     } catch (Exception e) {
                                         log.error("WinSecurity: class:{} load failed", physicalNamingStrategyClassName, e);
@@ -139,19 +140,13 @@ public class RepositoryAttributesConfiguration {
                                 needChange = true;
                             }
                             if (needChange) {
-                                String newPhysicalNamingStrategyClassName = new AbstractSecurityPhysicalNamingStrategyStandardImpl() {
-                                    @Override
-                                    public String tablePrefix() {
-                                        return tablePrefix;
-                                    }
-                                }.getClass().getName();
+                                String newPhysicalNamingStrategyClassName = DefaultSecurityPhysicalNamingStrategyStandardImpl.class.getName();
                                 jpaPropertyMap.put(JPA_PROPERTY_MAP_PHYSICAL_NAMING_STRATEGY, newPhysicalNamingStrategyClassName);
                                 ((MutablePropertyValues) pvs).add(JPA_PROPERTY_MAP, jpaPropertyMap);
                             }
                         }
                     }
                 }
-                //     factoryBean.internalPersistenceUnitManager.packagesToScan
                 return pvs;
             }
             return pvs;
@@ -186,7 +181,7 @@ public class RepositoryAttributesConfiguration {
         }
     }
 
-    enum EnableWinSecurityAttributesHolder {
+    public enum EnableWinSecurityAttributesHolder {
         INSTANCE;
         private AnnotationAttributes enableWinSecurity;
 
