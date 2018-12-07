@@ -1,5 +1,7 @@
 package com.winbaoxian.module.security.config;
 
+import com.winbaoxian.module.security.config.definition.ControllerEffectiveScopeSelector;
+
 /**
  * @author dongxuanliang252
  */

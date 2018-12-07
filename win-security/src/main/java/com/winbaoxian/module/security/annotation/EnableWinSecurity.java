@@ -1,9 +1,10 @@
 package com.winbaoxian.module.security.annotation;
 
 import com.winbaoxian.module.security.config.ControllerEffectiveScope;
-import com.winbaoxian.module.security.config.ControllerEffectiveScopeSelector;
-import com.winbaoxian.module.security.config.ExtensionClassRegistrar;
-import com.winbaoxian.module.security.config.RepositoryAttributesConfiguration;
+import com.winbaoxian.module.security.config.RepositoryAttributesPostProcessor;
+import com.winbaoxian.module.security.config.definition.ControllerEffectiveScopeSelector;
+import com.winbaoxian.module.security.config.definition.ExtensionClassRegistrar;
+import com.winbaoxian.module.security.config.definition.AnnotationAttributesRegistrar;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
@@ -30,8 +31,8 @@ import java.lang.annotation.*;
 @ComponentScan({"com.winbaoxian.module.security.service"})
 @Import({ExtensionClassRegistrar.class,
         ControllerEffectiveScopeSelector.class,
-        RepositoryAttributesConfiguration.Registrar.class,
-        RepositoryAttributesConfiguration.PostProcessor.class})
+        AnnotationAttributesRegistrar.class,
+        RepositoryAttributesPostProcessor.class})
 @EnableJpaRepositories(basePackages = "com.winbaoxian.module.security.repository")
 @ServletComponentScan
 public @interface EnableWinSecurity {

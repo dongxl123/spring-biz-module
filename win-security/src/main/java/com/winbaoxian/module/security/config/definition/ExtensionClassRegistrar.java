@@ -1,6 +1,7 @@
-package com.winbaoxian.module.security.config;
+package com.winbaoxian.module.security.config.definition;
 
 import com.winbaoxian.module.security.annotation.EnableWinSecurity;
+import com.winbaoxian.module.security.config.EnableWinSecurityAttributeEnum;
 import com.winbaoxian.module.security.config.loader.WinSecurityClassLoaderConfiguration;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;

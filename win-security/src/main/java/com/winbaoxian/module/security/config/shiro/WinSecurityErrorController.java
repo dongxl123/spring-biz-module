@@ -17,30 +17,13 @@
 package com.winbaoxian.module.security.config.shiro;
 
 import com.winbaoxian.module.security.model.common.JsonResult;
-import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
-import org.springframework.boot.autoconfigure.web.ErrorProperties;
-import org.springframework.boot.context.embedded.AbstractEmbeddedServletContainerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Basic global error {@link Controller}, rendering {@link ErrorAttributes}. More specific
- * errors can be handled either using Spring MVC abstractions (e.g.
- * {@code @ExceptionHandler}) or by adding servlet
- * {@link AbstractEmbeddedServletContainerFactory#setErrorPages container error pages}.
- *
- * @author Dave Syer
- * @author Phillip Webb
- * @author Michael Stummvoll
- * @author Stephane Nicoll
- * @see ErrorAttributes
- * @see ErrorProperties
- */
 
 @RestController
 @RequestMapping("/")
@@ -54,9 +37,10 @@ public class WinSecurityErrorController implements ErrorController {
         int status = response.getStatus();
         if (status == 401) {
             errorMsg = "未登录";
-        } if (status == 403) {
+        }
+        if (status == 403) {
             errorMsg = "访问无权限";
-        }  else if (status == 404) {
+        } else if (status == 404) {
             errorMsg = "请求URL不存在";
         } else if (status == 500) {
             errorMsg = "服务器内部错误";
@@ -68,5 +52,4 @@ public class WinSecurityErrorController implements ErrorController {
     public String getErrorPath() {
         return ERROR_PATH;
     }
-
 }
