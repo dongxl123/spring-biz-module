@@ -7,6 +7,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface SearchParam {
     COMPARE compare() default COMPARE.eq;
+
     String name() default "";
 
     enum COMPARE {

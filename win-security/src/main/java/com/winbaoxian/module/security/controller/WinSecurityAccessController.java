@@ -3,8 +3,6 @@ package com.winbaoxian.module.security.controller;
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.dto.*;
 import com.winbaoxian.module.security.service.WinSecurityAccessService;
-import com.winbaoxian.module.security.service.extension.IUserAddProcessor;
-import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,8 +19,6 @@ public class WinSecurityAccessController {
 
     @Resource
     private WinSecurityAccessService winSecurityAccessService;
-    @Resource
-    private ApplicationContext applicationContext;
 
     /**
      * /**

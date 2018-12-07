@@ -8,6 +8,7 @@ subprojects {
     buildscript {
         ext {
             springBootVersion = '1.5.17.RELEASE'
+            springVersion = '4.3.20.RELEASE'
         }
         repositories {
             mavenCentral()
@@ -39,6 +40,9 @@ subprojects {
     task "create-dirs" << {
         sourceSets*.java.srcDirs*.each { it.mkdirs() }
         sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+    }
+    tasks.withType(JavaCompile){
+        options.encoding = "UTF-8"
     }
 }
 
