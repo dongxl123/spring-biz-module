@@ -25,6 +25,7 @@ spring:
       testOnBorrow: false
       testOnReturn: false
       poolPreparedStatements: false
+      cipherText: vault:v1:Zd7xYEU7kLiUG0THKcFnSjszkEzL67r7MNXYpho1Tu1sEcZZ0nyxOw==
     tob:
       driver-class-name: com.mysql.jdbc.Driver
       url: jdbc:mysql://testwinbx.mysql.rds.aliyuncs.com:3306/baoxian2b?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
@@ -41,6 +42,7 @@ spring:
       testOnBorrow: false
       testOnReturn: false
       poolPreparedStatements: false
+      cipherText: vault:v1:Zd7xYEU7kLiUG0THKcFnSjszkEzL67r7MNXYpho1Tu1sEcZZ0nyxOw==
   aop:
     proxy-target-class: true
 logging:
@@ -51,3 +53,9 @@ logging:
     org.hibernate: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.winbaoxian.broker.component.log.LogAspect: DEBUG
+winbaoxian:
+  vault:
+    gateway: https://vault.winbaoxian.cn:8200
+    encryptionKey: /serverside-qa/decrypt/car_insure_bid
+    authType: token
+    authToken: 4f956d8c-b6b0-c2ef-baef-4fa24f76d841

@@ -1,5 +1,7 @@
 package com.winbaoxian.module.example.component.multids;
 
+import com.winbaoxian.vault.VaultTools;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -29,11 +31,16 @@ public class TobDataSourceConfiguration {
 
     @Resource
     private JpaProperties jpaProperties;
+    @Resource
+    private VaultTools vaultTools;
+    @Value("${spring.datasource.tob.cipherText}")
+    private String cipherText;
 
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.tob")
     public DataSource dataSourceTob() {
-        return DataSourceBuilder.create().build();
+        String password = vaultTools.decrypt(cipherText);
+        return DataSourceBuilder.create().password(password).build();
     }
 
     @Bean

@@ -1,5 +1,7 @@
 package com.winbaoxian.module.example.component.multids;
 
+import com.winbaoxian.vault.VaultTools;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -29,12 +31,17 @@ public class CityManagerDataSourceConfiguration {
 
     @Resource
     private JpaProperties jpaProperties;
+    @Resource
+    private VaultTools vaultTools;
+    @Value("${spring.datasource.citymanager.cipherText}")
+    private String cipherText;
 
     @Bean
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.citymanager")
+    @ConfigurationProperties(prefix = "spring.datasource.citymanager", ignoreNestedProperties = true)
     public DataSource dataSourceCitymanager() {
-        return DataSourceBuilder.create().build();
+        String password = vaultTools.decrypt(cipherText);
+        return DataSourceBuilder.create().password(password).build();
     }
 
     @Bean
