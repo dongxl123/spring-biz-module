@@ -15,7 +15,6 @@ import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager;
@@ -32,7 +31,6 @@ import java.util.Map;
  * @author dongxuanliang252
  * @date 2018-12-05 17:37
  */
-@EnableAspectJAutoProxy
 public class RepositoryAttributesPostProcessor extends InstantiationAwareBeanPostProcessorAdapter implements BeanFactoryPostProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(RepositoryAttributesPostProcessor.class);
