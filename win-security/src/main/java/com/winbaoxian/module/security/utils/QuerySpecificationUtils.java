@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.winbaoxian.module.security.annotation.SearchParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.jpa.criteria.path.RootImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,13 +27,16 @@ public enum QuerySpecificationUtils {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    public <T> Specification<T> getSingleSpecification(Object queryParam) {
+    public <T> Specification<T> getSingleSpecification(Object queryParam, Class<T> entityClass) {
         if (queryParam == null) {
             return null;
         }
         return (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = null;
             try {
+                if (root instanceof RootImpl) {
+                    root = ((RootImpl<T>) root).treatAs(entityClass);
+                }
                 list = getPredicateList(queryParam, root, criteriaBuilder);
             } catch (Exception e) {
                 logger.error("QuerySpecificationUtils.getSingleSpecification failed, queryParam:{}", JSON.toJSONString(queryParam), e);

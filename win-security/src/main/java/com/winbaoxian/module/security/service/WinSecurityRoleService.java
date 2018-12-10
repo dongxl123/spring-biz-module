@@ -125,7 +125,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     }
 
     public List<D> getRoleList(D params) {
-        Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
+        Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getRoleEntityClass());
         Sort sort = new Sort(Sort.Direction.ASC, WinSecurityConstant.SORT_COLUMN_SEQ);
         List<E> roleList = winSecurityRoleRepository.findAll(specification, sort);
         return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(roleList, winSecurityClassLoaderConfiguration.getRoleDTOClass());
@@ -133,7 +133,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     }
 
     public PaginationDTO<D> getRolePage(D params, Pagination pagination) {
-        Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
+        Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getRoleEntityClass());
         Pageable pageable = Pagination.createPageable(pagination, WinSecurityConstant.SORT_COLUMN_SEQ, Sort.Direction.ASC.name());
         Page<E> page = winSecurityRoleRepository.findAll(specification, pageable);
         return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassLoaderConfiguration.getRoleDTOClass());

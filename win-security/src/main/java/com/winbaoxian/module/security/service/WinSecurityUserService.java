@@ -130,13 +130,13 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public List<D> getUserList(D params) {
-        Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
+        Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
         List<E> userList = winSecurityUserRepository.findAll(specification);
         return WinSecurityUserMapper.INSTANCE.toUserDTOList(userList, winSecurityClassLoaderConfiguration.getUserDTOClass());
     }
 
     public PaginationDTO<D> getUserPage(D params, Pagination pagination) {
-        Specification<E> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
+        Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
         Pageable pageable = Pagination.createPageable(pagination);
         Page<E> page = winSecurityUserRepository.findAll(specification, pageable);
         return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassLoaderConfiguration.getUserDTOClass());

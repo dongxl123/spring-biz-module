@@ -128,7 +128,7 @@ public class WinSecurityResourceService {
     }
 
     public List<WinSecurityResourceDTO> getResourceList(WinSecurityResourceDTO params) {
-        Specification<WinSecurityResourceEntity> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params);
+        Specification<WinSecurityResourceEntity> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, WinSecurityResourceEntity.class);
         List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAll(specification);
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
     }
