@@ -82,7 +82,7 @@ public enum QuerySpecificationUtils {
         if (value instanceof Collection && CollectionUtils.isEmpty((Collection) value)) {
             return null;
         }
-        if (value instanceof String && StringUtils.isBlank((CharSequence) value)) {
+        if (value instanceof CharSequence && StringUtils.isBlank((CharSequence) value)) {
             return null;
         }
         Predicate predicate = null;
