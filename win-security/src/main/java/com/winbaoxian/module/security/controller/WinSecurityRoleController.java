@@ -8,6 +8,7 @@ import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
 import com.winbaoxian.module.security.service.WinSecurityRoleService;
+import com.winbaoxian.module.security.utils.MapFastUtils;
 import com.winbaoxian.module.security.utils.TransformerUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -149,6 +150,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      */
     @GetMapping(value = "/getRoleList")
     public JsonResult<List<D>> getRoleList(@RequestParam Map<String, Object> paramsMap) {
+        MapFastUtils.INSTANCE.valueEmptyToNull(paramsMap);
         D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getRoleDTOClass());
         List<D> RoleList = winSecurityRoleService.getRoleList(params);
         return JsonResult.createSuccessResult(RoleList);
@@ -185,6 +187,7 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      */
     @GetMapping(value = "/getRolePage")
     public JsonResult<PaginationDTO<D>> getRolePage(@RequestParam Map<String, Object> paramsMap, Pagination pagination) {
+        MapFastUtils.INSTANCE.valueEmptyToNull(paramsMap);
         D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getRoleDTOClass());
         PaginationDTO<D> paginationDTO = winSecurityRoleService.getRolePage(params, pagination);
         return JsonResult.createSuccessResult(paginationDTO);

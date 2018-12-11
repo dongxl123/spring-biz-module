@@ -8,6 +8,7 @@ import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
 import com.winbaoxian.module.security.service.WinSecurityUserService;
+import com.winbaoxian.module.security.utils.MapFastUtils;
 import com.winbaoxian.module.security.utils.TransformerUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -150,6 +151,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      */
     @GetMapping(value = "/getUserList")
     public JsonResult<List<D>> getUserList(@RequestParam Map<String, Object> paramsMap) {
+        MapFastUtils.INSTANCE.valueEmptyToNull(paramsMap);
         D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getUserDTOClass());
         List<D> UserList = winSecurityUserService.getUserList(params);
         return JsonResult.createSuccessResult(UserList);
@@ -186,6 +188,7 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      */
     @GetMapping(value = "/getUserPage")
     public JsonResult<PaginationDTO<D>> getUserPage(@RequestParam Map<String, Object> paramsMap, Pagination pagination) {
+        MapFastUtils.INSTANCE.valueEmptyToNull(paramsMap);
         D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getUserDTOClass());
         PaginationDTO<D> paginationDTO = winSecurityUserService.getUserPage(params, pagination);
         return JsonResult.createSuccessResult(paginationDTO);
