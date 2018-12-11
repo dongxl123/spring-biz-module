@@ -34,7 +34,7 @@ public enum QuerySpecificationUtils {
         return (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = null;
             try {
-                if (root instanceof RootImpl) {
+                if (root instanceof RootImpl && !((RootImpl) root).getEntityType().getJavaType().equals(entityClass)) {
                     root = ((RootImpl<T>) root).treatAs(entityClass);
                 }
                 list = getPredicateList(queryParam, root, criteriaBuilder);
@@ -82,7 +82,7 @@ public enum QuerySpecificationUtils {
         if (value instanceof Collection && CollectionUtils.isEmpty((Collection) value)) {
             return null;
         }
-        if(value instanceof String && StringUtils.isBlank((CharSequence) value)){
+        if (value instanceof String && StringUtils.isBlank((CharSequence) value)) {
             return null;
         }
         Predicate predicate = null;

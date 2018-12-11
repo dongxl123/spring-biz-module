@@ -1,5 +1,6 @@
 package com.winbaoxian.module.security.service;
 
+import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
@@ -12,6 +13,7 @@ import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,7 +131,8 @@ public class WinSecurityResourceService {
 
     public List<WinSecurityResourceDTO> getResourceList(WinSecurityResourceDTO params) {
         Specification<WinSecurityResourceEntity> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, WinSecurityResourceEntity.class);
-        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAll(specification);
+        Sort sort = new Sort(Sort.Direction.ASC, WinSecurityConstant.SORT_COLUMN_SEQ);
+        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAll(specification, sort);
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
     }
 
