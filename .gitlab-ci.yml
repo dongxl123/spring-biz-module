@@ -5,3 +5,10 @@ trigger_build_doc:
   script:
     - curl -X POST http://192.168.180.192/jenkins/job/bxs-apidoc/buildWithParameters --user dongxuanliang252:110e0732fde118c802cb616637fd47278d  -d 'projectName=spring-biz-module'
     - curl -X POST http://192.168.180.192/jenkins/job/bxs-servicedoc/buildWithParameters --user dongxuanliang252:110e0732fde118c802cb616637fd47278d  -d 'projectName=spring-biz-module'
+
+trigger_build_jar:
+  stage: deploy
+  only:
+  - master
+  script:
+  - curl -X POST http://192.168.180.192/jenkins/job/spring-biz-module/build --user dongxuanliang252:110e0732fde118c802cb616637fd47278d
