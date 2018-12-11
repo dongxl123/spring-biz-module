@@ -57,11 +57,15 @@ public class RepositoryAttributesPostProcessor extends InstantiationAwareBeanPos
             pvs = new MutablePropertyValues();
             for (PropertyDescriptor pd : pds) {
                 if (PACKAGES_TO_SCAN.equals(pd.getName())) {
-                    //apply @EnableWinSecurity entityScanPackages and defaultEntityPackages:ENTITY_PACKAGES
+                    //apply @EnableWinSecurity entityClass packages and defaultEntityPackages:ENTITY_PACKAGES
                     String[] allEntityScanPackages = WinSecurityConstant.ENTITY_PACKAGES;
-                    String[] annotationEntityScanPackages = enableWinSecurity.getStringArray(EnableWinSecurityAttributeEnum.ENTITY_SCAN_PACKAGES.getValue());
-                    if (ArrayUtils.isNotEmpty(annotationEntityScanPackages)) {
-                        allEntityScanPackages = ArrayUtils.addAll(allEntityScanPackages, annotationEntityScanPackages);
+                    Class extensionUserEntityClass = enableWinSecurity.getClass(EnableWinSecurityAttributeEnum.EXTENSION_USER_ENTITY.getValue());
+                    if (extensionUserEntityClass != null) {
+                        allEntityScanPackages = ArrayUtils.addAll(allEntityScanPackages, ClassUtils.getPackageName(extensionUserEntityClass));
+                    }
+                    Class extensionRoleEntityClass = enableWinSecurity.getClass(EnableWinSecurityAttributeEnum.EXTENSION_ROLE_ENTITY.getValue());
+                    if (extensionRoleEntityClass != null) {
+                        allEntityScanPackages = ArrayUtils.addAll(allEntityScanPackages, ClassUtils.getPackageName(extensionRoleEntityClass));
                     }
                     if (ArrayUtils.isNotEmpty(allEntityScanPackages)) {
                         String[] basePackages = getPackages(bean, pd.getName());

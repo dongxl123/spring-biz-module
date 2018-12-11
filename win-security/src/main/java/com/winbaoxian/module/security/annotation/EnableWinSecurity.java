@@ -2,9 +2,9 @@ package com.winbaoxian.module.security.annotation;
 
 import com.winbaoxian.module.security.config.ControllerEffectiveScope;
 import com.winbaoxian.module.security.config.RepositoryAttributesPostProcessor;
+import com.winbaoxian.module.security.config.definition.AnnotationAttributesRegistrar;
 import com.winbaoxian.module.security.config.definition.ControllerEffectiveScopeSelector;
 import com.winbaoxian.module.security.config.definition.ExtensionClassRegistrar;
-import com.winbaoxian.module.security.config.definition.AnnotationAttributesRegistrar;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
@@ -48,11 +48,6 @@ public @interface EnableWinSecurity {
      */
     @AliasFor(annotation = EnableJpaRepositories.class)
     String transactionManagerRef() default "transactionManager";
-
-    /**
-     * winSecurity entityScanPackages
-     */
-    String[] entityScanPackages() default {};
 
     /**
      * 表前缀

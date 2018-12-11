@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author dongxuanliang252getValidResourceListByUserId
+ * @author dongxuanliang252
  * @date 2018-11-19 14:04
  */
 @Service

@@ -24,7 +24,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
         entityManagerFactoryRef = "entityManagerFactoryCitymanager",
         transactionManagerRef = "transactionManagerCitymanager",
         tablePrefix = "SECURITY",
-        entityScanPackages = {"com.winbaoxian.module.example.model.entity.citymanager"},
         extensionUserDTO = SecurityUserDTO.class,
         extensionUserEntity = SecurityUserEntity.class,
         extensionRoleDTO = SecurityRoleDTO.class,
