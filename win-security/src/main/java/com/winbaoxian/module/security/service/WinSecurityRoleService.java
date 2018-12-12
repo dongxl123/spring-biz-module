@@ -46,6 +46,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     @Autowired(required = false)
     private IRoleUpdateProcessor<D, E> iRoleUpdateProcessor;
 
+    @Transactional
     public D addRole(D dto) {
         if (iRoleAddProcessor != null) {
             iRoleAddProcessor.preProcess(dto);

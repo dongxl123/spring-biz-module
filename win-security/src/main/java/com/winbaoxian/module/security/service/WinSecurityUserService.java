@@ -45,6 +45,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     @Autowired(required = false)
     private IUserUpdateProcessor<D, E> iUserUpdateProcessor;
 
+    @Transactional
     public D addUser(D dto) {
         if (iUserAddProcessor != null) {
             iUserAddProcessor.preProcess(dto);
