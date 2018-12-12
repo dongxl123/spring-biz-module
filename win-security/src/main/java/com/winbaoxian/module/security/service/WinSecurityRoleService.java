@@ -28,7 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends WinSecurityBaseRoleEntity> {
@@ -105,7 +107,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         //资源
         if (CollectionUtils.isNotEmpty(dto.getResourceIdList())) {
             List<WinSecurityRoleResourceEntity> persistentResourceEntityList = winSecurityRoleResourceRepository.findByRoleId(id);
-            List<Long> persistentResourceIdList = trans2ResourceIdList(persistentResourceEntityList);
+            Set<Long> persistentResourceIdList = trans2ResourceIdList(persistentResourceEntityList);
             if (!CollectionFastUtils.INSTANCE.isDistinctEqualCollection(dto.getResourceIdList(), persistentResourceIdList)) {
                 winSecurityRoleResourceRepository.deleteByRoleId(id);
                 List<WinSecurityRoleResourceEntity> roleResourceEntityList = trans2RoleResourceEntityList(id, dto.getResourceIdList());
@@ -144,7 +146,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassLoaderConfiguration.getRoleDTOClass());
     }
 
-    private List<WinSecurityRoleResourceEntity> trans2RoleResourceEntityList(Long roleId, List<Long> resourceIdList) {
+    private List<WinSecurityRoleResourceEntity> trans2RoleResourceEntityList(Long roleId, Set<Long> resourceIdList) {
         List<WinSecurityRoleResourceEntity> roleResourceEntityList = new ArrayList<>();
         for (Long resourceId : resourceIdList) {
             WinSecurityRoleResourceEntity entity = new WinSecurityRoleResourceEntity();
@@ -155,11 +157,11 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         return roleResourceEntityList;
     }
 
-    private List<Long> trans2ResourceIdList(List<WinSecurityRoleResourceEntity> roleResourceEntityList) {
+    private Set<Long> trans2ResourceIdList(List<WinSecurityRoleResourceEntity> roleResourceEntityList) {
         if (CollectionUtils.isEmpty(roleResourceEntityList)) {
             return null;
         }
-        List<Long> resourceIdList = new ArrayList<>();
+        Set<Long> resourceIdList = new HashSet<>();
         for (WinSecurityRoleResourceEntity entity : roleResourceEntityList) {
             resourceIdList.add(entity.getResourceId());
         }

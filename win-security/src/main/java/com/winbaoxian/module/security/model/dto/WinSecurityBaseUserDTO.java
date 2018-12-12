@@ -14,7 +14,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * 用户(SECURITY_USER)
@@ -49,7 +49,7 @@ public class WinSecurityBaseUserDTO implements Serializable {
     private Integer status;
 
     /** 关联的权限 */
-    private List<Long> roleIdList;
+    private Set<Long> roleIdList;
 
     private Boolean deleted;
 

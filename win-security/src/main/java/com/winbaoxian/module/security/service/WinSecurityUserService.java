@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,7 +111,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         //角色
         if (CollectionUtils.isNotEmpty(dto.getRoleIdList())) {
             List<WinSecurityUserRoleEntity> persistentRoleEntityList = winSecurityUserRoleRepository.findByUserId(id);
-            List<Long> persistentRoleIdList = trans2RoleIdList(persistentRoleEntityList);
+            Set<Long> persistentRoleIdList = trans2RoleIdList(persistentRoleEntityList);
             if (!CollectionFastUtils.INSTANCE.isDistinctEqualCollection(dto.getRoleIdList(), persistentRoleIdList)) {
                 winSecurityUserRoleRepository.deleteByUserId(id);
                 List<WinSecurityUserRoleEntity> userRoleEntityList = trans2UserRoleEntityList(id, dto.getRoleIdList());
@@ -147,7 +148,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassLoaderConfiguration.getUserDTOClass());
     }
 
-    private List<WinSecurityUserRoleEntity> trans2UserRoleEntityList(Long userId, List<Long> roleIdList) {
+    private List<WinSecurityUserRoleEntity> trans2UserRoleEntityList(Long userId, Set<Long> roleIdList) {
         List<WinSecurityUserRoleEntity> userRoleEntityList = new ArrayList<>();
         for (Long roleId : roleIdList) {
             WinSecurityUserRoleEntity userRoleEntity = new WinSecurityUserRoleEntity();
@@ -158,11 +159,11 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         return userRoleEntityList;
     }
 
-    private List<Long> trans2RoleIdList(List<WinSecurityUserRoleEntity> userRoleEntityList) {
+    private Set<Long> trans2RoleIdList(List<WinSecurityUserRoleEntity> userRoleEntityList) {
         if (CollectionUtils.isEmpty(userRoleEntityList)) {
             return null;
         }
-        return userRoleEntityList.stream().map(o -> o.getRoleId()).collect(Collectors.toList());
+        return userRoleEntityList.stream().map(o -> o.getRoleId()).collect(Collectors.toSet());
     }
 
     public D getUserByUserName(String userName) {

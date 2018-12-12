@@ -14,7 +14,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * 角色(SECURITY_ROLE)
@@ -49,7 +49,7 @@ public class WinSecurityBaseRoleDTO implements Serializable {
     private Integer status;
 
     /** 关联的资源 */
-    private List<Long> resourceIdList;
+    private Set<Long> resourceIdList;
 
     private Boolean deleted;
 
