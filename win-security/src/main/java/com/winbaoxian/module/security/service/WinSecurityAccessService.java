@@ -90,6 +90,12 @@ public class WinSecurityAccessService {
         return true;
     }
 
+    public boolean isAuthenticated() {
+        Subject subject = SecurityUtils.getSubject();
+        return subject != null && subject.isAuthenticated();
+    }
+
+
     public WinSecurityPrincipal getWinSecurityPrincipal() {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {

@@ -75,7 +75,7 @@ CREATE TABLE `{prefix}_sys_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `user_name` varchar(255) DEFAULT NULL COMMENT '登陆名',
   `role_name` varchar(255) DEFAULT NULL COMMENT '角色名',
-  `opt_content` varchar(1024) DEFAULT NULL COMMENT '内容',
+  `opt_content` text COMMENT '内容',
   `client_ip` varchar(255) DEFAULT NULL COMMENT '客户端ip',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志';

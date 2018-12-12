@@ -5,6 +5,7 @@ import com.winbaoxian.module.security.config.RepositoryAttributesPostProcessor;
 import com.winbaoxian.module.security.config.definition.AnnotationAttributesRegistrar;
 import com.winbaoxian.module.security.config.definition.ControllerEffectiveScopeSelector;
 import com.winbaoxian.module.security.config.definition.ExtensionClassRegistrar;
+import com.winbaoxian.module.security.config.definition.SysLogSelector;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
@@ -18,7 +19,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.lang.annotation.*;
 
-
 /**
  * @author dongxuanliang252
  * @date 2018-12-03 11:36
@@ -28,8 +28,10 @@ import java.lang.annotation.*;
 @Documented
 @ComponentScan({"com.winbaoxian.module.security.config.shiro"})
 @ComponentScan({"com.winbaoxian.module.security.config.exception"})
+@ComponentScan({"com.winbaoxian.module.security.config.log"})
 @ComponentScan({"com.winbaoxian.module.security.service"})
 @Import({ExtensionClassRegistrar.class,
+        SysLogSelector.class,
         ControllerEffectiveScopeSelector.class,
         AnnotationAttributesRegistrar.class,
         RepositoryAttributesPostProcessor.class})
@@ -96,7 +98,15 @@ public @interface EnableWinSecurity {
      */
     Class<? extends IProcessor>[] extensionServiceProcessors() default {};
 
+    /**
+     * sysLog switch
+     *
+     * @return
+     */
+    boolean sysLog() default false;
+
 }
+
 
 
 

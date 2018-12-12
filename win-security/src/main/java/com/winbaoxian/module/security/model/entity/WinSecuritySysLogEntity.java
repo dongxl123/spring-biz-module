@@ -10,13 +10,14 @@ package com.winbaoxian.module.security.model.entity;/*
  * Version:5.0.0
  */
 
-import java.io.Serializable;
-import java.util.Date;
-import javax.persistence.*;
-
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 系统日志(SECURITY_SYS_LOG)
@@ -41,6 +42,7 @@ public class WinSecuritySysLogEntity implements Serializable {
 
     /** 创建时间 */
     @Column(name = "CREATE_TIME")
+    @CreationTimestamp
     private Date createTime;
 
     /** 登陆名 */

@@ -15,6 +15,7 @@ public enum EnableWinSecurityAttributeEnum {
     EXTENSION_ROLE_DTO("extensionRoleDTO"),
     EXTENSION_ROLE_ENTITY("extensionRoleEntity"),
     EXTENSION_SERVICE_PROCESSORS("extensionServiceProcessors"),
+    SYS_LOG("sysLog"),
     ;
 
     private final String value;
