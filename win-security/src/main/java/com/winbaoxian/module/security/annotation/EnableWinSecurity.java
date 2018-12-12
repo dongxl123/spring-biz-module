@@ -28,7 +28,6 @@ import java.lang.annotation.*;
 @Documented
 @ComponentScan({"com.winbaoxian.module.security.config.shiro"})
 @ComponentScan({"com.winbaoxian.module.security.config.exception"})
-@ComponentScan({"com.winbaoxian.module.security.config.log"})
 @ComponentScan({"com.winbaoxian.module.security.service"})
 @Import({ExtensionClassRegistrar.class,
         SysLogSelector.class,

@@ -15,6 +15,7 @@ import com.winbaoxian.module.security.repository.WinSecurityRoleResourceReposito
 import com.winbaoxian.module.security.service.extension.IRoleAddProcessor;
 import com.winbaoxian.module.security.service.extension.IRoleUpdateProcessor;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
+import com.winbaoxian.module.security.utils.CollectionFastUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,9 +104,13 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         winSecurityRoleRepository.save(persistent);
         //资源
         if (CollectionUtils.isNotEmpty(dto.getResourceIdList())) {
-            winSecurityRoleResourceRepository.deleteByRoleId(id);
-            List<WinSecurityRoleResourceEntity> roleResourceEntityList = trans2RoleResourceEntityList(id, dto.getResourceIdList());
-            winSecurityRoleResourceRepository.save(roleResourceEntityList);
+            List<WinSecurityRoleResourceEntity> persistentResourceEntityList = winSecurityRoleResourceRepository.findByRoleId(id);
+            List<Long> persistentResourceIdList = trans2ResourceIdList(persistentResourceEntityList);
+            if (!CollectionFastUtils.INSTANCE.isDistinctEqualCollection(dto.getResourceIdList(), persistentResourceIdList)) {
+                winSecurityRoleResourceRepository.deleteByRoleId(id);
+                List<WinSecurityRoleResourceEntity> roleResourceEntityList = trans2RoleResourceEntityList(id, dto.getResourceIdList());
+                winSecurityRoleResourceRepository.save(roleResourceEntityList);
+            }
         }
         D retDto = getRole(id);
         if (iRoleUpdateProcessor != null) {

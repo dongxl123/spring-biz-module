@@ -14,6 +14,7 @@ import com.winbaoxian.module.security.repository.WinSecurityUserRoleRepository;
 import com.winbaoxian.module.security.service.extension.IUserAddProcessor;
 import com.winbaoxian.module.security.service.extension.IUserUpdateProcessor;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
+import com.winbaoxian.module.security.utils.CollectionFastUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -108,9 +109,13 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         winSecurityUserRepository.save(persistent);
         //角色
         if (CollectionUtils.isNotEmpty(dto.getRoleIdList())) {
-            winSecurityUserRoleRepository.deleteByUserId(id);
-            List<WinSecurityUserRoleEntity> userRoleEntityList = trans2UserRoleEntityList(id, dto.getRoleIdList());
-            winSecurityUserRoleRepository.save(userRoleEntityList);
+            List<WinSecurityUserRoleEntity> persistentRoleEntityList = winSecurityUserRoleRepository.findByUserId(id);
+            List<Long> persistentRoleIdList = trans2RoleIdList(persistentRoleEntityList);
+            if (!CollectionFastUtils.INSTANCE.isDistinctEqualCollection(dto.getRoleIdList(), persistentRoleIdList)) {
+                winSecurityUserRoleRepository.deleteByUserId(id);
+                List<WinSecurityUserRoleEntity> userRoleEntityList = trans2UserRoleEntityList(id, dto.getRoleIdList());
+                winSecurityUserRoleRepository.save(userRoleEntityList);
+            }
         }
         D retDto = getUser(id);
         if (iUserUpdateProcessor != null) {
