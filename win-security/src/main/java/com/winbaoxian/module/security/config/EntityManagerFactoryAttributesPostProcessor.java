@@ -31,9 +31,9 @@ import java.util.Map;
  * @author dongxuanliang252
  * @date 2018-12-05 17:37
  */
-public class RepositoryAttributesPostProcessor extends InstantiationAwareBeanPostProcessorAdapter implements BeanFactoryPostProcessor {
+public class EntityManagerFactoryAttributesPostProcessor extends InstantiationAwareBeanPostProcessorAdapter implements BeanFactoryPostProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(RepositoryAttributesPostProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(EntityManagerFactoryAttributesPostProcessor.class);
 
     private static final String INTERNAL_PERSISTENCE_UNIT_MANAGER = "internalPersistenceUnitManager";
     private static final String PACKAGES_TO_SCAN = "packagesToScan";
@@ -41,9 +41,9 @@ public class RepositoryAttributesPostProcessor extends InstantiationAwareBeanPos
     private static final String JPA_PROPERTY_MAP_PHYSICAL_NAMING_STRATEGY = "hibernate.physical_naming_strategy";
     private AnnotationAttributes enableWinSecurity;
 
-    public RepositoryAttributesPostProcessor() {
+    public EntityManagerFactoryAttributesPostProcessor() {
         this.enableWinSecurity = AnnotationAttributesHolder.INSTANCE.getEnableWinSecurity();
-        Assert.notNull(this.enableWinSecurity, "RepositoryAttributesConfiguration.PostProcessor, can not found enableWinSecurity annotation attributes");
+        Assert.notNull(this.enableWinSecurity, "EntityManagerFactoryAttributesPostProcessor.PostProcessor, can not found enableWinSecurity annotation attributes");
     }
 
     private boolean matchedBeanName(String beanName) {

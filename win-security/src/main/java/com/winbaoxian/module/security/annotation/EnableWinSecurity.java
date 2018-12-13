@@ -1,7 +1,7 @@
 package com.winbaoxian.module.security.annotation;
 
 import com.winbaoxian.module.security.config.ControllerEffectiveScope;
-import com.winbaoxian.module.security.config.RepositoryAttributesPostProcessor;
+import com.winbaoxian.module.security.config.EntityManagerFactoryAttributesPostProcessor;
 import com.winbaoxian.module.security.config.definition.AnnotationAttributesRegistrar;
 import com.winbaoxian.module.security.config.definition.ControllerEffectiveScopeSelector;
 import com.winbaoxian.module.security.config.definition.ExtensionClassRegistrar;
@@ -33,7 +33,7 @@ import java.lang.annotation.*;
         SysLogSelector.class,
         ControllerEffectiveScopeSelector.class,
         AnnotationAttributesRegistrar.class,
-        RepositoryAttributesPostProcessor.class})
+        EntityManagerFactoryAttributesPostProcessor.class})
 @EnableJpaRepositories(basePackages = "com.winbaoxian.module.security.repository")
 @ServletComponentScan
 public @interface EnableWinSecurity {
