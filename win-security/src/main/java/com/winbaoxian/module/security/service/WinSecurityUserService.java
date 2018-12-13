@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -146,7 +147,20 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
         Pageable pageable = Pagination.createPageable(pagination);
         Page<E> page = winSecurityUserRepository.findAll(specification, pageable);
-        return (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassLoaderConfiguration.getUserDTOClass());
+        PaginationDTO<D> paginationDTO = (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassLoaderConfiguration.getUserDTOClass());
+        if (CollectionUtils.isEmpty(paginationDTO.getList())) {
+            return paginationDTO;
+        }
+        List<Long> userIdList = paginationDTO.getList().stream().map(o -> o.getId()).collect(Collectors.toList());
+        List<WinSecurityUserRoleEntity> userRoleEntityList = winSecurityUserRoleRepository.findByUserIdIn(userIdList);
+        Map<Long, List<WinSecurityUserRoleEntity>> userRoleEntityMap = userRoleEntityList.stream().collect(Collectors.groupingBy(o -> o.getUserId()));
+        paginationDTO.getList().stream().forEach(o -> {
+                    if (userRoleEntityMap.containsKey(o.getId())) {
+                        o.setRoleIdList(trans2RoleIdList(userRoleEntityMap.get(o.getId())));
+                    }
+                }
+        );
+        return paginationDTO;
     }
 
     private List<WinSecurityUserRoleEntity> trans2UserRoleEntityList(Long userId, Set<Long> roleIdList) {

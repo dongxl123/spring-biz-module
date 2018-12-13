@@ -10,4 +10,7 @@ public interface WinSecurityUserRoleRepository extends JpaRepository<WinSecurity
     void deleteByUserId(Long userId);
 
     List<WinSecurityUserRoleEntity> findByUserId(Long userId);
+
+    List<WinSecurityUserRoleEntity> findByUserIdIn(List<Long> userIdList);
+
 }
