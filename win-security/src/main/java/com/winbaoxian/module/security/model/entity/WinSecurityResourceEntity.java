@@ -87,7 +87,7 @@ public class WinSecurityResourceEntity implements Serializable {
     @Column(name = "STATUS")
     private Integer status;
 
-    /** 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量 */
+    /** 资源类别, 0:无特别作用，1:菜单，2:其他 */
     @Column(name = "RESOURCE_TYPE")
     private Integer resourceType;
 

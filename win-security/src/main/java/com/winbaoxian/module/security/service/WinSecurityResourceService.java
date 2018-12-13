@@ -141,13 +141,13 @@ public class WinSecurityResourceService {
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
     }
 
-    public List<WinSecurityResourceDTO> getAllValidResourceList() {
+    public List<WinSecurityResourceDTO> getAllValidAccessResourceList() {
         List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAllByStatusAndDeletedFalse(WinSecurityStatusEnum.ENABLED.getValue());
         List<WinSecurityResourceDTO> resourceList = WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
         if (CollectionUtils.isEmpty(resourceList)) {
             return null;
         }
-        return resourceList.stream().filter(o -> WinSecurityResourceTypeEnum.BUTTON.getValue().equals(o.getResourceType()) && StringUtils.isNotBlank(o.getValue())).collect(Collectors.toList());
+        return resourceList.stream().filter(o -> WinSecurityResourceTypeEnum.OTHER.getValue().equals(o.getResourceType()) && StringUtils.isNotBlank(o.getValue())).collect(Collectors.toList());
     }
 
 }

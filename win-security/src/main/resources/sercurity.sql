@@ -31,7 +31,7 @@ CREATE TABLE `{prefix}_resource` (
   `pid` bigint(20) DEFAULT '0' COMMENT '父级资源id',
   `seq` int(5) NOT NULL DEFAULT '0' COMMENT '排序',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态，0:无效 , 1:有效',
-  `resource_type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量',
+  `resource_type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '资源类别, 0:无特别作用，1:菜单，2:其他',
   `deleted` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`),
   KEY `idx_value` (`value`),

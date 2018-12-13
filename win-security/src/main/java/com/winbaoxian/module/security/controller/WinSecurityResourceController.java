@@ -28,7 +28,7 @@ public class WinSecurityResourceController {
      * @apiParam (请求体) {Number} pid 上级父ID
      * @apiParam (请求体) {Number} seq 排序
      * @apiParam (请求体) {Number} status 状态，0:无效 , 1:有效
-     * @apiParam (请求体) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
+     * @apiParam (请求体) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:其他
      * @apiParamExample 请求体示例
      * {"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0}
      * @apiSuccess (响应参数) {Number} id 主键
@@ -43,7 +43,7 @@ public class WinSecurityResourceController {
      * @apiSuccess (响应参数) {Number} pid 上级父ID
      * @apiSuccess (响应参数) {Number} seq 排序
      * @apiSuccess (响应参数) {Number} status 状态，0:无效 , 1:有效
-     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
+     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:其他
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
      */
@@ -83,7 +83,7 @@ public class WinSecurityResourceController {
      * @apiParam (请求体) {Number} pid 上级父ID
      * @apiParam (请求体) {Number} seq 排序
      * @apiParam (请求体) {Number} status 状态，0:无效 , 1:有效
-     * @apiParam (请求体) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
+     * @apiParam (请求体) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:其他
      * @apiParamExample 请求体示例
      * {"id":11,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0}
      * @apiSuccess (响应参数) {Number} id 主键
@@ -98,7 +98,7 @@ public class WinSecurityResourceController {
      * @apiSuccess (响应参数) {Number} pid 上级父ID
      * @apiSuccess (响应参数) {Number} seq 排序
      * @apiSuccess (响应参数) {Number} status 状态，0:无效 , 1:有效
-     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
+     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:其他
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
      */
@@ -128,7 +128,7 @@ public class WinSecurityResourceController {
      * @apiSuccess (响应参数) {Number} pid 上级父ID
      * @apiSuccess (响应参数) {Number} seq 排序
      * @apiSuccess (响应参数) {Number} status 状态，0:无效 , 1:有效
-     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
+     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:其他
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
      */
@@ -156,7 +156,7 @@ public class WinSecurityResourceController {
      * @apiSuccess (响应参数) {Number} pid 上级父ID
      * @apiSuccess (响应参数) {Number} seq 排序
      * @apiSuccess (响应参数) {Number} status 状态，0:无效 , 1:有效
-     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
+     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:其他
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1392742800000,"updateTime":1541642350000,"name":"权限管理","code":"","globalCode":"","value":"/resource/treeGrid","description":"系统管理","icon":"glyphicon-folder-open ","pid":11,"seq":1,"status":0,"resourceType":1,"deleted":false},{"id":111,"createTime":1392742800000,"updateTime":1541642350000,"name":"列表","code":"","globalCode":"","value":"/resource/treeGrid","description":"资源列表","icon":"glyphicon-list ","pid":11,"seq":0,"status":0,"resourceType":1,"deleted":false},{"id":112,"createTime":1392742800000,"updateTime":1541642350000,"name":"添加","code":"","globalCode":"","value":"/resource/add","description":"资源添加","icon":"glyphicon-plus icon-green","pid":11,"seq":0,"status":0,"resourceType":1,"deleted":false},{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}]}
      */

@@ -84,7 +84,7 @@ public class WinSecurityAccessController {
      * @apiSuccess (响应参数) {Number} pid 父ID
      * @apiSuccess (响应参数) {Number} seq 排序
      * @apiSuccess (响应参数) {Number} status 状态
-     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
+     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:其他
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1392742800000,"updateTime":1541642350000,"name":"权限管理","code":"","globalCode":"","value":"/article/create","description":"系统管理","icon":"glyphicon-folder-open ","pid":230,"seq":0,"status":0,"resourceType":0},{"id":231,"createTime":1482566027000,"updateTime":1541642350000,"name":"新建文章","code":"","globalCode":"","value":"/article/create","description":null,"icon":"glyphicon-open-file ","pid":230,"seq":0,"status":0,"resourceType":0}]}
      */
@@ -130,7 +130,7 @@ public class WinSecurityAccessController {
      * @apiSuccess (响应参数) {Number} resourceList.pid 父ID
      * @apiSuccess (响应参数) {Number} resourceList.seq 排序
      * @apiSuccess (响应参数) {Number} resourceList.status 状态, 0:无效 , 1:有效
-     * @apiSuccess (响应参数) {Number} resourceList.resourceType 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
+     * @apiSuccess (响应参数) {Number} resourceList.resourceType 资源类别, 0:无特别作用，1:菜单，2:其他
      * @apiSuccessExample 响应示例
      * {"code":200,"msg":null,"data":{"userInfo":{"id":1,"createTime":1449378845000,"updateTime":1543312537000,"userName":"admin","name":"admin","mobile":"18707173376","status":1,"roleIdList":[1,2,7,8],"edu":null},"roleList":[{"id":1,"createTime":1541642375000,"updateTime":1541642375000,"name":"admin","description":"超级管理员","seq":0,"status":0},{"id":2,"createTime":1541642375000,"updateTime":1541642375000,"name":"de","description":"技术部经理","seq":0,"status":0}],"resourceList":[{"id":1,"createTime":1392742800000,"updateTime":1541642350000,"name":"权限管理","code":"","globalCode":"","value":"/article/create","description":"系统管理","icon":"glyphicon-folder-open ","pid":230,"seq":0,"status":0,"resourceType":0},{"id":231,"createTime":1482566027000,"updateTime":1541642350000,"name":"新建文章","code":"","globalCode":"","value":"/article/create","description":null,"icon":"glyphicon-open-file ","pid":230,"seq":0,"status":0,"resourceType":0}]}}
      */

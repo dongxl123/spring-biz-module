@@ -1,14 +1,12 @@
 package com.winbaoxian.module.security.model.enums;
 
 /**
- * 资源类别, 0:无特别作用，1:菜单，2:子页面，3:按钮, 4:页面自定义变量
+ * 资源类别, 0:无特别作用，1:菜单，2:其他
  */
 public enum WinSecurityResourceTypeEnum {
     DEFAULT(0, "无特别作用"),
     MENU(1, "菜单"),
-    SUB_PAGE(2, "子页面"),
-    BUTTON(3, "按钮"),
-    VARIABLE(4, "页面自定义变量"),
+    OTHER(2, "其他"),
     ;
     private Integer value;
     private String desc;

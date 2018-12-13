@@ -47,7 +47,7 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
 
         List<WinSecurityResourceDTO> resourceList = cache.get(RESOURCE_CACHE_KEY);
         if (CollectionUtils.isEmpty(resourceList)) {
-            resourceList = winSecurityResourceService.getAllValidResourceList();
+            resourceList = winSecurityResourceService.getAllValidAccessResourceList();
             cache.put(RESOURCE_CACHE_KEY, resourceList);
             log.info("WinSecurityUrlFilter, 时间:{}, 从数据库获取数据", new Date());
         }
