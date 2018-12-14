@@ -1,6 +1,7 @@
 package com.winbaoxian.module.security.service;
 
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
+import com.winbaoxian.module.security.model.dto.DragAndDropParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
@@ -13,6 +14,7 @@ import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -144,6 +146,85 @@ public class WinSecurityResourceService {
             return null;
         }
         return resourceList.stream().filter(o -> WinSecurityResourceTypeEnum.OTHER.getValue().equals(o.getResourceType()) && StringUtils.isNotBlank(o.getValue())).collect(Collectors.toList());
+    }
+
+    public WinSecurityResourceDTO dragAndDropResource(DragAndDropParamDTO params) {
+        if (params == null || params.getId() == null || params.getTargetParentId() == null) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
+        }
+        Long id = params.getId();
+        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOne(id);
+        if (persistent == null) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
+        }
+        //pid更改，更新自身和下级元素的globalCode
+        if (!params.getTargetParentId().equals(persistent.getPid())) {
+            //判断同级下的code是否重复
+            if (winSecurityResourceRepository.existsByCodeAndPidAndIdNotAndDeletedFalse(persistent.getCode(), params.getTargetParentId(), id)) {
+                throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_EXISTS);
+            }
+            persistent.setGlobalCode(getGlobalCode(persistent.getCode(), params.getTargetParentId()));
+            //更新下级所有的globalCode
+            updateGlobalCodeByPid(persistent.getId());
+        }
+        //计算seq
+        persistent.setSeq(reCalculateSequence(id, params.getTargetUpId(), params.getTargetDownId()));
+        persistent.setPid(params.getTargetParentId());
+        winSecurityResourceRepository.save(persistent);
+        return getResource(id);
+    }
+
+    private Long reCalculateSequence(Long id, Long targetUpId, Long targetDownId) {
+        WinSecurityResourceEntity thisResource = winSecurityResourceRepository.findOne(id);
+        WinSecurityResourceEntity upResource = null;
+        WinSecurityResourceEntity downResource = null;
+        if (targetUpId != null) {
+            upResource = winSecurityResourceRepository.findOne(targetUpId);
+            if (upResource == null) {
+                throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
+            }
+        }
+        if (targetDownId != null) {
+            downResource = winSecurityResourceRepository.findOne(targetDownId);
+            if (downResource == null) {
+                throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
+            }
+        }
+        Long seq = thisResource.getSeq() == null ? NumberUtils.LONG_ZERO : thisResource.getSeq();
+        if (upResource == null && downResource == null) {
+            //NoThing to do
+        } else if (upResource == null && downResource != null) {
+            //in the top
+            seq = downResource.getSeq() - 1;
+        } else if (upResource != null && downResource == null) {
+            //in the bottom
+            seq = upResource.getSeq() + 1;
+        } else {
+            if (!upResource.getPid().equals(downResource.getPid()) || upResource.getSeq() > downResource.getSeq()) {
+                throw new WinSecurityException(WinSecurityErrorEnum.COMMON_DATA_NOT_SUITABLE);
+            }
+            //in the middle
+            if (seq > upResource.getSeq() && seq < downResource.getSeq()) {
+                //suitable seq
+            } else if (downResource.getSeq() - upResource.getSeq() > 1) {
+                seq = upResource.getSeq() + 1;
+            } else {
+                seq = upResource.getSeq() + 1;
+                //update downResourceList seq
+                updateDownResourceListSeq(upResource.getPid(), downResource.getSeq());
+            }
+        }
+        return seq;
+    }
+
+    private void updateDownResourceListSeq(Long pid, Long seq) {
+        List<WinSecurityResourceEntity> downList = winSecurityResourceRepository.findByPidAndSeqGreaterThanEqualAndDeletedFalse(pid, seq);
+        if (CollectionUtils.isNotEmpty(downList)) {
+            for (WinSecurityResourceEntity entity : downList) {
+                entity.setSeq(entity.getSeq() + 1);
+            }
+            winSecurityResourceRepository.save(downList);
+        }
     }
 
 }

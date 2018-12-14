@@ -1,6 +1,7 @@
 package com.winbaoxian.module.security.controller;
 
 import com.winbaoxian.module.security.model.common.JsonResult;
+import com.winbaoxian.module.security.model.dto.DragAndDropParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import org.springframework.web.bind.annotation.*;
@@ -165,5 +166,39 @@ public class WinSecurityResourceController {
         List<WinSecurityResourceDTO> resourceList = winSecurityResourceService.getResourceList(params);
         return JsonResult.createSuccessResult(resourceList);
     }
+
+    /**
+     * @apiVersion 1.0.0
+     * @api {POST} /api/winSecurity/v1/resource/dragAndDropResource 拖拉资源位置
+     * @apiGroup resource
+     * @apiName dragAndDropResource
+     * @apiParam (请求体) {Number} id 当前元素ID
+     * @apiParam (请求体) {Number} targetParentId targetParentId
+     * @apiParam (请求体) {Number} targetUpId 目标位置上面的元素ID
+     * @apiParam (请求体) {Number} targetDownId 目标位置下面的元素ID
+     * @apiParamExample 请求体示例
+     * {"id":111,"targetParentId":11,"targetUpId":121,"targetDownId":122}
+     * @apiSuccess (响应参数) {Number} id 主键
+     * @apiSuccess (响应参数) {Number} createTime 创建时间
+     * @apiSuccess (响应参数) {Number} updateTime 更新时间
+     * @apiSuccess (响应参数) {String} name 名称
+     * @apiSuccess (响应参数) {String} code 编码
+     * @apiSuccess (响应参数) {String} globalCode 全局唯一编码
+     * @apiSuccess (响应参数) {String} value 值
+     * @apiSuccess (响应参数) {String} description 描述
+     * @apiSuccess (响应参数) {String} icon 图标
+     * @apiSuccess (响应参数) {Number} pid 上级父ID
+     * @apiSuccess (响应参数) {Number} seq 排序
+     * @apiSuccess (响应参数) {Number} status 状态，0:无效 , 1:有效
+     * @apiSuccess (响应参数) {Number} resourceType 资源类别, 0:无特别作用，1:菜单，2:其他
+     * @apiSuccessExample 响应示例
+     * {"code":200,"msg":null,"data":{"id":11,"createTime":1392742800000,"updateTime":1541642350000,"name":"资源管理","code":"","globalCode":"","value":"/resource/manager","description":"资源管理","icon":"glyphicon-th ","pid":1,"seq":1,"status":0,"resourceType":0,"deleted":false}}
+     */
+    @PostMapping(value = "/dragAndDropResource")
+    public JsonResult<WinSecurityResourceDTO> dragAndDropResource(@RequestBody DragAndDropParamDTO params) {
+        WinSecurityResourceDTO resourceDTO = winSecurityResourceService.dragAndDropResource(params);
+        return JsonResult.createSuccessResult(resourceDTO);
+    }
+
 
 }

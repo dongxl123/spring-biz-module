@@ -58,6 +58,7 @@ public class WinSecurityTransactionConfiguration {
         nameMap.put("add*", new RuleBasedTransactionAttribute());
         nameMap.put("update*", new RuleBasedTransactionAttribute());
         nameMap.put("delete*", new RuleBasedTransactionAttribute());
+        nameMap.put("dragAndDrop*", new RuleBasedTransactionAttribute());
         attributes.setNameMap(nameMap);
         advice.setTransactionAttributeSource(attributes);
         return advice;

@@ -12,6 +12,7 @@ public enum WinSecurityErrorEnum {
     COMMON_USER_EXISTS("用户已存在"),
     COMMON_USER_NOT_EXISTS("用户不存在"),
     COMMON_ROLE_NOT_EXISTS("角色不存在"),
+    COMMON_DATA_NOT_SUITABLE("数据不符合要求"),
     ;
 
     private String message;

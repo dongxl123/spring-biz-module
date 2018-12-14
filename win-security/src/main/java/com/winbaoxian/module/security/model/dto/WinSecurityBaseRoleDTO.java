@@ -43,7 +43,7 @@ public class WinSecurityBaseRoleDTO implements Serializable {
     private String description;
 
     /** 排序号 */
-    private Integer seq;
+    private Long seq;
 
     /** 状态, 0:无效 , 1:有效 */
     private Integer status;

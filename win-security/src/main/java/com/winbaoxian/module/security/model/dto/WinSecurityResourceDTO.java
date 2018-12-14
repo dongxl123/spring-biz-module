@@ -57,7 +57,7 @@ public class WinSecurityResourceDTO implements Serializable {
     private Long pid;
 
     /** 排序 */
-    private Integer seq;
+    private Long seq;
 
     /** 状态，0:无效 , 1:有效 */
     private Integer status;
