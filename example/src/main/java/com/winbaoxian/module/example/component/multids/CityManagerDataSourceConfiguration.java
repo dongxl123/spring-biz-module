@@ -37,7 +37,6 @@ public class CityManagerDataSourceConfiguration {
     private String cipherText;
 
     @Bean
-    @Primary
     @ConfigurationProperties(prefix = "spring.datasource.citymanager", ignoreNestedProperties = true)
     public DataSource dataSourceCitymanager() {
         String password = vaultTools.decrypt(cipherText);
@@ -45,7 +44,6 @@ public class CityManagerDataSourceConfiguration {
     }
 
     @Bean
-    @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryCitymanager(EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(dataSourceCitymanager())
@@ -56,7 +54,6 @@ public class CityManagerDataSourceConfiguration {
     }
 
     @Bean
-    @Primary
     PlatformTransactionManager transactionManagerCitymanager(EntityManagerFactoryBuilder builder) {
         return new JpaTransactionManager(entityManagerFactoryCitymanager(builder).getObject());
     }

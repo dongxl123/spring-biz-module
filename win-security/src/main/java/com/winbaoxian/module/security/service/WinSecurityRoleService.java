@@ -24,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     @Autowired(required = false)
     private IRoleUpdateProcessor<D, E> iRoleUpdateProcessor;
 
-    @Transactional
     public D addRole(D dto) {
         if (iRoleAddProcessor != null) {
             iRoleAddProcessor.preProcess(dto);
@@ -73,7 +71,6 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         return retDto;
     }
 
-    @Transactional
     public void deleteRole(Long id) {
         E entity = winSecurityRoleRepository.findOne(id);
         if (entity == null) {
@@ -83,7 +80,6 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         winSecurityRoleRepository.save(entity);
     }
 
-    @Transactional
     public D updateRole(D dto) {
         if (iRoleUpdateProcessor != null) {
             iRoleUpdateProcessor.preProcess(dto);

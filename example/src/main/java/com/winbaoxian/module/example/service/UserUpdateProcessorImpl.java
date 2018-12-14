@@ -32,5 +32,6 @@ public class UserUpdateProcessorImpl implements IUserUpdateProcessor<SecurityUse
     @Override
     public void postProcess(SecurityUserDTO result) throws WinSecurityException {
         log.info("update user postProcess");
+        throw new WinSecurityException("transaction test");
     }
 }

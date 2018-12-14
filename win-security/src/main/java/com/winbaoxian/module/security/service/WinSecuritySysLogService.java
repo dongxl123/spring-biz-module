@@ -5,7 +5,6 @@ import com.winbaoxian.module.security.model.entity.WinSecuritySysLogEntity;
 import com.winbaoxian.module.security.model.mapper.WinSecuritySysLogMapper;
 import com.winbaoxian.module.security.repository.WinSecuritySysLogRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -19,7 +18,6 @@ public class WinSecuritySysLogService {
     @Resource
     private WinSecuritySysLogRepository winSecuritySysLogRepository;
 
-    @Transactional
     public WinSecuritySysLogDTO addSysLog(WinSecuritySysLogDTO dto) {
         WinSecuritySysLogEntity entity = WinSecuritySysLogMapper.INSTANCE.toSysLogEntity(dto);
         WinSecuritySysLogEntity retEntity = winSecuritySysLogRepository.save(entity);

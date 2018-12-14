@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -36,6 +37,7 @@ public class TobDataSourceConfiguration {
     private String cipherText;
 
     @Bean
+    @Primary
     @ConfigurationProperties(prefix = "spring.datasource.tob")
     public DataSource dataSourceTob() {
         String password = vaultTools.decrypt(cipherText);
@@ -43,6 +45,7 @@ public class TobDataSourceConfiguration {
     }
 
     @Bean
+    @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryTob(EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(dataSourceTob())
@@ -53,6 +56,7 @@ public class TobDataSourceConfiguration {
     }
 
     @Bean
+    @Primary
     PlatformTransactionManager transactionManagerTob(EntityManagerFactoryBuilder builder) {
         return new JpaTransactionManager(entityManagerFactoryTob(builder).getObject());
     }

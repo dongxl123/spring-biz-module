@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -28,7 +27,6 @@ public class WinSecurityResourceService {
     @Resource
     private WinSecurityResourceRepository winSecurityResourceRepository;
 
-    @Transactional
     public WinSecurityResourceDTO addResource(WinSecurityResourceDTO dto) {
         if (dto.getPid() == null) {
             dto.setPid(0L);
@@ -65,7 +63,6 @@ public class WinSecurityResourceService {
         return globalCode;
     }
 
-    @Transactional
     public void deleteResource(Long id) {
         WinSecurityResourceEntity entity = winSecurityResourceRepository.findOne(id);
         if (entity == null) {
@@ -88,7 +85,6 @@ public class WinSecurityResourceService {
         }
     }
 
-    @Transactional
     public WinSecurityResourceDTO updateResource(WinSecurityResourceDTO dto) {
         if (dto == null || dto.getId() == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);

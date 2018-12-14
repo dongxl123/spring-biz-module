@@ -72,6 +72,7 @@ public class EntityManagerFactoryAttributesPostProcessor extends InstantiationAw
                         if (ArrayUtils.isNotEmpty(basePackages)) {
                             allEntityScanPackages = ArrayUtils.addAll(allEntityScanPackages, basePackages);
                         }
+                        log.info("WinSecurity: EntityManagerFactoryAttributesPostProcessor, beanName:{}, propertyName:{}, change propertyValue to:{}", beanName, pd.getName(), allEntityScanPackages);
                         ((MutablePropertyValues) pvs).add(pd.getName(), allEntityScanPackages);
                     }
                 } else if (JPA_PROPERTY_MAP.equals(pd.getName())) {
@@ -104,6 +105,7 @@ public class EntityManagerFactoryAttributesPostProcessor extends InstantiationAw
                         if (needChange) {
                             String newPhysicalNamingStrategyClassName = DefaultSecurityPhysicalNamingStrategyStandardImpl.class.getName();
                             jpaPropertyMap.put(JPA_PROPERTY_MAP_PHYSICAL_NAMING_STRATEGY, newPhysicalNamingStrategyClassName);
+                            log.info("WinSecurity: EntityManagerFactoryAttributesPostProcessor, beanName:{}, propertyName:{}, change propertyValue to:{}", beanName, pd.getName(), jpaPropertyMap);
                             ((MutablePropertyValues) pvs).add(JPA_PROPERTY_MAP, jpaPropertyMap);
                         }
                     }

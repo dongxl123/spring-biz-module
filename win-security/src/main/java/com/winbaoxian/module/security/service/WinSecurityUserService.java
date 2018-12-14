@@ -23,7 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     @Autowired(required = false)
     private IUserUpdateProcessor<D, E> iUserUpdateProcessor;
 
-    @Transactional
     public D addUser(D dto) {
         if (iUserAddProcessor != null) {
             iUserAddProcessor.preProcess(dto);
@@ -74,7 +72,6 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         return retDto;
     }
 
-    @Transactional
     public void deleteUser(Long id) {
         E entity = winSecurityUserRepository.findOne(id);
         if (entity == null) {
@@ -84,7 +81,6 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         winSecurityUserRepository.save(entity);
     }
 
-    @Transactional
     public D updateUser(D dto) {
         if (iUserUpdateProcessor != null) {
             iUserUpdateProcessor.preProcess(dto);
