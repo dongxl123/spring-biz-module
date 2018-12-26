@@ -13,6 +13,7 @@ import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -168,13 +170,13 @@ public class WinSecurityResourceService {
             updateGlobalCodeByPid(persistent.getId());
         }
         //计算seq
-        persistent.setSeq(reCalculateSequence(id, params.getTargetUpId(), params.getTargetDownId()));
+        persistent.setSeq(reCalculateSequence(id, params.getTargetParentId(), params.getTargetUpId(), params.getTargetDownId()));
         persistent.setPid(params.getTargetParentId());
         winSecurityResourceRepository.save(persistent);
         return getResource(id);
     }
 
-    private Long reCalculateSequence(Long id, Long targetUpId, Long targetDownId) {
+    private Long reCalculateSequence(Long id, Long targetParentId, Long targetUpId, Long targetDownId) {
         WinSecurityResourceEntity thisResource = winSecurityResourceRepository.findOne(id);
         WinSecurityResourceEntity upResource = null;
         WinSecurityResourceEntity downResource = null;
@@ -183,14 +185,32 @@ public class WinSecurityResourceService {
             if (upResource == null) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
             }
+            if (!targetParentId.equals(upResource.getPid())) {
+                throw new WinSecurityException(WinSecurityErrorEnum.COMMON_DATA_NOT_SUITABLE);
+            }
         }
         if (targetDownId != null) {
             downResource = winSecurityResourceRepository.findOne(targetDownId);
             if (downResource == null) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
             }
+            if (!targetParentId.equals(downResource.getPid())) {
+                throw new WinSecurityException(WinSecurityErrorEnum.COMMON_DATA_NOT_SUITABLE);
+            }
         }
         Long seq = thisResource.getSeq() == null ? NumberUtils.LONG_ZERO : thisResource.getSeq();
+        //兼容前端代码
+        List<WinSecurityResourceEntity> resourceEntityList = winSecurityResourceRepository.findByPidAndDeletedFalseOrderBySeqAscIdAsc(targetParentId);
+        if (CollectionUtils.isEmpty(resourceEntityList)) {
+            return seq;
+        }
+        if (upResource == null && downResource != null) {
+            upResource = chooseUpResource(resourceEntityList, targetDownId, id);
+        }
+        if (downResource == null && upResource != null) {
+            downResource = chooseDownResource(resourceEntityList, targetUpId, id);
+        }
+        //计算位置
         if (upResource == null && downResource == null) {
             //NoThing to do
         } else if (upResource == null && downResource != null) {
@@ -200,7 +220,7 @@ public class WinSecurityResourceService {
             //in the bottom
             seq = upResource.getSeq() + 1;
         } else {
-            if (!upResource.getPid().equals(downResource.getPid()) || upResource.getSeq() > downResource.getSeq()) {
+            if (upResource.getSeq() > downResource.getSeq()) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_DATA_NOT_SUITABLE);
             }
             //in the middle
@@ -211,20 +231,76 @@ public class WinSecurityResourceService {
             } else {
                 seq = upResource.getSeq() + 1;
                 //update downResourceList seq
-                updateDownResourceListSeq(upResource.getPid(), downResource.getSeq());
+                List<WinSecurityResourceEntity> downList = chooseDownResourceList(resourceEntityList, downResource.getId(), id);
+                updateDownResourceListSeq(downList, seq);
             }
         }
         return seq;
     }
 
-    private void updateDownResourceListSeq(Long pid, Long seq) {
-        List<WinSecurityResourceEntity> downList = winSecurityResourceRepository.findByPidAndSeqGreaterThanEqualAndDeletedFalse(pid, seq);
+    private void updateDownResourceListSeq(List<WinSecurityResourceEntity> downList, Long seq) {
         if (CollectionUtils.isNotEmpty(downList)) {
             for (WinSecurityResourceEntity entity : downList) {
-                entity.setSeq(entity.getSeq() + 1);
+                entity.setSeq(++seq);
             }
             winSecurityResourceRepository.save(downList);
         }
+    }
+
+    private WinSecurityResourceEntity chooseUpResource(List<WinSecurityResourceEntity> resourceEntityList, Long downId, Long thisId) {
+        for (int i = 0; i < resourceEntityList.size(); i++) {
+            WinSecurityResourceEntity resourceEntity = resourceEntityList.get(i);
+            if (downId.equals(resourceEntity.getId())) {
+                int j = i;
+                while (j > 0) {
+                    WinSecurityResourceEntity preResourceEntity = resourceEntityList.get(j - 1);
+                    if (!thisId.equals(preResourceEntity.getId())) {
+                        return preResourceEntity;
+                    } else {
+                        j--;
+                    }
+                }
+                break;
+            }
+        }
+        return null;
+    }
+
+    private WinSecurityResourceEntity chooseDownResource(List<WinSecurityResourceEntity> resourceEntityList, Long upId, Long thisId) {
+        for (int i = 0; i < resourceEntityList.size(); i++) {
+            WinSecurityResourceEntity resourceEntity = resourceEntityList.get(i);
+            if (upId.equals(resourceEntity.getId())) {
+                int j = i;
+                while (j < resourceEntityList.size() - 1) {
+                    WinSecurityResourceEntity downResourceEntity = resourceEntityList.get(j + 1);
+                    if (!thisId.equals(downResourceEntity.getId())) {
+                        return downResourceEntity;
+                    } else {
+                        j++;
+                    }
+                }
+                break;
+            }
+        }
+        return null;
+    }
+
+    private List<WinSecurityResourceEntity> chooseDownResourceList(List<WinSecurityResourceEntity> resourceEntityList, Long downId, Long thisId) {
+        for (int i = 0; i < resourceEntityList.size(); i++) {
+            WinSecurityResourceEntity resourceEntity = resourceEntityList.get(i);
+            if (downId.equals(resourceEntity.getId())) {
+                List<WinSecurityResourceEntity> downList = new ArrayList<>();
+                for (int j = i; j < resourceEntityList.size(); j++) {
+                    WinSecurityResourceEntity downEntity = resourceEntityList.get(j);
+                    if (!thisId.equals(downEntity.getId())) {
+                        downList.add(downEntity);
+                    }
+                }
+                return downList;
+            }
+        }
+
+        return null;
     }
 
 }
