@@ -6,4 +6,5 @@ import lombok.Data;
 @Data
 public class SecurityUserDTO extends WinSecurityBaseUserDTO {
     private String edu;
+    private String fillEdu;
 }

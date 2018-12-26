@@ -12,6 +12,7 @@ import com.winbaoxian.module.security.model.mapper.WinSecurityUserMapper;
 import com.winbaoxian.module.security.repository.WinSecurityUserRepository;
 import com.winbaoxian.module.security.repository.WinSecurityUserRoleRepository;
 import com.winbaoxian.module.security.service.extension.IUserAddProcessor;
+import com.winbaoxian.module.security.service.extension.IUserFiller;
 import com.winbaoxian.module.security.service.extension.IUserUpdateProcessor;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
@@ -44,6 +45,8 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     private IUserAddProcessor<D, E> iUserAddProcessor;
     @Autowired(required = false)
     private IUserUpdateProcessor<D, E> iUserUpdateProcessor;
+    @Autowired(required = false)
+    private IUserFiller<D> iUserFiller;
 
     public D addUser(D dto) {
         if (iUserAddProcessor != null) {
@@ -130,13 +133,19 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         }
         List<WinSecurityUserRoleEntity> userRoleEntityList = winSecurityUserRoleRepository.findByUserId(id);
         userDTO.setRoleIdList(trans2RoleIdList(userRoleEntityList));
+        if (iUserFiller != null) {
+            iUserFiller.fillData(userDTO);
+        }
         return userDTO;
     }
 
     public List<D> getUserList(D params) {
         Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
         List<E> userList = winSecurityUserRepository.findAll(specification);
-        return WinSecurityUserMapper.INSTANCE.toUserDTOList(userList, winSecurityClassLoaderConfiguration.getUserDTOClass());
+
+        List<D> userDTOList = WinSecurityUserMapper.INSTANCE.toUserDTOList(userList, winSecurityClassLoaderConfiguration.getUserDTOClass());
+        iUserFiller.fillData(userDTOList);
+        return userDTOList;
     }
 
     public PaginationDTO<D> getUserPage(D params, Pagination pagination) {
@@ -156,6 +165,9 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
                     }
                 }
         );
+        if (iUserFiller != null) {
+            iUserFiller.fillData(paginationDTO.getList());
+        }
         return paginationDTO;
     }
 

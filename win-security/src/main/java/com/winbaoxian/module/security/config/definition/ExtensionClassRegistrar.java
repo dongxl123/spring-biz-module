@@ -55,5 +55,13 @@ public class ExtensionClassRegistrar implements ImportBeanDefinitionRegistrar {
                 log.info("WinSecurity: ExtensionClassRegistrar, (Bean)[{}] is registered", serviceProcessorCls);
             }
         }
+        //注册 serviceFillerClass
+        Class<?>[] serviceFillerClassArray = annotationAttributes.getClassArray(EnableWinSecurityAttributeEnum.EXTENSION_SERVICE_FILLERS.getValue());
+        if (ArrayUtils.isNotEmpty(serviceFillerClassArray)) {
+            for (Class serviceFillerCls : serviceFillerClassArray) {
+                registry.registerBeanDefinition(serviceFillerCls.getName(), BeanDefinitionBuilder.genericBeanDefinition(serviceFillerCls).getBeanDefinition());
+                log.info("WinSecurity: ExtensionClassRegistrar, (Bean)[{}] is registered", serviceFillerCls);
+            }
+        }
     }
 }

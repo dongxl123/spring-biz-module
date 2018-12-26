@@ -10,6 +10,7 @@ import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
+import com.winbaoxian.module.security.service.extension.IFiller;
 import com.winbaoxian.module.security.service.extension.IProcessor;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
@@ -97,6 +98,14 @@ public @interface EnableWinSecurity {
      * @return
      */
     Class<? extends IProcessor>[] extensionServiceProcessors() default {};
+
+
+    /**
+     * implements of {@link com.winbaoxian.module.security.service.extension.IUserFiller}
+     *
+     * @return
+     */
+    Class<? extends IFiller>[] extensionServiceFillers() default {};
 
     /**
      * sysLog switch
