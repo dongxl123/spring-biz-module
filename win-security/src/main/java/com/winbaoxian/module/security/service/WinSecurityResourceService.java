@@ -141,7 +141,7 @@ public class WinSecurityResourceService {
     }
 
     public List<WinSecurityResourceDTO> getAllValidAccessResourceList() {
-        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAllByStatusAndDeletedFalse(WinSecurityStatusEnum.ENABLED.getValue());
+        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAllByStatusAndDeletedFalseOrderBySeqAsc(WinSecurityStatusEnum.ENABLED.getValue());
         List<WinSecurityResourceDTO> resourceList = WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
         if (CollectionUtils.isEmpty(resourceList)) {
             return null;
