@@ -1,6 +1,7 @@
 package com.winbaoxian.module.security.controller;
 
 import com.winbaoxian.module.security.model.common.JsonResult;
+import com.winbaoxian.module.security.model.dto.BatchUpdateParamDTO;
 import com.winbaoxian.module.security.model.dto.DragAndDropParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
@@ -24,6 +25,7 @@ public class WinSecurityResourceController {
      * @apiParam (请求体) {String} name 名称
      * @apiParam (请求体) {String} code 编码
      * @apiParam (请求体) {String} value 值
+     * @apiParam (请求体) {String} ajaxUrls 后端接口地址，支持多个，中间用,隔开
      * @apiParam (请求体) {String} description 描述
      * @apiParam (请求体) {String} icon 图标
      * @apiParam (请求体) {Number} pid 上级父ID
@@ -39,6 +41,7 @@ public class WinSecurityResourceController {
      * @apiSuccess (响应参数) {String} code 编码
      * @apiSuccess (响应参数) {String} globalCode 全局唯一编码
      * @apiSuccess (响应参数) {String} value 值
+     * @apiSuccess (响应参数) {String} ajaxUrls 后端接口地址，支持多个，中间用,隔开
      * @apiSuccess (响应参数) {String} description 描述
      * @apiSuccess (响应参数) {String} icon 图标
      * @apiSuccess (响应参数) {Number} pid 上级父ID
@@ -79,6 +82,7 @@ public class WinSecurityResourceController {
      * @apiParam (请求体) {String} name 名称
      * @apiParam (请求体) {String} code 编码
      * @apiParam (请求体) {String} value 值
+     * @apiParam (请求体) {String} ajaxUrls 后端接口地址，支持多个，中间用,隔开
      * @apiParam (请求体) {String} description 描述
      * @apiParam (请求体) {String} icon 图标
      * @apiParam (请求体) {Number} pid 上级父ID
@@ -94,6 +98,7 @@ public class WinSecurityResourceController {
      * @apiSuccess (响应参数) {String} code 编码
      * @apiSuccess (响应参数) {String} globalCode 全局唯一编码
      * @apiSuccess (响应参数) {String} value 值
+     * @apiSuccess (响应参数) {String} ajaxUrls 后端接口地址，支持多个，中间用,隔开
      * @apiSuccess (响应参数) {String} description 描述
      * @apiSuccess (响应参数) {String} icon 图标
      * @apiSuccess (响应参数) {Number} pid 上级父ID
@@ -124,6 +129,7 @@ public class WinSecurityResourceController {
      * @apiSuccess (响应参数) {String} code 编码
      * @apiSuccess (响应参数) {String} globalCode 全局唯一编码
      * @apiSuccess (响应参数) {String} value 值
+     * @apiSuccess (响应参数) {String} ajaxUrls 后端接口地址，支持多个，中间用,隔开
      * @apiSuccess (响应参数) {String} description 描述
      * @apiSuccess (响应参数) {String} icon 图标
      * @apiSuccess (响应参数) {Number} pid 上级父ID
@@ -152,6 +158,7 @@ public class WinSecurityResourceController {
      * @apiSuccess (响应参数) {String} code 编码
      * @apiSuccess (响应参数) {String} globalCode 全局唯一编码
      * @apiSuccess (响应参数) {String} value 值
+     * @apiSuccess (响应参数) {String} ajaxUrls 后端接口地址，支持多个，中间用,隔开
      * @apiSuccess (响应参数) {String} description 描述
      * @apiSuccess (响应参数) {String} icon 图标
      * @apiSuccess (响应参数) {Number} pid 上级父ID
@@ -185,6 +192,7 @@ public class WinSecurityResourceController {
      * @apiSuccess (响应参数) {String} code 编码
      * @apiSuccess (响应参数) {String} globalCode 全局唯一编码
      * @apiSuccess (响应参数) {String} value 值
+     * @apiSuccess (响应参数) {String} ajaxUrls 后端接口地址，支持多个，中间用,隔开
      * @apiSuccess (响应参数) {String} description 描述
      * @apiSuccess (响应参数) {String} icon 图标
      * @apiSuccess (响应参数) {Number} pid 上级父ID
@@ -200,5 +208,25 @@ public class WinSecurityResourceController {
         return JsonResult.createSuccessResult(resourceDTO);
     }
 
+    /**
+     * @apiVersion 1.0.0
+     * @api {POST} /api/winSecurity/v1/resource/updateResourceBatch 批量更新资源
+     * @apiGroup resource
+     * @apiName updateResourceBatch
+     * @apiParam (请求体) {Array} idList 待移动元素ID列表
+     * @apiParam (请求体) {Number} targetParentId 目标位置父元素ID
+     * @apiParamExample 请求体示例
+     * {"idList":[11,12,13],"targetParentId":1}
+     * @apiSuccess (响应参数) {Number} code 状态 200:成功,400:失败,500:服务器内部错误
+     * @apiSuccess (响应参数) {Object} msg 提示信息
+     * @apiSuccess (响应参数) {Object} data 业务数据
+     * @apiSuccessExample 响应示例
+     * {"code":200,"msg":null,"data":null}
+     */
+    @PostMapping(value = "/updateResourceBatch")
+    public JsonResult<WinSecurityResourceDTO> updateResourceBatch(@RequestBody BatchUpdateParamDTO params) {
+        winSecurityResourceService.updateResourceBatch(params);
+        return JsonResult.createSuccessResult(null);
+    }
 
 }

@@ -26,6 +26,7 @@ CREATE TABLE `{prefix}_resource` (
   `code` varchar(64) DEFAULT '' COMMENT '编码',
   `global_code` varchar(1024) DEFAULT '' COMMENT '全局编码, 格式: 系统code.菜单code.thisCode',
   `value` varchar(100) DEFAULT NULL COMMENT '资源路径',
+  `ajax_urls` varchar(1000) DEFAULT NULL COMMENT '后端接口地址，支持多个，中间用,隔开',
   `description` varchar(255) DEFAULT NULL COMMENT '资源介绍',
   `icon` varchar(32) DEFAULT NULL COMMENT '资源图标',
   `pid` bigint(20) DEFAULT '0' COMMENT '父级资源id',

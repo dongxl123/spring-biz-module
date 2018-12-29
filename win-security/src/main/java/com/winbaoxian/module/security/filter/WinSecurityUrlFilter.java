@@ -2,9 +2,11 @@ package com.winbaoxian.module.security.filter;
 
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
+import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import com.winbaoxian.module.security.utils.MemoryExpirationCache;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.PathMatchingFilter;
@@ -55,9 +57,15 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
         Long resourceId = null;
         if (CollectionUtils.isNotEmpty(resourceList)) {
             for (WinSecurityResourceDTO resourceDTO : resourceList) {
-                if (pathsMatch(resourceDTO.getValue(), path)) {
-                    resourceId = resourceDTO.getId();
-                    break;
+                if (StringUtils.isBlank(resourceDTO.getAjaxUrls())) {
+                    continue;
+                }
+                String[] ajaxUrlPatterns = StringUtils.split(resourceDTO.getAjaxUrls(), ",");
+                for (String ajaxUrlPattern : ajaxUrlPatterns) {
+                    if (pathsMatch(ajaxUrlPattern, path)) {
+                        resourceId = resourceDTO.getId();
+                        break;
+                    }
                 }
             }
         }

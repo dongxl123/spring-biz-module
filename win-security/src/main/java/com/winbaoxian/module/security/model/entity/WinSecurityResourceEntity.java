@@ -95,4 +95,9 @@ public class WinSecurityResourceEntity implements Serializable {
     @Column(name = "DELETED")
     private Boolean deleted;
 
+    /**
+     * 后端接口地址，支持多个，中间用,隔开
+     */
+    @Column(name = "AJAX_URLS")
+    private String ajaxUrls;
 }

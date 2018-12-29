@@ -1,11 +1,11 @@
 package com.winbaoxian.module.security.service;
 
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
+import com.winbaoxian.module.security.model.dto.BatchUpdateParamDTO;
 import com.winbaoxian.module.security.model.dto.DragAndDropParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
-import com.winbaoxian.module.security.model.enums.WinSecurityResourceTypeEnum;
 import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.mapper.WinSecurityResourceMapper;
@@ -13,7 +13,6 @@ import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.data.domain.Sort;
@@ -147,12 +146,16 @@ public class WinSecurityResourceService {
         if (CollectionUtils.isEmpty(resourceList)) {
             return null;
         }
-        return resourceList.stream().filter(o -> WinSecurityResourceTypeEnum.OTHER.getValue().equals(o.getResourceType()) && StringUtils.isNotBlank(o.getValue())).collect(Collectors.toList());
+        return resourceList.stream().filter(o -> StringUtils.isNotBlank(o.getAjaxUrls())).collect(Collectors.toList());
     }
 
     public WinSecurityResourceDTO dragAndDropResource(DragAndDropParamDTO params) {
-        if (params == null || params.getId() == null || params.getTargetParentId() == null) {
+        if (params == null || params.getId() == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
+        }
+        //顶层元素移动
+        if (params.getTargetParentId() == null) {
+            params.setTargetParentId(0L);
         }
         Long id = params.getId();
         WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOne(id);
@@ -162,7 +165,7 @@ public class WinSecurityResourceService {
         //pid更改，更新自身和下级元素的globalCode
         if (!params.getTargetParentId().equals(persistent.getPid())) {
             //判断同级下的code是否重复
-            if (winSecurityResourceRepository.existsByCodeAndPidAndIdNotAndDeletedFalse(persistent.getCode(), params.getTargetParentId(), id)) {
+            if (StringUtils.isNotBlank(persistent.getCode()) && winSecurityResourceRepository.existsByCodeAndPidAndIdNotAndDeletedFalse(persistent.getCode(), params.getTargetParentId(), id)) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_EXISTS);
             }
             persistent.setGlobalCode(getGlobalCode(persistent.getCode(), params.getTargetParentId()));
@@ -303,4 +306,28 @@ public class WinSecurityResourceService {
         return null;
     }
 
+    public boolean updateResourceBatch(BatchUpdateParamDTO params) {
+        if (params == null || CollectionUtils.isEmpty(params.getIdList())) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
+        }
+        //顶层元素移动
+        if (params.getTargetParentId() == null) {
+            params.setTargetParentId(0L);
+        }
+        for (Long thisId : params.getIdList()) {
+            WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOne(thisId);
+            if (persistent == null) {
+                continue;
+            }
+            if (params.getTargetParentId().equals(persistent.getPid())) {
+                continue;
+            }
+            persistent.setGlobalCode(getGlobalCode(persistent.getCode(), params.getTargetParentId()));
+            //更新下级所有的globalCode
+            updateGlobalCodeByPid(thisId);
+            persistent.setPid(params.getTargetParentId());
+            winSecurityResourceRepository.save(persistent);
+        }
+        return true;
+    }
 }

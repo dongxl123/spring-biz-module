@@ -33,15 +33,12 @@ public class TobDataSourceConfiguration {
     private JpaProperties jpaProperties;
     @Resource
     private VaultTools vaultTools;
-    @Value("${spring.datasource.tob.cipherText}")
-    private String cipherText;
 
     @Bean
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource.tob")
     public DataSource dataSourceTob() {
-        String password = vaultTools.decrypt(cipherText);
-        return DataSourceBuilder.create().password(password).build();
+        return DataSourceBuilder.create().build();
     }
 
     @Bean

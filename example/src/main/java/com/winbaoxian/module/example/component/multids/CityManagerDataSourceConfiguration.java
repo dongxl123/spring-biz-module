@@ -33,14 +33,11 @@ public class CityManagerDataSourceConfiguration {
     private JpaProperties jpaProperties;
     @Resource
     private VaultTools vaultTools;
-    @Value("${spring.datasource.citymanager.cipherText}")
-    private String cipherText;
 
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.citymanager", ignoreNestedProperties = true)
     public DataSource dataSourceCitymanager() {
-        String password = vaultTools.decrypt(cipherText);
-        return DataSourceBuilder.create().password(password).build();
+        return DataSourceBuilder.create().build();
     }
 
     @Bean

@@ -67,4 +67,9 @@ public class WinSecurityResourceDTO implements Serializable {
 
     private Boolean deleted;
 
+    /**
+     * 后端接口地址，支持多个，中间用,隔开
+     */
+    private String ajaxUrls;
+
 }
