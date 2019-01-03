@@ -1,6 +1,7 @@
 package com.winbaoxian.module.security.config.exception;
 
 import com.winbaoxian.module.security.model.common.JsonResult;
+import com.winbaoxian.module.security.model.enums.JsonResultCodeEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityUnAuthException;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class WinSecurityExceptionHandler {
     @ExceptionHandler(WinSecurityException.class)
     public Object handleWinSecurityExp(WinSecurityUnAuthException e) {
         logger.error("winSecurity unAuthException handler  " + e.getMessage());
-        return JsonResult.createErrorResult(e.getMessage());
+        return JsonResult.createNewInstance(JsonResultCodeEnum.UNAUTHORIZED, e.getMessage(), null);
     }
 
     @ResponseStatus
