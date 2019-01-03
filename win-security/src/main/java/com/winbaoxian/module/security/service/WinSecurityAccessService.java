@@ -3,6 +3,7 @@ package com.winbaoxian.module.security.service;
 import com.winbaoxian.module.security.model.dto.*;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
+import com.winbaoxian.module.security.model.exceptions.WinSecurityUnAuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -99,7 +100,7 @@ public class WinSecurityAccessService {
     public WinSecurityPrincipal getWinSecurityPrincipal() {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
-            throw new WinSecurityException("用户未认证");
+            throw new WinSecurityUnAuthException("用户未认证");
         }
         return (WinSecurityPrincipal) subject.getPrincipal();
     }
