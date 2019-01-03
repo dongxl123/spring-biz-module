@@ -26,7 +26,7 @@ public class WinSecurityExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(WinSecurityException.class)
+    @ExceptionHandler(WinSecurityUnAuthException.class)
     public Object handleWinSecurityExp(WinSecurityUnAuthException e) {
         logger.error("winSecurity unAuthException handler  " + e.getMessage());
         return JsonResult.createNewInstance(JsonResultCodeEnum.UNAUTHORIZED, e.getMessage(), null);
