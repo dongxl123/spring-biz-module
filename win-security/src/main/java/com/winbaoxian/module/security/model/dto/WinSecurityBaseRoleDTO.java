@@ -1,15 +1,16 @@
 package com.winbaoxian.module.security.model.dto;/*
  * Welcome to use the TableGo Tools.
- * 
+ *
  * http://vipbooks.iteye.com
  * http://blog.csdn.net/vipbooks
  * http://www.cnblogs.com/vipbooks
- * 
+ *
  * Author:dongxuanliang252
  * Email:edinsker@163.com
  * Version:5.0.0
  */
 
+import com.winbaoxian.module.security.annotation.SearchParam;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ import java.util.Set;
 
 /**
  * 角色(SECURITY_ROLE)
- * 
+ *
  * @author dongxuanliang252
  * @version 1.0.0 2018-11-08
  */
@@ -37,6 +38,7 @@ public class WinSecurityBaseRoleDTO implements Serializable {
     private Date updateTime;
 
     /** 角色名 */
+    @SearchParam(compare= SearchParam.COMPARE.like)
     private String name;
 
     /** 简介 */

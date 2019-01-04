@@ -10,6 +10,7 @@ package com.winbaoxian.module.security.model.dto;/*
  * Version:5.0.0
  */
 
+import com.winbaoxian.module.security.annotation.SearchParam;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -37,12 +38,14 @@ public class WinSecurityBaseUserDTO implements Serializable {
     private Date updateTime;
 
     /** 登陆名 */
+    @SearchParam(compare= SearchParam.COMPARE.like)
     private String userName;
 
     /** 用户名 */
     private String name;
 
     /** 手机号 */
+    @SearchParam(compare= SearchParam.COMPARE.like)
     private String mobile;
 
     /** 用户状态，, 0:无效 , 1:有效 */
