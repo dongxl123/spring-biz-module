@@ -65,11 +65,16 @@ public class WinSecurityResourceDTO implements Serializable {
     /** 资源类别, 0:无特别作用，1:菜单，2:其他 */
     private Integer resourceType;
 
-    private Boolean deleted;
-
     /**
      * 后端接口地址，支持多个，中间用,隔开
      */
     private String ajaxUrls;
+
+    /**
+     * 属于哪些角色拥有，中间用,隔开， NULL不限制
+     */
+    private String belongRoles;
+
+    private Boolean deleted;
 
 }

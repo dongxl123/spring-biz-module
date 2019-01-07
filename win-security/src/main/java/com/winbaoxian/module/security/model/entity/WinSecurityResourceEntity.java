@@ -1,10 +1,10 @@
 package com.winbaoxian.module.security.model.entity;/*
  * Welcome to use the TableGo Tools.
- * 
+ *
  * http://vipbooks.iteye.com
  * http://blog.csdn.net/vipbooks
  * http://www.cnblogs.com/vipbooks
- * 
+ *
  * Author:dongxuanliang252
  * Email:edinsker@163.com
  * Version:5.0.0
@@ -22,7 +22,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * 资源(SECURITY_RESOURCE)
- * 
+ *
  * @author dongxuanliang252
  * @version 1.0.0 2018-11-08
  */
@@ -91,13 +91,18 @@ public class WinSecurityResourceEntity implements Serializable {
     @Column(name = "RESOURCE_TYPE")
     private Integer resourceType;
 
-    /**  */
-    @Column(name = "DELETED")
-    private Boolean deleted;
-
     /**
      * 后端接口地址，支持多个，中间用,隔开
      */
     @Column(name = "AJAX_URLS")
     private String ajaxUrls;
+
+    /** 属于哪些角色拥有，中间用,隔开， NULL不限制 */
+    @Column(name = "BELONG_ROLES")
+    private String belongRoles;
+
+    /**  */
+    @Column(name = "DELETED")
+    private Boolean deleted;
+
 }

@@ -4,15 +4,18 @@ import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.dto.BatchUpdateParamDTO;
 import com.winbaoxian.module.security.model.dto.DragAndDropParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
+import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
 import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.mapper.WinSecurityResourceMapper;
 import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
+import com.winbaoxian.module.security.repository.WinSecurityRoleRepository;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.data.domain.Sort;
@@ -29,6 +32,8 @@ public class WinSecurityResourceService {
 
     @Resource
     private WinSecurityResourceRepository winSecurityResourceRepository;
+    @Resource
+    private WinSecurityRoleRepository winSecurityRoleRepository;
 
     public WinSecurityResourceDTO addResource(WinSecurityResourceDTO dto) {
         if (dto.getPid() == null) {
@@ -137,7 +142,36 @@ public class WinSecurityResourceService {
 
     public List<WinSecurityResourceDTO> getValidResourceListByUserId(Long userId) {
         List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.getValidResourceListByUserId(userId);
+        if (CollectionUtils.isEmpty(entityList)) {
+            return null;
+        }
+        List<WinSecurityBaseRoleEntity> roleEntityList = winSecurityRoleRepository.getValidRoleListByUserId(userId);
+        List<Long> roleIdList = null;
+        if (CollectionUtils.isNotEmpty(roleEntityList)) {
+            roleIdList = roleEntityList.stream().map(o -> o.getId()).collect(Collectors.toList());
+        }
+        List<Long> finalRoleIdList = roleIdList;
+        entityList = entityList.stream().filter(o -> isMatchedRole(o.getBelongRoles(), finalRoleIdList)).collect(Collectors.toList());
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
+    }
+
+    private boolean isMatchedRole(String belongRoles, List<Long> roleIdList) {
+        if (StringUtils.isBlank(belongRoles)) {
+            return true;
+        }
+        if (CollectionUtils.isEmpty(roleIdList)) {
+            return false;
+        }
+        String[] belongRoleArray = StringUtils.split(belongRoles, ",");
+        List<Long> belongRoleIdList = new ArrayList<>();
+        for (String belongRoleString : belongRoleArray) {
+            try {
+                belongRoleIdList.add(Long.parseLong(belongRoleString));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return CollectionUtils.containsAny(belongRoleIdList, roleIdList);
     }
 
     public List<WinSecurityResourceDTO> getAllValidAccessResourceList() {

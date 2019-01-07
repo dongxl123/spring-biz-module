@@ -33,6 +33,7 @@ CREATE TABLE `{prefix}_resource` (
   `seq` bigint(20) NOT NULL DEFAULT '0' COMMENT '排序',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态，0:无效 , 1:有效',
   `resource_type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '资源类别, 0:无特别作用，1:菜单，2:其他',
+  `belong_roles` varchar(255) DEFAULT NULL COMMENT '属于哪些角色拥有，中间用,隔开， NULL不限制',
   `deleted` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`),
   KEY `idx_value` (`value`),
