@@ -63,6 +63,7 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
                 String[] ajaxUrlPatterns = StringUtils.split(resourceDTO.getAjaxUrls(), ",");
                 for (String ajaxUrlPattern : ajaxUrlPatterns) {
                     if (pathsMatch(ajaxUrlPattern, path)) {
+                        log.info("WinSecurityUrlFilter, 匹配到路径, path:{}, urlPattern:{}", path, ajaxUrlPattern);
                         resourceId = resourceDTO.getId();
                         break;
                     }
