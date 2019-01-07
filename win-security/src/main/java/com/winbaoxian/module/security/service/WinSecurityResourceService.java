@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -180,7 +182,53 @@ public class WinSecurityResourceService {
         if (CollectionUtils.isEmpty(resourceList)) {
             return null;
         }
-        return resourceList.stream().filter(o -> StringUtils.isNotBlank(o.getAjaxUrls())).collect(Collectors.toList());
+        List<WinSecurityResourceDTO> sortedResourceList = getSortedResourceList(resourceList);
+        return sortedResourceList.stream().filter(o -> StringUtils.isNotBlank(o.getAjaxUrls())).collect(Collectors.toList());
+    }
+
+    private List<WinSecurityResourceDTO> getSortedResourceList(List<WinSecurityResourceDTO> resourceList) {
+        for (WinSecurityResourceDTO resource : resourceList) {
+            if (resource.getSeq() == null) {
+                resource.setSeq(0L);
+            }
+        }
+        resourceList.sort(Comparator.comparingLong(WinSecurityResourceDTO::getSeq));
+        Collections.reverse(resourceList);
+        List<WinSecurityResourceDTO> toList = getSortedChildResourceList(null, resourceList);
+        //顶部补充未处理的数据
+        List<WinSecurityResourceDTO> leftList = ListUtils.subtract(resourceList, toList);
+        if (CollectionUtils.isNotEmpty(leftList)) {
+            toList.addAll(0, leftList);
+        }
+        //顺序翻转
+        Collections.reverse(toList);
+        return toList;
+    }
+
+    private List<WinSecurityResourceDTO> getSortedChildResourceList(Long pid, List<WinSecurityResourceDTO> resourceList) {
+        List<WinSecurityResourceDTO> toList = new ArrayList<>();
+        for (WinSecurityResourceDTO resource : resourceList) {
+            if (pid == null || pid == 0) {
+                if ((resource.getPid() == null || resource.getPid() == 0)) {
+                    toList.add(resource);
+                }
+            } else if (pid.equals(resource.getPid())) {
+                toList.add(resource);
+            }
+        }
+        if (CollectionUtils.isEmpty(toList)) {
+            return null;
+        }
+        //SEQ降序排列, 所有数据
+        List<WinSecurityResourceDTO> itrList = new ArrayList<>(toList);
+        for (WinSecurityResourceDTO retResource : itrList) {
+            List<WinSecurityResourceDTO> sortedChildResourceList = getSortedChildResourceList(retResource.getId(), resourceList);
+            if (CollectionUtils.isEmpty(sortedChildResourceList)) {
+                continue;
+            }
+            toList.addAll(toList.indexOf(retResource) + 1, sortedChildResourceList);
+        }
+        return toList;
     }
 
     public WinSecurityResourceDTO dragAndDropResource(DragAndDropParamDTO params) {
