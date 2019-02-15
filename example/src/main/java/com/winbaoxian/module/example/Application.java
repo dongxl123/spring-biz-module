@@ -25,7 +25,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
         extensionUserEntity = SecurityUserEntity.class,
         extensionRoleDTO = SecurityRoleDTO.class,
         extensionRoleEntity = SecurityRoleEntity.class,
-        extensionServiceProcessors = {RoleAddProcessorImpl.class, RoleUpdateProcessorImpl.class, UserAddProcessorImpl.class, UserUpdateProcessorImpl.class},
+        extensionServiceProcessors = {RoleAddProcessorImpl.class, RoleUpdateProcessorImpl.class, UserAddProcessorImpl.class, UserUpdateProcessorImpl.class, UserPageProcessorImpl.class},
         extensionServiceFillers = {UserFillerImpl.class},
         sysLog = true)
 public class Application extends SpringBootServletInitializer {

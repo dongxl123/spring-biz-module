@@ -13,6 +13,7 @@ import com.winbaoxian.module.security.repository.WinSecurityUserRepository;
 import com.winbaoxian.module.security.repository.WinSecurityUserRoleRepository;
 import com.winbaoxian.module.security.service.extension.IUserAddProcessor;
 import com.winbaoxian.module.security.service.extension.IUserFiller;
+import com.winbaoxian.module.security.service.extension.IUserPageProcessor;
 import com.winbaoxian.module.security.service.extension.IUserUpdateProcessor;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
@@ -48,6 +49,8 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     private IUserAddProcessor<D, E> iUserAddProcessor;
     @Autowired(required = false)
     private IUserUpdateProcessor<D, E> iUserUpdateProcessor;
+    @Autowired(required = false)
+    private IUserPageProcessor<D, E> iUserPageProcessor;
     @Autowired(required = false)
     private IUserFiller<D> iUserFiller;
 
@@ -157,11 +160,17 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public PaginationDTO<D> getUserPage(D params, Pagination pagination) {
+        if (iUserPageProcessor != null) {
+            iUserPageProcessor.preProcess(params);
+        }
         if (winSecurityAccessService.isAuthenticated()) {
             WinSecurityBaseUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
             if (userDTO != null && BooleanUtils.isNotTrue(userDTO.getSuperAdminFlag())) {
                 params.setSuperAdminFlag(false);
             }
+        }
+        if (iUserPageProcessor != null) {
+            iUserPageProcessor.customValidateAfterCommon(params);
         }
         Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
         Pageable pageable = Pagination.createPageable(pagination);

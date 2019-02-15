@@ -7,6 +7,6 @@ import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
  * @author dongxuanliang252
  * @date 2018-12-03 19:40
  */
-public interface IUserUpdateProcessor<D extends WinSecurityBaseUserDTO, E extends WinSecurityBaseUserEntity> extends IProcessor<D, E> {
+public interface IUserUpdateProcessor<D extends WinSecurityBaseUserDTO, E extends WinSecurityBaseUserEntity> extends IUserProcessor<D, E> {
 
 }
