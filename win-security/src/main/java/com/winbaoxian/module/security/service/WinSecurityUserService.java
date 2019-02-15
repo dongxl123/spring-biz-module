@@ -18,6 +18,7 @@ import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.SetUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,8 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     private WinSecurityUserRoleRepository winSecurityUserRoleRepository;
     @Resource
     private WinSecurityClassLoaderConfiguration winSecurityClassLoaderConfiguration;
+    @Resource
+    private WinSecurityAccessService winSecurityAccessService;
     @Autowired(required = false)
     private IUserAddProcessor<D, E> iUserAddProcessor;
     @Autowired(required = false)
@@ -140,15 +143,26 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public List<D> getUserList(D params) {
+        if (winSecurityAccessService.isAuthenticated()) {
+            WinSecurityBaseUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
+            if (userDTO != null && BooleanUtils.isNotTrue(userDTO.getSuperAdminFlag())) {
+                params.setSuperAdminFlag(false);
+            }
+        }
         Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
         List<E> userList = winSecurityUserRepository.findAll(specification);
-
         List<D> userDTOList = WinSecurityUserMapper.INSTANCE.toUserDTOList(userList, winSecurityClassLoaderConfiguration.getUserDTOClass());
         iUserFiller.fillData(userDTOList);
         return userDTOList;
     }
 
     public PaginationDTO<D> getUserPage(D params, Pagination pagination) {
+        if (winSecurityAccessService.isAuthenticated()) {
+            WinSecurityBaseUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
+            if (userDTO != null && BooleanUtils.isNotTrue(userDTO.getSuperAdminFlag())) {
+                params.setSuperAdminFlag(false);
+            }
+        }
         Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
         Pageable pageable = Pagination.createPageable(pagination);
         Page<E> page = winSecurityUserRepository.findAll(specification, pageable);

@@ -82,6 +82,10 @@ public class WinSecurityBaseUserEntity implements Serializable {
     @Column(name = "STATUS")
     private Integer status;
 
+    /** 是否是超级管理员 */
+    @Column(name = "SUPER_ADMIN_FLAG")
+    private Boolean superAdminFlag;
+
     /**  */
     @Column(name = "DELETED")
     private Boolean deleted;

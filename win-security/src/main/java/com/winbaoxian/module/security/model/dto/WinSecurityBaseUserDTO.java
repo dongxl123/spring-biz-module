@@ -54,6 +54,9 @@ public class WinSecurityBaseUserDTO implements Serializable {
     /** 关联的权限 */
     private Set<Long> roleIdList;
 
+    /** 是否是超级管理员 */
+    private Boolean superAdminFlag;
+
     private Boolean deleted;
 
 }

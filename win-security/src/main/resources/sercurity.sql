@@ -93,6 +93,7 @@ CREATE TABLE `{prefix}_user` (
   `name` varchar(64) DEFAULT NULL COMMENT '用户名',
   `mobile` varchar(20) DEFAULT NULL COMMENT '手机号',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态，0:无效 , 1:有效',
+  `superAdminFlag` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否是超级管理员',
   `deleted` bit(1) NOT NULL DEFAULT b'0',
   `dtype` varchar(255) DEFAULT '' COMMENT 'entity间有继承关系时，hibernate需要的type来区分',
   PRIMARY KEY (`id`),
