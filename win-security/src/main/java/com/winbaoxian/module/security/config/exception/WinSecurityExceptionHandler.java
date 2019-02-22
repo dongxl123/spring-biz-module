@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class WinSecurityExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(WinSecurityExceptionHandler.class);
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus
     @ExceptionHandler(WinSecurityException.class)
     public Object handleWinSecurityExp(WinSecurityException e) {
         logger.error("winSecurity exception handler  " + e.getMessage());
@@ -32,7 +32,7 @@ public class WinSecurityExceptionHandler {
         return JsonResult.createNewInstance(JsonResultCodeEnum.UNAUTHORIZED, e.getMessage(), null);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus
     @ExceptionHandler(Exception.class)
     public Object handleCommonExp(Exception e) {
         logger.error("common exception handler  " + e.getMessage(), e);
