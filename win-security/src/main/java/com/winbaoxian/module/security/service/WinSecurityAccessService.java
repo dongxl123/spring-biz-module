@@ -1,5 +1,6 @@
 package com.winbaoxian.module.security.service;
 
+import com.alibaba.fastjson.JSON;
 import com.winbaoxian.module.security.model.dto.*;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
@@ -100,6 +101,7 @@ public class WinSecurityAccessService {
     public WinSecurityPrincipal getWinSecurityPrincipal() {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
+            log.error("WinSecurityUnAuthException, subject:{}", JSON.toJSONString(subject));
             throw new WinSecurityUnAuthException("用户未认证");
         }
         return (WinSecurityPrincipal) subject.getPrincipal();
