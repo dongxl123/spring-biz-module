@@ -101,7 +101,7 @@ public class WinSecurityAccessService {
     public WinSecurityPrincipal getWinSecurityPrincipal() {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
-            log.error("WinSecurityUnAuthException, subject:{}", JSON.toJSONString(subject));
+            log.error("WinSecurityUnAuthException, subject:{}", subject == null ? "null" : "isAuthenticated = false");
             throw new WinSecurityUnAuthException("用户未认证");
         }
         return (WinSecurityPrincipal) subject.getPrincipal();
