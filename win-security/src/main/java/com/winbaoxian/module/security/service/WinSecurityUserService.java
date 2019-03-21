@@ -155,7 +155,9 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
         List<E> userList = winSecurityUserRepository.findAll(specification);
         List<D> userDTOList = WinSecurityUserMapper.INSTANCE.toUserDTOList(userList, winSecurityClassLoaderConfiguration.getUserDTOClass());
-        iUserFiller.fillData(userDTOList);
+        if (iUserFiller != null) {
+            iUserFiller.fillData(userDTOList);
+        }
         return userDTOList;
     }
 
