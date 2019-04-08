@@ -1,5 +1,5 @@
 server:
-  port: 9999
+  port: 9998
 spring:
   application:
     name: spring-biz-module
@@ -53,9 +53,15 @@ logging:
     org.hibernate: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.winbaoxian.broker.component.log.LogAspect: DEBUG
+    org.jasig.cas: trace
 winbaoxian:
   vault:
     gateway: https://vault.winbaoxian.cn:8200
     encryptionKey: /serverside-qa/decrypt/car_insure_bid
     authType: token
     authToken: 4f956d8c-b6b0-c2ef-baef-4fa24f76d841
+cas:
+  server-url-prefix: https://sso.winbaoxian.cn/
+  server-login-url: https://sso.winbaoxian.cn/login
+  client-host-url: http://www.suiyiwen.com:9998
+  use-single-signOut: true

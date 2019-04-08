@@ -3,7 +3,6 @@ package com.winbaoxian.module.cas.annotation;
 import com.winbaoxian.module.cas.adapter.CasClientConfigurer;
 import com.winbaoxian.module.cas.adapter.CasClientConfigurerAdapter;
 import com.winbaoxian.module.cas.config.CasClientConfiguration;
-import com.winbaoxian.module.cas.config.CasClientConfiguration2;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -28,6 +27,6 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Import(CasClientConfiguration.class)
-public @interface EnableCasClient {
+public @interface EnableWinCasClient {
 
 }

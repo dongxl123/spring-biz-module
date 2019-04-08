@@ -1,5 +1,6 @@
 package com.winbaoxian.module.example;
 
+import com.winbaoxian.module.cas.annotation.EnableWinCasClient;
 import com.winbaoxian.module.example.model.dto.SecurityRoleDTO;
 import com.winbaoxian.module.example.model.dto.SecurityUserDTO;
 import com.winbaoxian.module.example.model.entity.citymanager.SecurityRoleEntity;
@@ -28,6 +29,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
         extensionServiceProcessors = {RoleAddProcessorImpl.class, RoleUpdateProcessorImpl.class, UserAddProcessorImpl.class, UserUpdateProcessorImpl.class, UserPageProcessorImpl.class},
         extensionServiceFillers = {UserFillerImpl.class},
         sysLog = true)
+@EnableWinCasClient
 public class Application extends SpringBootServletInitializer {
 
     @Override

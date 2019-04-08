@@ -1,4 +1,4 @@
-package com.winbaoxian.module.cas.controller;
+package com.winbaoxian.module.example.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,9 +1,8 @@
 package com.winbaoxian.module.cas.config;
 
 import com.winbaoxian.module.cas.adapter.CasClientConfigurer;
-import com.winbaoxian.module.cas.annotation.EnableCasClient;
+import com.winbaoxian.module.cas.annotation.EnableWinCasClient;
 import org.jasig.cas.client.authentication.AuthenticationFilter;
-import org.jasig.cas.client.authentication.AuthenticationRedirectStrategy;
 import org.jasig.cas.client.configuration.ConfigurationKeys;
 import org.jasig.cas.client.session.SingleSignOutFilter;
 import org.jasig.cas.client.session.SingleSignOutHttpSessionListener;
@@ -11,6 +10,7 @@ import org.jasig.cas.client.util.HttpServletRequestWrapperFilter;
 import org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter;
 import org.jasig.cas.client.validation.Cas30ProxyReceivingTicketValidationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -29,10 +29,10 @@ import java.util.Map;
 /**
  * Configuration class providing default CAS client infrastructure filters.
  * This config facility is typically imported into Spring's Application Context via
- * {@link EnableCasClient EnableCasClient} meta annotation.
+ * {@link EnableWinCasClient EnableWinCasClient} meta annotation.
  *
  * @author Dmitriy Kopylenko
- * @see EnableCasClient
+ * @see EnableWinCasClient
  * @since 1.0.0
  */
 @Configuration
@@ -40,9 +40,7 @@ import java.util.Map;
 public class CasClientConfiguration {
 
     @Autowired
-    private CasClientConfigurationProperties casProperties;
-    
-    private static boolean casEnabled = true;
+    private CasClientConfigurationProperties configProps;
 
     private CasClientConfigurer casClientConfigurer;
 
@@ -60,14 +58,13 @@ public class CasClientConfiguration {
         this.casClientConfigurer = configurers.iterator().next();
     }
 
-
     /**
      * 用于实现单点登出功能
      */
     @Bean
+    @ConditionalOnProperty("cas.use-single-signOut")
     public ServletListenerRegistrationBean<SingleSignOutHttpSessionListener> singleSignOutHttpSessionListener() {
         ServletListenerRegistrationBean<SingleSignOutHttpSessionListener> listener = new ServletListenerRegistrationBean<>();
-        listener.setEnabled(casEnabled);
         listener.setListener(new SingleSignOutHttpSessionListener());
         listener.setOrder(1);
         return listener;
@@ -76,95 +73,121 @@ public class CasClientConfiguration {
     /**
      * 该过滤器用于实现单点登出功能，单点退出配置，一定要放在其他filter之前
      */
-//    @Bean
-//    public FilterRegistrationBean logOutFilter() {
-//        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
-//        LogoutFilter logoutFilter = new LogoutFilter(casProperties.getCasServerUrlPrefix() + "/logout?service=" + casProperties.getClientHostUrl(), new SecurityContextLogoutHandler());
-//        filterRegistration.setFilter(logoutFilter);
-//        filterRegistration.setEnabled(casEnabled);
-//        filterRegistration.addUrlPatterns("/logout");
-//        filterRegistration.addInitParameter("casServerUrlPrefix", casProperties.getCasServerUrlPrefix());
-//        filterRegistration.addInitParameter("serverName", casProperties.getClientHostUrl());
-//        filterRegistration.setOrder(Integer.MIN_VALUE+1);
-//        return filterRegistration;
-//    }
-
-    /**
-     * 该过滤器用于实现单点登出功能，单点退出配置，一定要放在其他filter之前
-     */
     @Bean
+    @ConditionalOnProperty("cas.use-single-signOut")
     public FilterRegistrationBean singleSignOutFilter() {
         FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
         filterRegistration.setFilter(new SingleSignOutFilter());
-        filterRegistration.setEnabled(casEnabled);
         filterRegistration.addUrlPatterns("/*");
-        filterRegistration.addInitParameter("casServerUrlPrefix", casProperties.getServerUrlPrefix());
-        filterRegistration.addInitParameter("serverName", casProperties.getClientHostUrl());
-        filterRegistration.setOrder(3);
+        filterRegistration.addInitParameter(ConfigurationKeys.CAS_SERVER_URL_PREFIX.getName(), this.configProps.getServerUrlPrefix());
+        filterRegistration.addInitParameter(ConfigurationKeys.SERVER_NAME.getName(), this.configProps.getClientHostUrl());
+        filterRegistration.setOrder(1);
         return filterRegistration;
     }
 
     /**
-     * 该过滤器负责用户的认证工作
+     * 登录校验
+     *
+     * @return
      */
     @Bean
-    public FilterRegistrationBean authenticationFilter() {
-        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
-        filterRegistration.setFilter(new AuthenticationFilter());
-        filterRegistration.setEnabled(casEnabled);
+    public FilterRegistrationBean casAuthenticationFilter() {
+        final FilterRegistrationBean authnFilter = new FilterRegistrationBean();
+        authnFilter.setFilter(new AuthenticationFilter());
+        authnFilter.setOrder(2);
+        final Map<String, String> initParams = new HashMap<>(2);
+        initParams.put(ConfigurationKeys.CAS_SERVER_LOGIN_URL.getName(), this.configProps.getServerLoginUrl());
+        initParams.put(ConfigurationKeys.SERVER_NAME.getName(), this.configProps.getClientHostUrl());
+        initParams.put(ConfigurationKeys.AUTHENTICATION_REDIRECT_STRATEGY_CLASS.getName(), "com.winbaoxian.module.cas.strategy.AjaxAuthRedirectStrategy");
+        authnFilter.setInitParameters(initParams);
+        List<String> authenticationUrlPatterns = this.configProps.getAuthenticationUrlPatterns();
+        if (authenticationUrlPatterns.size() > 0) {
+            authnFilter.setUrlPatterns(authenticationUrlPatterns);
+        }
+        if (this.configProps.getGateway() != null) {
+            authnFilter.getInitParameters().put(ConfigurationKeys.GATEWAY.getName(), String.valueOf(this.configProps.getGateway()));
+        }
+        if (this.casClientConfigurer != null) {
+            this.casClientConfigurer.configureAuthenticationFilter(authnFilter);
+        }
+        return authnFilter;
+    }
 
-//        filterRegistration.addUrlPatterns("/claim/*");
-        filterRegistration.addUrlPatterns("/auth");
-        filterRegistration.addUrlPatterns("/user/*");
+    /**
+     * ticket校验
+     *
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean casValidationFilter() {
+        final FilterRegistrationBean validationFilter = new FilterRegistrationBean();
+        final Filter targetCasValidationFilter;
+        switch (this.configProps.getValidationType()) {
+            case CAS:
+                targetCasValidationFilter = new Cas20ProxyReceivingTicketValidationFilter();
+                break;
+            case CAS3:
+                targetCasValidationFilter = new Cas30ProxyReceivingTicketValidationFilter();
+                break;
+            default:
+                throw new IllegalStateException("Unknown CAS validation type");
+        }
+        validationFilter.setFilter(targetCasValidationFilter);
+        validationFilter.setOrder(3);
+        final Map<String, String> initParams = new HashMap<>(2);
+        initParams.put(ConfigurationKeys.CAS_SERVER_URL_PREFIX.getName(), this.configProps.getServerUrlPrefix());
+        initParams.put(ConfigurationKeys.SERVER_NAME.getName(), this.configProps.getClientHostUrl());
+        validationFilter.setInitParameters(initParams);
+        List<String> validationUrlPatterns = this.configProps.getValidationUrlPatterns();
+        if (validationUrlPatterns.size() > 0) {
+            validationFilter.setUrlPatterns(validationUrlPatterns);
+        }
+        if (this.configProps.getUseSession() != null) {
+            validationFilter.getInitParameters().put(ConfigurationKeys.USE_SESSION.getName(), String.valueOf(this.configProps.getUseSession()));
+        }
+        if (this.configProps.getRedirectAfterValidation() != null) {
+            validationFilter.getInitParameters().put(ConfigurationKeys.REDIRECT_AFTER_VALIDATION.getName(), String.valueOf(this.configProps.getRedirectAfterValidation()));
+        }
 
-        //casServerLoginUrl:cas服务的登陆url
-        filterRegistration.addInitParameter(ConfigurationKeys.CAS_SERVER_LOGIN_URL.getName(), casProperties.getServerLoginUrl().trim());
-        filterRegistration.addInitParameter(ConfigurationKeys.AUTHENTICATION_REDIRECT_STRATEGY_CLASS.getName(), AuthenticationRedirectStrategy.class.getName());
-//        filterRegistration.addInitParameter(ConfigurationKeys.SERVER_NAME.getName(), casProperties.getClientHostUrl().trim());
-       // filterRegistration.addInitParameter(ConfigurationKeys.SERVICE.getName(), casProperties.getServerAuthPath() );
-//        filterRegistration.addInitParameter("redirectAfterValidation", "true");
-        filterRegistration.setOrder(4);
-        return filterRegistration;
+        //Proxy tickets validation
+        if (this.configProps.getAcceptAnyProxy() != null) {
+            validationFilter.getInitParameters().put(ConfigurationKeys.ACCEPT_ANY_PROXY.getName(), String.valueOf(this.configProps.getAcceptAnyProxy()));
+        }
+        if (this.configProps.getAllowedProxyChains().size() > 0) {
+            validationFilter.getInitParameters().put(ConfigurationKeys.ALLOWED_PROXY_CHAINS.getName(),
+                    StringUtils.collectionToDelimitedString(this.configProps.getAllowedProxyChains(), " "));
+        }
+        if (this.configProps.getProxyCallbackUrl() != null) {
+            validationFilter.getInitParameters().put(ConfigurationKeys.PROXY_CALLBACK_URL.getName(), this.configProps.getProxyCallbackUrl());
+        }
+        if (this.configProps.getProxyReceptorUrl() != null) {
+            validationFilter.getInitParameters().put(ConfigurationKeys.PROXY_RECEPTOR_URL.getName(), this.configProps.getProxyReceptorUrl());
+        }
+        if (this.casClientConfigurer != null) {
+            this.casClientConfigurer.configureValidationFilter(validationFilter);
+        }
+        return validationFilter;
     }
 
 
-
-
     /**
-     * 该过滤器负责对Ticket的校验工作
+     * http wrapper
+     *
+     * @return
      */
     @Bean
-    public FilterRegistrationBean cas30ProxyReceivingTicketValidationFilter() {
-        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
-        Cas30ProxyReceivingTicketValidationFilter cas30ProxyReceivingTicketValidationFilter = new Cas30ProxyReceivingTicketValidationFilter();
-        cas30ProxyReceivingTicketValidationFilter.setServerName(casProperties.getClientHostUrl());
-        filterRegistration.setFilter(cas30ProxyReceivingTicketValidationFilter);
-        filterRegistration.setEnabled(casEnabled);
+    public FilterRegistrationBean casHttpServletRequestWrapperFilter() {
+        final FilterRegistrationBean reqWrapperFilter = new FilterRegistrationBean();
+        reqWrapperFilter.setFilter(new HttpServletRequestWrapperFilter());
+        if (this.configProps.getRequestWrapperUrlPatterns().size() > 0) {
+            reqWrapperFilter.setUrlPatterns(this.configProps.getRequestWrapperUrlPatterns());
+        }
+        reqWrapperFilter.setOrder(4);
 
-
-        filterRegistration.addUrlPatterns("/*");
-//        filterRegistration.addInitParameter();
-//        filterRegistration.addInitParameter("useSession", "true");
-//        filterRegistration.addInitParameter("redirectAfterValidation", "true");
-        filterRegistration.addInitParameter("casServerUrlPrefix", casProperties.getServerUrlPrefix());
-        filterRegistration.addInitParameter("serverName", casProperties.getClientHostUrl());
-
-        filterRegistration.setOrder(5);
-        return filterRegistration;
-    }
-
-
-    /**
-     * 该过滤器对HttpServletRequest请求包装， 可通过HttpServletRequest的getRemoteUser()方法获得登录用户的登录名
-     */
-    @Bean
-    public FilterRegistrationBean httpServletRequestWrapperFilter() {
-        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
-        filterRegistration.setFilter(new HttpServletRequestWrapperFilter());
-        filterRegistration.setEnabled(true);
-        filterRegistration.addUrlPatterns("/*");
-        filterRegistration.setOrder(Integer.MIN_VALUE);
-        return filterRegistration;
+        if (this.casClientConfigurer != null) {
+            this.casClientConfigurer.configureHttpServletRequestWrapperFilter(reqWrapperFilter);
+        }
+        return reqWrapperFilter;
     }
 
 

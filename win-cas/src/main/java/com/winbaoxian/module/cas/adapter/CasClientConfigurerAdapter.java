@@ -13,6 +13,11 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 public class CasClientConfigurerAdapter implements CasClientConfigurer {
 
     @Override
+    public void configureSingleSignOutFilter(FilterRegistrationBean singleSignOutFilter) {
+        //Noop. Designed to be overridden if necessary to ease plugging in custom configs.
+    }
+
+    @Override
     public void configureAuthenticationFilter(FilterRegistrationBean authenticationFilter) {
         //Noop. Designed to be overridden if necessary to ease plugging in custom configs.
     }
@@ -27,8 +32,4 @@ public class CasClientConfigurerAdapter implements CasClientConfigurer {
         //Noop. Designed to be overridden if necessary to ease plugging in custom configs.
     }
 
-//    @Override
-//    public void configureAssertionThreadLocalFilter(FilterRegistrationBean assertionThreadLocalFilter) {
-//        //Noop. Designed to be overridden if necessary to ease plugging in custom configs.
-//    }
 }

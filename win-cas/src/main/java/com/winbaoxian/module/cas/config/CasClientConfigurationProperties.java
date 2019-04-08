@@ -100,5 +100,5 @@ public class CasClientConfigurationProperties {
      */
     private ValidationType validationType = ValidationType.CAS3;
 
-
+    private Boolean useSingleSignOut;
 }

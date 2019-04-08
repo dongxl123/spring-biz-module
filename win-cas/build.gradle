@@ -1,7 +1,6 @@
 description = 'win-cas'
 version = '1.0.0-SNAPSHOT'
 
-apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
 
 dependencies {

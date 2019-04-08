@@ -97,6 +97,13 @@
       "name": "cas.validation-url-patterns",
       "description": "List of URL patterns protected by CAS validation filter.",
       "type": "java.util.List<java.lang.String>"
+    },
+    {
+      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "name": "cas.use-single-signOut",
+      "description": "choose if use single signOut, default true",
+      "type": "java.lang.Boolean",
+      "defaultValue": true
     }
   ]
 }

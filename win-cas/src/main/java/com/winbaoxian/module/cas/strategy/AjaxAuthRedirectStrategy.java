@@ -1,4 +1,4 @@
-package com.winbaoxian.module.cas;
+package com.winbaoxian.module.cas.strategy;
 
 import org.jasig.cas.client.authentication.AuthenticationRedirectStrategy;
 
