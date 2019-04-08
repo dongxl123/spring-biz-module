@@ -1,0 +1,16 @@
+server:
+  port: 9998
+spring:
+  application:
+    name: spring-biz-module
+  aop:
+    proxy-target-class: true
+logging:
+  level:
+    root: info
+    org.jasig.cas: trace
+    com.winbaoxian: debug
+cas:
+  server-url-prefix: https://sso.winbaoxian.cn/
+  server-login-url: https://sso.winbaoxian.cn/login
+  client-host-url: http://cm.winbaoxian.com:9998
