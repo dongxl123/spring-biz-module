@@ -17,9 +17,9 @@ import java.util.List;
  * @author Dmitriy Kopylenko
  * @since 1.0.0
  */
-@ConfigurationProperties(prefix = "cas", ignoreUnknownFields = false)
 @Getter
 @Setter
+@ConfigurationProperties(prefix = "cas", ignoreUnknownFields = false)
 public class CasClientConfigurationProperties {
 
     /**

@@ -62,7 +62,7 @@ public class CasClientConfiguration {
      * 用于实现单点登出功能
      */
     @Bean
-    @ConditionalOnProperty("cas.use-single-signOut")
+    @ConditionalOnProperty(value = "cas.use-single-signOut", matchIfMissing = true)
     public ServletListenerRegistrationBean<SingleSignOutHttpSessionListener> singleSignOutHttpSessionListener() {
         ServletListenerRegistrationBean<SingleSignOutHttpSessionListener> listener = new ServletListenerRegistrationBean<>();
         listener.setListener(new SingleSignOutHttpSessionListener());
@@ -74,7 +74,7 @@ public class CasClientConfiguration {
      * 该过滤器用于实现单点登出功能，单点退出配置，一定要放在其他filter之前
      */
     @Bean
-    @ConditionalOnProperty("cas.use-single-signOut")
+    @ConditionalOnProperty(value = "cas.use-single-signOut", matchIfMissing = true)
     public FilterRegistrationBean singleSignOutFilter() {
         FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
         filterRegistration.setFilter(new SingleSignOutFilter());
