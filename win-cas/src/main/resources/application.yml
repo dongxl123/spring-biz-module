@@ -13,4 +13,4 @@ logging:
 cas:
   server-url-prefix: https://sso.winbaoxian.cn/
   server-login-url: https://sso.winbaoxian.cn/login
-  client-host-url: http://cm.winbaoxian.com:9998
+  client-host-url: https://common1.winbaoxian.cn
