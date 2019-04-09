@@ -82,6 +82,9 @@ public class CasClientConfiguration {
         filterRegistration.addInitParameter(ConfigurationKeys.CAS_SERVER_URL_PREFIX.getName(), this.configProps.getServerUrlPrefix());
         filterRegistration.addInitParameter(ConfigurationKeys.SERVER_NAME.getName(), this.configProps.getClientHostUrl());
         filterRegistration.setOrder(1);
+        if (this.casClientConfigurer != null) {
+            this.casClientConfigurer.configureSingleSignOutFilter(filterRegistration);
+        }
         return filterRegistration;
     }
 

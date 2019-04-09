@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,19 +24,16 @@ public class CasClientConfigurationProperties {
     /**
      * CAS server URL E.g. https://example.com/cas or https://cas.example. Required.
      */
-    @NotNull
     private String serverUrlPrefix;
 
     /**
      * CAS server login URL E.g. https://example.com/cas/login or https://cas.example/login. Required.
      */
-    @NotNull
     private String serverLoginUrl;
 
     /**
      * CAS-protected client application host URL E.g. https://myclient.example.com Required.
      */
-    @NotNull
     private String clientHostUrl;
 
     /**
