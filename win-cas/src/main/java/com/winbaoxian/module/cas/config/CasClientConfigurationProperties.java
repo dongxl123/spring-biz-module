@@ -4,9 +4,12 @@ import com.winbaoxian.module.cas.enums.ValidationType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * {@link ConfigurationProperties} for CAS Java client filters.
@@ -18,7 +21,9 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "cas", ignoreUnknownFields = false)
+@Configuration
+@ConfigurationProperties(prefix = "cas")
+@PropertySource(value = {"classpath:win-cas.properties"}, ignoreResourceNotFound = true)
 public class CasClientConfigurationProperties {
 
     /**
