@@ -3,6 +3,7 @@ package com.winbaoxian.module.cas.config;
 import com.winbaoxian.module.cas.enums.ValidationType;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -29,11 +30,13 @@ public class WinCasClientConfigurationProperties {
     /**
      * CAS server URL E.g. https://example.com/cas or https://cas.example. Required.
      */
+    @Value("${cas.server-url-prefix}")
     private String serverUrlPrefix;
 
     /**
      * CAS server login URL E.g. https://example.com/cas/login or https://cas.example/login. Required.
      */
+    @Value("#{ @environment['cas.server-login-url'] ?: 'txxxx' }")
     private String serverLoginUrl;
 
     /**
@@ -59,6 +62,7 @@ public class WinCasClientConfigurationProperties {
     /**
      * Authentication filter gateway parameter.
      */
+//    @Value("${cas.gateway}")
     private Boolean gateway;
 
     /**
