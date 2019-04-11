@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.Collection;
 import java.util.HashMap;
@@ -73,7 +72,7 @@ public class WinCasClientConfiguration {
      * 该过滤器用于实现单点登出功能，单点退出配置，一定要放在其他filter之前
      */
     @Bean
-    @ConditionalOnProperty(name = "cas.use-single-sign-out", havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(name = "cas.use-single-sign-out", havingValue = "true", matchIfMissing = true)
     public FilterRegistrationBean singleSignOutFilter() {
         FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
         filterRegistration.setFilter(new SingleSignOutFilter());
