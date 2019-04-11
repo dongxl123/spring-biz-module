@@ -6,14 +6,20 @@ import com.winbaoxian.module.security.config.definition.AnnotationAttributesRegi
 import com.winbaoxian.module.security.config.definition.ControllerEffectiveScopeSelector;
 import com.winbaoxian.module.security.config.definition.ExtensionClassRegistrar;
 import com.winbaoxian.module.security.config.definition.SysLogSelector;
+import com.winbaoxian.module.security.config.exception.WinSecurityExceptionHandler;
+import com.winbaoxian.module.security.config.shiro.ShiroConfiguration;
+import com.winbaoxian.module.security.config.shiro.ShiroFilterConfiguration;
+import com.winbaoxian.module.security.config.shiro.WinSecurityErrorController;
+import com.winbaoxian.module.security.config.transaction.WinSecurityTransactionConfiguration;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
+import com.winbaoxian.module.security.service.*;
 import com.winbaoxian.module.security.service.extension.IFiller;
 import com.winbaoxian.module.security.service.extension.IProcessor;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -27,10 +33,18 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@ComponentScan({"com.winbaoxian.module.security.config.shiro"})
-@ComponentScan({"com.winbaoxian.module.security.config.exception"})
-@ComponentScan({"com.winbaoxian.module.security.config.transaction"})
-@ComponentScan({"com.winbaoxian.module.security.service"})
+@Inherited
+@ImportAutoConfiguration({WinSecurityTransactionConfiguration.class,
+        WinSecurityExceptionHandler.class,
+        ShiroConfiguration.class,
+        ShiroFilterConfiguration.class,
+        WinSecurityErrorController.class,
+        WinSecurityAccessService.class,
+        WinSecurityUserService.class,
+        WinSecurityRoleService.class,
+        WinSecurityResourceService.class,
+        WinSecuritySysLogService.class
+})
 @Import({ExtensionClassRegistrar.class,
         SysLogSelector.class,
         ControllerEffectiveScopeSelector.class,
