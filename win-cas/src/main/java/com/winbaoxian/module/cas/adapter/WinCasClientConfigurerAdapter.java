@@ -3,14 +3,14 @@ package com.winbaoxian.module.cas.adapter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
 /**
- * An implementation of {@link CasClientConfigurer} with empty methods allowing
+ * An implementation of {@link WinCasClientConfigurer} with empty methods allowing
  * sub-classes to override only the methods they're interested in.
  *
  * @author Dmitriy Kopylenko
  * @since 1.0.0
- * @see CasClientConfigurer
+ * @see WinCasClientConfigurer
  */
-public class CasClientConfigurerAdapter implements CasClientConfigurer {
+public class WinCasClientConfigurerAdapter implements WinCasClientConfigurer {
 
     @Override
     public void configureSingleSignOutFilter(FilterRegistrationBean singleSignOutFilter) {

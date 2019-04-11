@@ -14,7 +14,6 @@ public class AjaxAuthRedirectStrategy implements AuthenticationRedirectStrategy 
     public void redirect(HttpServletRequest request, HttpServletResponse response, String potentialRedirectUrl) throws IOException {
         response.setStatus(401);
         response.setIntHeader("REQUIRES_AUTH",1);
-//        int endIdx = potentialRedirectUrl.indexOf("?service=") + 9;
         response.setHeader("REQUIRES_AUTH_URL", potentialRedirectUrl);
     }
 }

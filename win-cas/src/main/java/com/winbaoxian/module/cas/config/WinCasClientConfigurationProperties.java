@@ -24,7 +24,7 @@ import java.util.List;
 @Configuration
 @ConfigurationProperties(prefix = "cas")
 @PropertySource(value = {"classpath:win-cas.properties"}, ignoreResourceNotFound = true)
-public class CasClientConfigurationProperties {
+public class WinCasClientConfigurationProperties {
 
     /**
      * CAS server URL E.g. https://example.com/cas or https://cas.example. Required.
@@ -55,11 +55,6 @@ public class CasClientConfigurationProperties {
      * List of URL patterns protected by CAS request wrapper filter.
      */
     private List<String> requestWrapperUrlPatterns = new ArrayList<>();
-
-    /**
-     * List of URL patterns protected by CAS assertion thread local filter.
-     */
-    private List<String> assertionThreadLocalUrlPatterns = new ArrayList<>();
 
     /**
      * Authentication filter gateway parameter.
@@ -101,5 +96,18 @@ public class CasClientConfigurationProperties {
      */
     private ValidationType validationType = ValidationType.CAS3;
 
+    /**
+     * cas登出地址
+     */
+    private String serverLogoutUrl;
+
+    /**
+     * cas登出后重定向地址
+     */
+    private String logoutRedirectUrl;
+
+    /**
+     * true,使用单点登出功能
+     */
     private Boolean useSingleSignOut;
 }

@@ -50,6 +50,7 @@ logging:
     root: info
     org.apache.shiro: INFO
     com.winbaoxian: debug
+    org.springframework: info
     org.hibernate: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.winbaoxian.broker.component.log.LogAspect: DEBUG
@@ -61,7 +62,9 @@ winbaoxian:
     authType: token
     authToken: 4f956d8c-b6b0-c2ef-baef-4fa24f76d841
 cas:
-  server-url-prefix: https://sso.winbaoxian.cn/
+  server-url-prefix: https://sso.winbaoxian.cn
   server-login-url: https://sso.winbaoxian.cn/login
+  server-logout-url: https://sso.winbaoxian.cn/logout
   client-host-url: http://www.suiyiwen.com:9998
-  use-single-signOut: true
+  logout-redirect-url: http://blog.suiyiwen.com
+  use-single-sign-out: true

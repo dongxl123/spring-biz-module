@@ -1,9 +1,9 @@
 package com.winbaoxian.module.cas.annotation;
 
-import com.winbaoxian.module.cas.adapter.CasClientConfigurer;
-import com.winbaoxian.module.cas.adapter.CasClientConfigurerAdapter;
-import com.winbaoxian.module.cas.config.CasClientConfiguration;
-import org.springframework.context.annotation.Import;
+import com.winbaoxian.module.cas.adapter.WinCasClientConfigurer;
+import com.winbaoxian.module.cas.adapter.WinCasClientConfigurerAdapter;
+import com.winbaoxian.module.cas.config.WinCasClientConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.lang.annotation.*;
 
@@ -13,20 +13,20 @@ import java.lang.annotation.*;
  * or {@link org.springframework.boot.autoconfigure.SpringBootApplication SpringBootApplication} classes.
  *
  * <p>For those wishing to customize CAS filters during their creation, application config classes carrying this annotation
- * may implement the {@link CasClientConfigurer} callback interface or simply
- * extend the {@link CasClientConfigurerAdapter} and override only necessary methods.
+ * may implement the {@link WinCasClientConfigurer} callback interface or simply
+ * extend the {@link WinCasClientConfigurerAdapter} and override only necessary methods.
  *
  * @author Dmitriy Kopylenko
- * @see CasClientConfigurer
- * @see CasClientConfiguration
- * @see CasClientConfigurerAdapter
+ * @see WinCasClientConfigurer
+ * @see WinCasClientConfiguration
+ * @see WinCasClientConfigurerAdapter
  * @since 1.0.0
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Inherited
-@Import(CasClientConfiguration.class)
+@ComponentScan({"com.winbaoxian.module.cas.config"})
+@ComponentScan({"com.winbaoxian.module.cas.controller"})
 public @interface EnableWinCasClient {
 
 }

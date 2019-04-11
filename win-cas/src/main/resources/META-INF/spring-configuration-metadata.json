@@ -2,105 +2,109 @@
   "hints": [],
   "groups": [
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas",
-      "type": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties"
+      "type": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties"
     }
   ],
   "properties": [
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.accept-any-proxy",
       "description": "Cas20ProxyReceivingTicketValidationFilter acceptAnyProxy parameter.",
       "type": "java.lang.Boolean"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.allowed-proxy-chains",
       "description": "Cas20ProxyReceivingTicketValidationFilter allowedProxyChains parameter.",
       "type": "java.util.List<java.lang.String>"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
-      "name": "cas.assertion-thread-local-url-patterns",
-      "description": "List of URL patterns protected by CAS assertion thread local filter.",
-      "type": "java.util.List<java.lang.String>"
-    },
-    {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.authentication-url-patterns",
       "description": "List of URL patterns protected by CAS authentication filter.",
       "type": "java.util.List<java.lang.String>"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.client-host-url",
       "description": "CAS-protected client application host URL E.g. https:\/\/myclient.example.com Required.",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.gateway",
       "description": "Authentication filter gateway parameter.",
       "type": "java.lang.Boolean"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.proxy-callback-url",
       "description": "Cas20ProxyReceivingTicketValidationFilter proxyCallbackUrl parameter.",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.proxy-receptor-url",
       "description": "Cas20ProxyReceivingTicketValidationFilter proxyReceptorUrl parameter.",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.redirect-after-validation",
       "description": "Validation filter redirectAfterValidation.",
       "type": "java.lang.Boolean"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.request-wrapper-url-patterns",
       "description": "List of URL patterns protected by CAS request wrapper filter.",
       "type": "java.util.List<java.lang.String>"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.server-login-url",
       "description": "CAS server login URL E.g. https:\/\/example.com\/cas\/login or https:\/\/cas.example\/login. Required.",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.server-url-prefix",
       "description": "CAS server URL E.g. https:\/\/example.com\/cas or https:\/\/cas.example. Required.",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.use-session",
       "description": "Validation filter useSession parameter.",
       "type": "java.lang.Boolean"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.validation-type",
       "description": "ValidationType the CAS protocol validation type. Defaults to CAS3 if not explicitly set.",
       "type": "com.winbaoxian.module.cas.enums.ValidationType"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.validation-url-patterns",
       "description": "List of URL patterns protected by CAS validation filter.",
       "type": "java.util.List<java.lang.String>"
+    },{
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
+      "name": "cas.server-logout-url",
+      "description": "CAS server logout URL E.g. https:\/\/example.com\/cas\/login or https:\/\/cas.example\/login. Required.",
+      "type": "java.lang.String"
+    },{
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
+      "name": "cas.logout-redirect-url",
+      "description": "application redirect page URL，after cas logout。 E.g. https:\/\/myclient.example.com Required.",
+      "type": "java.lang.String"
     },
     {
-      "sourceType": "com.winbaoxian.module.cas.config.CasClientConfigurationProperties",
-      "name": "cas.use-single-signOut",
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
+      "name": "cas.use-single-sign-out",
       "description": "choose if use single signOut, default true",
       "type": "java.lang.Boolean",
       "defaultValue": true
