@@ -30,88 +30,102 @@ public class WinCasClientConfigurationProperties {
     /**
      * CAS server URL E.g. https://example.com/cas or https://cas.example. Required.
      */
-    @Value("${cas.server-url-prefix}")
+    @Value("#{@environment['cas.server-url-prefix'] ?: null }")
     private String serverUrlPrefix;
 
     /**
      * CAS server login URL E.g. https://example.com/cas/login or https://cas.example/login. Required.
      */
-    @Value("#{ @environment['cas.server-login-url'] ?: 'txxxx' }")
+    @Value("#{@environment['cas.server-login-url'] ?: null }")
     private String serverLoginUrl;
 
     /**
      * CAS-protected client application host URL E.g. https://myclient.example.com Required.
      */
+    @Value("#{@environment['cas.client-host-url'] ?: null }")
     private String clientHostUrl;
 
     /**
      * List of URL patterns protected by CAS authentication filter.
      */
+    @Value("#{@environment['cas.authentication-url-patterns'] ?: null }")
     private List<String> authenticationUrlPatterns = new ArrayList<>();
 
     /**
      * List of URL patterns protected by CAS validation filter.
      */
+    @Value("#{@environment['cas.validation-url-patterns'] ?: null }")
     private List<String> validationUrlPatterns = new ArrayList<>();
 
     /**
      * List of URL patterns protected by CAS request wrapper filter.
      */
+    @Value("#{@environment['cas.request-wrapper-url-patterns'] ?: null }")
     private List<String> requestWrapperUrlPatterns = new ArrayList<>();
 
     /**
      * Authentication filter gateway parameter.
      */
-//    @Value("${cas.gateway}")
+    @Value("#{@environment['cas.gateway'] ?: null }")
     private Boolean gateway;
 
     /**
      * Validation filter useSession parameter.
      */
+    @Value("#{@environment['cas.use-session'] ?: null }")
     private Boolean useSession;
 
     /**
      * Validation filter redirectAfterValidation.
      */
+    @Value("#{@environment['cas.redirect-after-validation'] ?: null }")
     private Boolean redirectAfterValidation;
 
     /**
      * Cas20ProxyReceivingTicketValidationFilter acceptAnyProxy parameter.
      */
+    @Value("#{@environment['cas.accept-any-proxy'] ?: null }")
     private Boolean acceptAnyProxy;
 
     /**
      * Cas20ProxyReceivingTicketValidationFilter allowedProxyChains parameter.
      */
+    @Value("#{@environment['cas.allowed-proxy-chains'] ?: null }")
     private List<String> allowedProxyChains = new ArrayList<>();
 
     /**
      * Cas20ProxyReceivingTicketValidationFilter proxyCallbackUrl parameter.
      */
+    @Value("#{@environment['cas.proxy-callback-url'] ?: null }")
     private String proxyCallbackUrl;
 
     /**
      * Cas20ProxyReceivingTicketValidationFilter proxyReceptorUrl parameter.
      */
+    @Value("#{@environment['cas.proxy-receptor-url'] ?: null }")
     private String proxyReceptorUrl;
 
     /**
      * ValidationType the CAS protocol validation type. Defaults to CAS3 if not explicitly set.
      */
+    @Value("#{@environment['cas.validation_type'] ?: null }")
     private ValidationType validationType = ValidationType.CAS3;
 
     /**
      * cas登出地址
      */
+    @Value("#{@environment['cas.server-logout-url'] ?: null }")
     private String serverLogoutUrl;
 
     /**
      * cas登出后重定向地址
      */
+    @Value("#{@environment['cas.logout-redirect-url'] ?: null }")
     private String logoutRedirectUrl;
 
     /**
      * true,使用单点登出功能
      */
+    @Value("#{@environment['cas.use-single-sign-out'] ?: null }")
     private Boolean useSingleSignOut;
 }

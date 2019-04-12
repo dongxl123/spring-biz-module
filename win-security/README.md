@@ -278,7 +278,7 @@
 
 ### 修改spring配置文件 *.xml
 - 将org.springframework.orm.hibernate**4**.* 改成 org.springframework.orm.hibernate**5**.*
-- spring-mvc.xml增加 
+- dispatcher-servlet.xml增加 
 ```xml
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
         <property name="detectHandlerMethodsInAncestorContexts">

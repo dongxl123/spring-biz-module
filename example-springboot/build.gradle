@@ -1,0 +1,16 @@
+description = 'module example for springboot'
+
+apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    compile project(":win-security")
+    compile project(":win-cas")
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    runtime('mysql:mysql-connector-java')
+    compile('com.winbaoxian.module:win-security:1.0.0-SNAPSHOT')
+    compile('com.winbaoxian:vault-lib:1.1.0')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
