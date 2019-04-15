@@ -11,6 +11,7 @@ import org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter
 import org.jasig.cas.client.validation.Cas30ProxyReceivingTicketValidationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +36,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Configuration
+@EnableConfigurationProperties(WinCasClientConfigurationProperties.class)
 public class WinCasClientConfiguration {
 
     @Autowired
