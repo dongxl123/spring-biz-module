@@ -1,5 +1,6 @@
 package com.winbaoxian.module.security.initializer;
 
+import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,6 @@ import javax.servlet.ServletException;
 public class WinSecuritySpringWebInitializer {
 
     private Logger log = LoggerFactory.getLogger(getClass());
-    private final String BEAN_NAME_SHIRO_FILTER = "shiroFilter";
 
     WinSecuritySpringWebInitializer(WebApplicationContext context) {
         ServletContext servletContext = context.getServletContext();
@@ -34,19 +34,19 @@ public class WinSecuritySpringWebInitializer {
         }
         ShiroFilterFactoryBean shiroFilterFactoryBean = context.getBean(ShiroFilterFactoryBean.class);
         if (shiroFilterFactoryBean != null) {
-            if (servletContext.getFilterRegistration(BEAN_NAME_SHIRO_FILTER) == null) {
+            if (servletContext.getFilterRegistration(WinSecurityConstant.BEAN_NAME_SHIRO_FILTER) == null) {
                 try {
                     DelegatingFilterProxy filterProxy = new DelegatingFilterProxy();
-                    filterProxy.setTargetBeanName(BEAN_NAME_SHIRO_FILTER);
+                    filterProxy.setTargetBeanName(WinSecurityConstant.BEAN_NAME_SHIRO_FILTER);
                     FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-                    filterRegistrationBean.setName(BEAN_NAME_SHIRO_FILTER);
+                    filterRegistrationBean.setName(WinSecurityConstant.BEAN_NAME_SHIRO_FILTER);
                     filterRegistrationBean.setFilter(filterProxy);
                     filterRegistrationBean.setOrder(10);
                     filterRegistrationBean.setMatchAfter(true);
                     filterRegistrationBean.addUrlPatterns("/*");
                     filterRegistrationBean.onStartup(servletContext);
                 } catch (ServletException e) {
-                    log.error("add Filter error, {}", BEAN_NAME_SHIRO_FILTER, e);
+                    log.error("add Filter error, {}", WinSecurityConstant.BEAN_NAME_SHIRO_FILTER, e);
                 }
             }
         }
