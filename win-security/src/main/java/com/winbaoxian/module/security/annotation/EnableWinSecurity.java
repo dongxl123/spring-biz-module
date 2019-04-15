@@ -19,7 +19,6 @@ import com.winbaoxian.module.security.service.*;
 import com.winbaoxian.module.security.service.extension.IFiller;
 import com.winbaoxian.module.security.service.extension.IProcessor;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -51,7 +50,6 @@ import java.lang.annotation.*;
         AnnotationAttributesRegistrar.class,
         EntityManagerFactoryAttributesPostProcessor.class})
 @EnableJpaRepositories(basePackages = "com.winbaoxian.module.security.repository")
-@ServletComponentScan
 public @interface EnableWinSecurity {
 
     /**

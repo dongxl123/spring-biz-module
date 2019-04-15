@@ -45,7 +45,7 @@ public class ShiroFilterConfiguration {
      * @see org.apache.shiro.web.filter.mgt.DefaultFilter
      */
     @Bean
-    public ShiroFilterFactoryBean shirFilter() {
+    public ShiroFilterFactoryBean shiroFilter() {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 设置拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
