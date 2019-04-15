@@ -2,7 +2,6 @@ package com.winbaoxian.module.security.filter;
 
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
-import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import com.winbaoxian.module.security.utils.MemoryExpirationCache;
 import org.apache.commons.collections.CollectionUtils;
@@ -46,7 +45,6 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
     }
 
     private boolean isAccessAllowed(ServletRequest request, ServletResponse response) throws Exception {
-
         List<WinSecurityResourceDTO> resourceList = cache.get(RESOURCE_CACHE_KEY);
         if (CollectionUtils.isEmpty(resourceList)) {
             resourceList = winSecurityResourceService.getAllValidAccessResourceList();

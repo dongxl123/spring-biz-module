@@ -11,6 +11,7 @@ import com.winbaoxian.module.security.config.shiro.ShiroConfiguration;
 import com.winbaoxian.module.security.config.shiro.ShiroFilterConfiguration;
 import com.winbaoxian.module.security.config.shiro.WinSecurityErrorController;
 import com.winbaoxian.module.security.config.transaction.WinSecurityTransactionConfiguration;
+import com.winbaoxian.module.security.initializer.WinSecuritySpringWebInitializer;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
@@ -42,7 +43,8 @@ import java.lang.annotation.*;
         WinSecurityUserService.class,
         WinSecurityRoleService.class,
         WinSecurityResourceService.class,
-        WinSecuritySysLogService.class
+        WinSecuritySysLogService.class,
+        WinSecuritySpringWebInitializer.class
 })
 @Import({ExtensionClassRegistrar.class,
         SysLogSelector.class,

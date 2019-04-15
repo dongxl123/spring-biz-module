@@ -60,5 +60,6 @@ public class ShiroFilterConfiguration {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         return shiroFilterFactoryBean;
     }
+
 }
 

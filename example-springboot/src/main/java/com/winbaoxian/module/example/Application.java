@@ -17,6 +17,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * @EnableHystrix 开启熔断
  */
 @SpringBootApplication
+@EnableWinCasClient
 @EnableWinSecurity(
         entityManagerFactoryRef = "entityManagerFactoryCitymanager",
         transactionManagerRef = "transactionManagerCitymanager",
@@ -28,7 +29,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
         extensionServiceProcessors = {RoleAddProcessorImpl.class, RoleUpdateProcessorImpl.class, UserAddProcessorImpl.class, UserUpdateProcessorImpl.class, UserPageProcessorImpl.class},
         extensionServiceFillers = {UserFillerImpl.class},
         sysLog = true)
-@EnableWinCasClient
 public class Application extends SpringBootServletInitializer {
 
     @Override

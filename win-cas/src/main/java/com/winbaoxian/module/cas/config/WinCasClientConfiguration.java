@@ -63,7 +63,7 @@ public class WinCasClientConfiguration {
      */
     @Bean
     @ConditionalOnProperty(name = "cas.use-single-sign-out", havingValue = "true", matchIfMissing = true)
-    public ServletListenerRegistrationBean<SingleSignOutHttpSessionListener> singleSignOutHttpSessionListener() {
+    public ServletListenerRegistrationBean<SingleSignOutHttpSessionListener> casSingleSignOutHttpSessionListener() {
         ServletListenerRegistrationBean<SingleSignOutHttpSessionListener> listener = new ServletListenerRegistrationBean<>();
         listener.setListener(new SingleSignOutHttpSessionListener());
         listener.setOrder(1);
@@ -75,13 +75,14 @@ public class WinCasClientConfiguration {
      */
     @Bean
     @ConditionalOnProperty(name = "cas.use-single-sign-out", havingValue = "true", matchIfMissing = true)
-    public FilterRegistrationBean singleSignOutFilter() {
+    public FilterRegistrationBean casSingleSignOutFilter() {
         FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
         filterRegistration.setFilter(new SingleSignOutFilter());
         filterRegistration.addUrlPatterns("/*");
         filterRegistration.addInitParameter(ConfigurationKeys.CAS_SERVER_URL_PREFIX.getName(), configProps.getServerUrlPrefix());
         filterRegistration.addInitParameter(ConfigurationKeys.SERVER_NAME.getName(), configProps.getClientHostUrl());
         filterRegistration.setOrder(1);
+        filterRegistration.setMatchAfter(true);
         if (this.casClientConfigurer != null) {
             this.casClientConfigurer.configureSingleSignOutFilter(filterRegistration);
         }
@@ -98,6 +99,7 @@ public class WinCasClientConfiguration {
         FilterRegistrationBean authnFilter = new FilterRegistrationBean();
         authnFilter.setFilter(new AuthenticationFilter());
         authnFilter.setOrder(2);
+        authnFilter.setMatchAfter(true);
         Map<String, String> initParams = new HashMap<>(2);
         initParams.put(ConfigurationKeys.CAS_SERVER_LOGIN_URL.getName(), configProps.getServerLoginUrl());
         initParams.put(ConfigurationKeys.SERVICE.getName(), String.format("%s/api/cas/auth?callback=", configProps.getClientHostUrl()));
@@ -137,6 +139,7 @@ public class WinCasClientConfiguration {
         }
         validationFilter.setFilter(targetCasValidationFilter);
         validationFilter.setOrder(3);
+        validationFilter.setMatchAfter(true);
         final Map<String, String> initParams = new HashMap<>(2);
         initParams.put(ConfigurationKeys.CAS_SERVER_URL_PREFIX.getName(), configProps.getServerUrlPrefix());
         initParams.put(ConfigurationKeys.SERVER_NAME.getName(), configProps.getClientHostUrl());
@@ -185,7 +188,7 @@ public class WinCasClientConfiguration {
             reqWrapperFilter.setUrlPatterns(configProps.getRequestWrapperUrlPatterns());
         }
         reqWrapperFilter.setOrder(4);
-
+        reqWrapperFilter.setMatchAfter(true);
         if (this.casClientConfigurer != null) {
             this.casClientConfigurer.configureHttpServletRequestWrapperFilter(reqWrapperFilter);
         }

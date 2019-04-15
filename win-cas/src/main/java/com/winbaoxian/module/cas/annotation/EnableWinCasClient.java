@@ -4,7 +4,7 @@ import com.winbaoxian.module.cas.adapter.WinCasClientConfigurer;
 import com.winbaoxian.module.cas.adapter.WinCasClientConfigurerAdapter;
 import com.winbaoxian.module.cas.config.WinCasClientConfiguration;
 import com.winbaoxian.module.cas.controller.WinCasController;
-import com.winbaoxian.module.cas.initializer.WinCasSpringWebInitializerConfiguration;
+import com.winbaoxian.module.cas.initializer.WinCasSpringWebInitializer;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
@@ -30,7 +30,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@ImportAutoConfiguration({WinCasClientConfiguration.class, WinCasSpringWebInitializerConfiguration.class})
+@ImportAutoConfiguration({WinCasClientConfiguration.class, WinCasSpringWebInitializer.class})
 @Import({WinCasController.class})
 public @interface EnableWinCasClient {
 
