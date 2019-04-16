@@ -18,8 +18,8 @@ cas:
   server-url-prefix: https://sso.winbaoxian.cn
   server-login-url: https://sso.winbaoxian.cn/login
   server-logout-url: https://sso.winbaoxian.cn/logout
-  client-host-url: http://www.suiyiwen.com:9998
-  logout-redirect-url: http://blog.suiyiwen.com
+  client-host-url: http://www.winbaoxian.com:9998
+  logout-redirect-url: http://test.winbaoxian.com
   use-single-sign-out: true
 ```
 
