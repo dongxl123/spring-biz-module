@@ -69,7 +69,6 @@ public class WinCasSpringWebInitializer {
                 EventListener listener = listenerRegistrationBean.getListener();
                 if (isCasListener(listener)) {
                     try {
-
                         listenerRegistrationBean.onStartup(servletContext);
                     } catch (ServletException e) {
                         log.error("cas add Listener error, {}", getBeanName(listener.getClass()), e);

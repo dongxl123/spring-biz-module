@@ -36,7 +36,6 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Configuration
-@EnableConfigurationProperties(WinCasClientConfigurationProperties.class)
 public class WinCasClientConfiguration {
 
     @Autowired
