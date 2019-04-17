@@ -43,7 +43,7 @@ public class WinSecurityTransactionConfiguration {
 
     private Pointcut pointcut() {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
-        pointcut.setExpression("execution(* com.winbaoxian.module.security.service.*Service.*(..))");
+        pointcut.setExpression("within (com.winbaoxian.module.security.service.*Service)");
         return pointcut;
     }
 
