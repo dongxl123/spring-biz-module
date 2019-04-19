@@ -31,8 +31,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@ImportAutoConfiguration({WinCasClientConfiguration.class, WinCasClientConfigurationProperties.class, WinCasSpringWebInitializer.class})
-@Import({WinCasController.class})
+@ImportAutoConfiguration({WinCasClientConfiguration.class, WinCasClientConfigurationProperties.class, WinCasSpringWebInitializer.class, WinCasController.class})
 public @interface EnableWinCasClient {
 
 }
