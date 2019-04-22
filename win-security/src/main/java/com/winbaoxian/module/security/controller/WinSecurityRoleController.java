@@ -5,8 +5,11 @@ import com.winbaoxian.module.security.config.loader.WinSecurityClassLoaderConfig
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
+import com.winbaoxian.module.security.model.dto.IdParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
+import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
+import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.service.WinSecurityRoleService;
 import com.winbaoxian.module.security.utils.MapFastUtils;
 import com.winbaoxian.module.security.utils.TransformerUtils;
@@ -58,19 +61,25 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
 
 
     /**
-     * @apiVersion 1.0.0
      * @api {POST} /api/winSecurity/v1/role/deleteRole 删除角色
+     * @apiVersion 1.0.0
      * @apiGroup role
      * @apiName deleteRole
-     * @apiParam (请求参数) {Number} id 主键
-     * @apiParamExample 请求参数示例
-     * ?id=1
-     * @apiSuccessExample 响应示例
+     * @apiParam (请求体) {Number} id 主键
+     * @apiParamExample 请求体示例
+     * {"id":233}
+     * @apiSuccess (响应结果) {Number} code
+     * @apiSuccess (响应结果) {String} msg
+     * @apiSuccess (响应结果) {Object} data
+     * @apiSuccessExample 响应结果示例
      * {"code":200,"msg":null,"data":null}
      */
     @PostMapping(value = "/deleteRole")
-    public JsonResult deleteRole(Long id) {
-        winSecurityRoleService.deleteRole(id);
+    public JsonResult deleteRole(@RequestBody IdParamDTO paramDTO) {
+        if (paramDTO.getId() == null) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_ID_NOT_EXISTS);
+        }
+        winSecurityRoleService.deleteRole(paramDTO.getId());
         return JsonResult.createSuccessResult(null);
     }
 

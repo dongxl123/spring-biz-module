@@ -5,8 +5,11 @@ import com.winbaoxian.module.security.config.loader.WinSecurityClassLoaderConfig
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
+import com.winbaoxian.module.security.model.dto.IdParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
+import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
+import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.service.WinSecurityUserService;
 import com.winbaoxian.module.security.utils.MapFastUtils;
 import com.winbaoxian.module.security.utils.TransformerUtils;
@@ -59,19 +62,25 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
 
 
     /**
-     * @apiVersion 1.0.0
      * @api {POST} /api/winSecurity/v1/user/deleteUser 删除用户
+     * @apiVersion 1.0.0
      * @apiGroup user
      * @apiName deleteUser
-     * @apiParam (请求参数) {Number} id 主键
-     * @apiParamExample 请求参数示例
-     * ?id=1
-     * @apiSuccessExample 响应示例
+     * @apiParam (请求体) {Number} id 主键
+     * @apiParamExample 请求体示例
+     * {"id":4676}
+     * @apiSuccess (响应结果) {Number} code
+     * @apiSuccess (响应结果) {String} msg
+     * @apiSuccess (响应结果) {Object} data
+     * @apiSuccessExample 响应结果示例
      * {"code":200,"msg":null,"data":null}
      */
     @PostMapping(value = "/deleteUser")
-    public JsonResult deleteUser(Long id) {
-        winSecurityUserService.deleteUser(id);
+    public JsonResult deleteUser(@RequestBody IdParamDTO paramDTO) {
+        if (paramDTO.getId() == null) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_ID_NOT_EXISTS);
+        }
+        winSecurityUserService.deleteUser(paramDTO.getId());
         return JsonResult.createSuccessResult(null);
     }
 

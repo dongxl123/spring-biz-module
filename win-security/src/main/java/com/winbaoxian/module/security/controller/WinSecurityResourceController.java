@@ -3,11 +3,15 @@ package com.winbaoxian.module.security.controller;
 import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.dto.BatchUpdateParamDTO;
 import com.winbaoxian.module.security.model.dto.DragAndDropParamDTO;
+import com.winbaoxian.module.security.model.dto.IdParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
+import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
+import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -58,19 +62,25 @@ public class WinSecurityResourceController {
     }
 
     /**
-     * @apiVersion 1.0.0
      * @api {POST} /api/winSecurity/v1/resource/deleteResource 删除资源
+     * @apiVersion 1.0.0
      * @apiGroup resource
      * @apiName deleteResource
-     * @apiParam (请求参数) {Number} id 主键
-     * @apiParamExample 请求参数示例
-     * ?id=11
-     * @apiSuccessExample 响应示例
+     * @apiParam (请求体) {Number} id 主键
+     * @apiParamExample 请求体示例
+     * {"id":118}
+     * @apiSuccess (响应结果) {Number} code
+     * @apiSuccess (响应结果) {String} msg
+     * @apiSuccess (响应结果) {Object} data
+     * @apiSuccessExample 响应结果示例
      * {"code":200,"msg":null,"data":null}
      */
     @PostMapping(value = "/deleteResource")
-    public JsonResult deleteResource(Long id) {
-        winSecurityResourceService.deleteResource(id);
+    public JsonResult deleteResource(@RequestBody IdParamDTO paramDTO) {
+        if (paramDTO.getId() == null) {
+            throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_ID_NOT_EXISTS);
+        }
+        winSecurityResourceService.deleteResource(paramDTO.getId());
         return JsonResult.createSuccessResult(null);
     }
 
