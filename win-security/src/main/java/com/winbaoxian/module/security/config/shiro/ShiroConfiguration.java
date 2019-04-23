@@ -1,5 +1,6 @@
 package com.winbaoxian.module.security.config.shiro;
 
+import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import com.winbaoxian.module.security.service.WinSecurityRoleService;
 import com.winbaoxian.module.security.service.WinSecurityUserService;
@@ -71,7 +72,9 @@ public class ShiroConfiguration {
         @Bean
         @ConditionalOnMissingBean(Cookie.class)
         public Cookie cookie() {
-            return new SimpleCookie();
+            Cookie cookie = new SimpleCookie(WinSecurityConstant.SHIRO_COOKIE_NAME);
+            cookie.setHttpOnly(true);
+            return cookie;
         }
     }
 

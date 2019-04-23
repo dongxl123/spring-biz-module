@@ -11,5 +11,6 @@ public interface WinSecurityConstant {
     String SORT_COLUMN_SEQ = "seq";
     String[] ENTITY_PACKAGES = {"com.winbaoxian.module.security.model.entity"};
     String BEAN_NAME_SHIRO_FILTER = "shiroFilter";
+    String SHIRO_COOKIE_NAME = "SHIRO_COOKIE";
 
 }
