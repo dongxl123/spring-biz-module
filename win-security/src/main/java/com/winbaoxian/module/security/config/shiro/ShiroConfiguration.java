@@ -11,6 +11,8 @@ import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.Cookie;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -47,6 +49,8 @@ public class ShiroConfiguration {
     public static class SessionManagerConfiguration {
         @Autowired
         private SessionDAO sessionDAO;
+        @Autowired
+        private Cookie cookie;
         @Autowired(required = false)
         private CacheManager cacheManager;
 
@@ -54,12 +58,22 @@ public class ShiroConfiguration {
         @ConditionalOnMissingBean(SessionManager.class)
         public SessionManager sessionManager() {
             DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+            sessionManager.setSessionIdCookie(cookie);
             sessionManager.setSessionDAO(sessionDAO);
             sessionManager.setCacheManager(cacheManager);
             return sessionManager;
         }
     }
 
+    @Configuration
+    public static class CookieConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(Cookie.class)
+        public Cookie cookie() {
+            return new SimpleCookie();
+        }
+    }
 
     @Configuration
     public static class SessionDAOConfiguration {
@@ -81,7 +95,6 @@ public class ShiroConfiguration {
         private WinSecurityResourceService winSecurityResourceService;
 
         @Bean
-        @ConditionalOnMissingBean(Realm.class)
         public Realm realm() {
             return new WinSecurityRealm(winSecurityUserService, winSecurityRoleService, winSecurityResourceService);
         }
