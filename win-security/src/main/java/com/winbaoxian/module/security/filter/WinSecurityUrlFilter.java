@@ -52,6 +52,7 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
             log.info("WinSecurityUrlFilter, 时间:{}, 从数据库获取数据", new Date());
         }
         String path = WebUtils.toHttp(request).getRequestURI();
+        log.info("WinSecurityUrlFilter, 请求路径, path:{}", path);
         Long resourceId = null;
         if (CollectionUtils.isNotEmpty(resourceList)) {
             for (WinSecurityResourceDTO resourceDTO : resourceList) {
