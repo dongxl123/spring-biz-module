@@ -77,6 +77,7 @@ public class WinSecurityAccessService {
         } catch (UnauthorizedException e) {
             throw new WinSecurityException("您没有得到相应的授权");
         } catch (Exception e) {
+            log.error("winSecurity loginInternal error", e);
             throw new WinSecurityException("验证失败");
         }
     }
