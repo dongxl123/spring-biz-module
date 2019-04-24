@@ -101,7 +101,7 @@ public class WinCasClientConfiguration {
         authnFilter.setMatchAfter(true);
         Map<String, String> initParams = new HashMap<>(2);
         initParams.put(ConfigurationKeys.CAS_SERVER_LOGIN_URL.getName(), configProps.getServerLoginUrl());
-        initParams.put(ConfigurationKeys.SERVICE.getName(), String.format("%s/api/cas/auth?callback=", configProps.getClientHostUrl()));
+        initParams.put(ConfigurationKeys.SERVICE.getName(), String.format("%s/api/winCas/auth?callback=", configProps.getClientHostUrl()));
         initParams.put(ConfigurationKeys.AUTHENTICATION_REDIRECT_STRATEGY_CLASS.getName(), "com.winbaoxian.module.cas.strategy.AjaxAuthRedirectStrategy");
         authnFilter.setInitParameters(initParams);
         List<String> authenticationUrlPatterns = configProps.getAuthenticationUrlPatterns();

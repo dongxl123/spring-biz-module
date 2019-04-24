@@ -54,7 +54,7 @@ public class ShiroFilterConfiguration {
         // 设置拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //拦截
-        filterChainDefinitionMap.put("/api/cas/auth", "casFilter");
+        filterChainDefinitionMap.put("/api/winCas/auth", "casFilter");
         filterChainDefinitionMap.put("/**", "urlFilter");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

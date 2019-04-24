@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019-04-11 9:45
  */
 @Controller
-@RequestMapping("/api/cas")
+@RequestMapping("/api/winCas")
 @Slf4j
 public class WinCasController {
 
