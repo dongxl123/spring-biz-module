@@ -1,6 +1,7 @@
 package com.winbaoxian.module.security.config.shiro;
 
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
+import com.winbaoxian.module.security.filter.WinCasFilter;
 import com.winbaoxian.module.security.filter.WinSecurityUrlFilter;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import lombok.extern.slf4j.Slf4j;
@@ -53,12 +54,14 @@ public class ShiroFilterConfiguration {
         // 设置拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //拦截
+        filterChainDefinitionMap.put("/api/cas/auth", "casFilter");
         filterChainDefinitionMap.put("/**", "urlFilter");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         // 获取filters
         Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
         // 将自定义的Filter注入shiroFilter中
+        filters.put("casFilter", new WinCasFilter());
         filters.put("urlFilter", new WinSecurityUrlFilter(winSecurityResourceService));
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         return shiroFilterFactoryBean;

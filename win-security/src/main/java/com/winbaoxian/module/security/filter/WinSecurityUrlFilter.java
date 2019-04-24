@@ -111,7 +111,7 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
 
     @Override
     public boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-        return this.isAccessAllowed(request, response) || this.onAccessDenied(request, response);
+        return isAccessAllowed(request, response) || onAccessDenied(request, response);
     }
 
 }

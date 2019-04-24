@@ -4,11 +4,11 @@ import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityPrincipal;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
-import com.winbaoxian.module.security.model.enums.WinSecurityResourceTypeEnum;
 import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import com.winbaoxian.module.security.service.WinSecurityRoleService;
 import com.winbaoxian.module.security.service.WinSecurityUserService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
@@ -18,7 +18,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -34,11 +33,17 @@ public class WinSecurityRealm extends AuthorizingRealm {
     private WinSecurityRoleService winSecurityRoleService;
     private WinSecurityResourceService winSecurityResourceService;
 
+    public WinSecurityRealm() {
+        setAuthenticationTokenClass(UsernamePasswordToken.class);
+    }
+
     public WinSecurityRealm(WinSecurityUserService winSecurityUserService, WinSecurityRoleService winSecurityRoleService, WinSecurityResourceService winSecurityResourceService) {
+        this();
         this.winSecurityUserService = winSecurityUserService;
         this.winSecurityRoleService = winSecurityRoleService;
         this.winSecurityResourceService = winSecurityResourceService;
     }
+
 
     @Override
     public CredentialsMatcher getCredentialsMatcher() {
@@ -64,18 +69,18 @@ public class WinSecurityRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         //null usernames are invalid
-        if (principals == null) {
-            throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
+        if (principals == null || principals.isEmpty()) {
+            throw new AuthorizationException("principals is null.");
         }
         WinSecurityPrincipal principal = (WinSecurityPrincipal) getAvailablePrincipal(principals);
         Set<String> roleNames = null;
         Set<String> permissions = null;
         List<WinSecurityBaseRoleDTO> roleDTOList = winSecurityRoleService.getValidRoleListByUserId(principal.getId());
-        if (!CollectionUtils.isEmpty(roleDTOList)) {
+        if (CollectionUtils.isNotEmpty(roleDTOList)) {
             roleNames = roleDTOList.stream().map(o -> o.getName()).collect(Collectors.toSet());
         }
         List<WinSecurityResourceDTO> resourceDTOList = winSecurityResourceService.getValidResourceListByUserId(principal.getId());
-        if (!CollectionUtils.isEmpty(resourceDTOList)) {
+        if (CollectionUtils.isNotEmpty(resourceDTOList)) {
             permissions = resourceDTOList.stream().filter(o -> StringUtils.isNotBlank(o.getAjaxUrls())).map(o -> String.valueOf(o.getId())).collect(Collectors.toSet());
         }
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roleNames);

@@ -9,6 +9,7 @@ subprojects {
         ext {
             springBootVersion = '1.5.17.RELEASE'
             springVersion = '4.3.20.RELEASE'
+            casVersion = '3.4.1'
         }
         repositories {
             mavenCentral()
