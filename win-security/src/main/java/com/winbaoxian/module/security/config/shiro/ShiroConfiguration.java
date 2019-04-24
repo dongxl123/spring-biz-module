@@ -60,6 +60,7 @@ public class ShiroConfiguration {
         public SessionManager sessionManager() {
             DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
             sessionManager.setSessionIdCookie(cookie);
+            sessionManager.setSessionIdUrlRewritingEnabled(false);
             sessionManager.setSessionDAO(sessionDAO);
             sessionManager.setCacheManager(cacheManager);
             return sessionManager;
