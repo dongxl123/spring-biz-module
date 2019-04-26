@@ -28,6 +28,12 @@
     },
     {
       "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
+      "name": "cas.authentication-url-ignore-patterns",
+      "description": "List of URL ignore patterns protected by CAS authentication filter.",
+      "type": "java.util.List<java.lang.String>"
+    },
+    {
+      "sourceType": "com.winbaoxian.module.cas.config.WinCasClientConfigurationProperties",
       "name": "cas.client-host-url",
       "description": "CAS-protected client application host URL E.g. https:\/\/myclient.example.com Required.",
       "type": "java.lang.String"

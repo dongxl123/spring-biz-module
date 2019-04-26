@@ -45,6 +45,9 @@ spring:
       cipherText: vault:v1:Zd7xYEU7kLiUG0THKcFnSjszkEzL67r7MNXYpho1Tu1sEcZZ0nyxOw==
   aop:
     proxy-target-class: true
+  mvc:
+    favicon:
+      enabled: false
 logging:
   level:
     root: info
@@ -68,3 +71,4 @@ cas:
   client-host-url: http://www.suiyiwen.com:9998
   logout-redirect-url: http://blog.suiyiwen.com
   use-single-sign-out: true
+  authentication-url-ignore-patterns: /api/winCas/logout, /static/**

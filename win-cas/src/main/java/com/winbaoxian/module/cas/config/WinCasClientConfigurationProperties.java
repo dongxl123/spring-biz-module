@@ -52,6 +52,12 @@ public class WinCasClientConfigurationProperties {
     private List<String> authenticationUrlPatterns = new ArrayList<>();
 
     /**
+     * List of URL ignore patterns protected by CAS authentication filter.
+     */
+    @Value("#{@environment['cas.authentication-url-ignore-patterns'] ?: null }")
+    private List<String> authenticationUrlIgnorePatterns = new ArrayList<>();
+
+    /**
      * List of URL patterns protected by CAS validation filter.
      */
     @Value("#{@environment['cas.validation-url-patterns'] ?: null }")

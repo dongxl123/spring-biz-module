@@ -2,6 +2,7 @@ package com.winbaoxian.module.cas.config;
 
 import com.winbaoxian.module.cas.adapter.WinCasClientConfigurer;
 import com.winbaoxian.module.cas.annotation.EnableWinCasClient;
+import org.apache.commons.collections.CollectionUtils;
 import org.jasig.cas.client.authentication.AuthenticationFilter;
 import org.jasig.cas.client.configuration.ConfigurationKeys;
 import org.jasig.cas.client.session.SingleSignOutFilter;
@@ -16,7 +17,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.Filter;
@@ -105,8 +105,12 @@ public class WinCasClientConfiguration {
         initParams.put(ConfigurationKeys.AUTHENTICATION_REDIRECT_STRATEGY_CLASS.getName(), "com.winbaoxian.module.cas.strategy.AjaxAuthRedirectStrategy");
         authnFilter.setInitParameters(initParams);
         List<String> authenticationUrlPatterns = configProps.getAuthenticationUrlPatterns();
-        if (authenticationUrlPatterns.size() > 0) {
+        if (CollectionUtils.isNotEmpty(authenticationUrlPatterns)) {
             authnFilter.setUrlPatterns(authenticationUrlPatterns);
+        }
+        List<String> authenticationUrlIgnorePatterns = configProps.getAuthenticationUrlIgnorePatterns();
+        if (CollectionUtils.isNotEmpty(authenticationUrlIgnorePatterns)) {
+            authnFilter.getInitParameters().put(ConfigurationKeys.IGNORE_PATTERN.getName(), String.join("|", authenticationUrlIgnorePatterns));
         }
         if (configProps.getGateway() != null) {
             authnFilter.getInitParameters().put(ConfigurationKeys.GATEWAY.getName(), String.valueOf(configProps.getGateway()));
