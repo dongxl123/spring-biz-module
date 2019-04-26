@@ -71,4 +71,4 @@ cas:
   client-host-url: http://www.suiyiwen.com:9998
   logout-redirect-url: http://blog.suiyiwen.com
   use-single-sign-out: true
-  authentication-url-ignore-patterns: /api/winCas/logout, /static/**
+  authentication-url-ignore-patterns: /favicon.ico, /api/winCas/logout, /static/*

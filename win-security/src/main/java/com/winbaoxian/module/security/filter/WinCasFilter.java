@@ -90,29 +90,17 @@ public class WinCasFilter extends PathMatchingFilter {
             Subject subject = SecurityUtils.getSubject();
             subject.logout();
             AuthenticationToken token = createToken(request, response);
-            if (token == null) {
-                return false;
+            if (token != null) {
+                subject.login(token);
             }
-            subject.login(token);
         } catch (AuthenticationException e) {
-            return false;
+            logger.error("cas tryLogin failed", e);
         }
         return true;
     }
 
-    private boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject != null && subject.isAuthenticated()) {
-            WebUtils.toHttp(response).sendError(403);
-        } else {
-            WebUtils.toHttp(response).sendError(401);
-        }
-        return false;
-    }
-
-
     @Override
     public boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-        return tryLogin(request, response) || onAccessDenied(request, response);
+        return tryLogin(request, response);
     }
 }

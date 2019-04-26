@@ -99,12 +99,20 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
     }
 
 
+    /**
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     private boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         Subject subject = SecurityUtils.getSubject();
-        if (subject != null && subject.isAuthenticated()) {
-            WebUtils.toHttp(response).sendError(403);
-        } else {
+        String outerLoginUser = WebUtils.toHttp(request).getRemoteUser();
+        if (StringUtils.isBlank(outerLoginUser) && (subject == null || !subject.isAuthenticated())) {
+            //系统全局未登录(X)且shiro未登录(X)
             WebUtils.toHttp(response).sendError(401);
+        } else {
+            WebUtils.toHttp(response).sendError(403);
         }
         return false;
     }
