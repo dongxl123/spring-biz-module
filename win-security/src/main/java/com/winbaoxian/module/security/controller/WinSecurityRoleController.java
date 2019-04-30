@@ -172,6 +172,8 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      * @apiDescription 支持动态查询数据，参数放到URL中
      * @apiGroup role
      * @apiName getRolePage
+     * @apiParam (请求参数) {String} name 角色名称,支持模糊搜索searchWord%
+     * @apiParam (请求参数) {Number} status 状态, 0:无效 , 1:有效
      * @apiParam (请求参数) {Number} pageNum 第几页
      * @apiParam (请求参数) {Number} pageSize 每页数量
      * @apiParamExample 请求参数示例

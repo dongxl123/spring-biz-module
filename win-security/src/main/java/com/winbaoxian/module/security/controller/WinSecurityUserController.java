@@ -172,7 +172,10 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      * @api {GET} /api/winSecurity/v1/user/getUserPage 获取用户分页数据
      * @apiDescription 支持动态查询数据，参数放到URL中
      * @apiGroup user
-     * @apiName getUserP
+     * @apiName getUserPage
+     * @apiParam (请求参数) {String} userName 登录名,支持模糊搜索searchWord%
+     * @apiParam (请求参数) {String} mobile 手机号,支持模糊搜索searchWord%
+     * @apiParam (请求参数) {Number} status 用户状态，, 状态, 0:无效 , 1:有效
      * @apiParam (请求参数) {Number} pageNum 第几页
      * @apiParam (请求参数) {Number} pageSize 每页数量
      * @apiParamExample 请求参数示例
