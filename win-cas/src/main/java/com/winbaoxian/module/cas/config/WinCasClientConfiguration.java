@@ -13,7 +13,6 @@ import org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter
 import org.jasig.cas.client.validation.Cas30ProxyReceivingTicketValidationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -123,6 +122,8 @@ public class WinCasClientConfiguration {
         if (CollectionUtils.isNotEmpty(authenticationUrlIgnorePatterns)) {
             authenticationUrlIgnorePatterns.add("/api/winCas/logout");
             authnFilter.getInitParameters().put(ConfigurationKeys.IGNORE_PATTERN.getName(), String.join("|", authenticationUrlIgnorePatterns));
+        } else {
+            authnFilter.getInitParameters().put(ConfigurationKeys.IGNORE_PATTERN.getName(), "/api/winCas/logout");
         }
         if (configProps.getGateway() != null) {
             authnFilter.getInitParameters().put(ConfigurationKeys.GATEWAY.getName(), String.valueOf(configProps.getGateway()));
