@@ -2,6 +2,7 @@ package com.winbaoxian.module.cas.config;
 
 import com.winbaoxian.module.cas.adapter.WinCasClientConfigurer;
 import com.winbaoxian.module.cas.annotation.EnableWinCasClient;
+import com.winbaoxian.module.cas.filter.WinCasLogoutFilter;
 import org.apache.commons.collections.CollectionUtils;
 import org.jasig.cas.client.authentication.AuthenticationFilter;
 import org.jasig.cas.client.configuration.ConfigurationKeys;
@@ -80,11 +81,21 @@ public class WinCasClientConfiguration {
         filterRegistration.addUrlPatterns("/*");
         filterRegistration.addInitParameter(ConfigurationKeys.CAS_SERVER_URL_PREFIX.getName(), configProps.getServerUrlPrefix());
         filterRegistration.addInitParameter(ConfigurationKeys.SERVER_NAME.getName(), configProps.getClientHostUrl());
-        filterRegistration.setOrder(1);
+        filterRegistration.setOrder(0);
         filterRegistration.setMatchAfter(true);
         if (this.casClientConfigurer != null) {
             this.casClientConfigurer.configureSingleSignOutFilter(filterRegistration);
         }
+        return filterRegistration;
+    }
+
+    @Bean
+    public FilterRegistrationBean winCasLogoutFilter() {
+        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
+        filterRegistration.setFilter(new WinCasLogoutFilter());
+        filterRegistration.addUrlPatterns("/api/winCas/logout");
+        filterRegistration.setOrder(1);
+        filterRegistration.setMatchAfter(true);
         return filterRegistration;
     }
 
@@ -110,6 +121,7 @@ public class WinCasClientConfiguration {
         }
         List<String> authenticationUrlIgnorePatterns = configProps.getAuthenticationUrlIgnorePatterns();
         if (CollectionUtils.isNotEmpty(authenticationUrlIgnorePatterns)) {
+            authenticationUrlIgnorePatterns.add("/api/winCas/logout");
             authnFilter.getInitParameters().put(ConfigurationKeys.IGNORE_PATTERN.getName(), String.join("|", authenticationUrlIgnorePatterns));
         }
         if (configProps.getGateway() != null) {

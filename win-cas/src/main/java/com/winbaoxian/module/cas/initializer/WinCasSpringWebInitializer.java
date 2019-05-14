@@ -1,5 +1,6 @@
 package com.winbaoxian.module.cas.initializer;
 
+import com.winbaoxian.module.cas.filter.WinCasLogoutFilter;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +39,7 @@ import java.util.*;
 public class WinCasSpringWebInitializer {
 
     private Logger log = LoggerFactory.getLogger(getClass());
-    private List<Class> CAS_FILTER_CLASS_LIST = Arrays.asList(SingleSignOutFilter.class, AuthenticationFilter.class, Cas20ProxyReceivingTicketValidationFilter.class, Cas30ProxyReceivingTicketValidationFilter.class, HttpServletRequestWrapperFilter.class);
+    private List<Class> CAS_FILTER_CLASS_LIST = Arrays.asList(SingleSignOutFilter.class, AuthenticationFilter.class, Cas20ProxyReceivingTicketValidationFilter.class, Cas30ProxyReceivingTicketValidationFilter.class, HttpServletRequestWrapperFilter.class, WinCasLogoutFilter.class);
     private Class CAS_LISTENER_CLASS = SingleSignOutHttpSessionListener.class;
 
     WinCasSpringWebInitializer(WebApplicationContext context) {
