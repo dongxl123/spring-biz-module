@@ -2,6 +2,7 @@ package com.winbaoxian.module.cas.config;
 
 import com.winbaoxian.module.cas.adapter.WinCasClientConfigurer;
 import com.winbaoxian.module.cas.annotation.EnableWinCasClient;
+import com.winbaoxian.module.cas.constant.WinCasConstant;
 import com.winbaoxian.module.cas.filter.WinCasLogoutFilter;
 import org.apache.commons.collections.CollectionUtils;
 import org.jasig.cas.client.authentication.AuthenticationFilter;
@@ -20,10 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.Filter;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -92,7 +90,7 @@ public class WinCasClientConfiguration {
     public FilterRegistrationBean winCasLogoutFilter() {
         FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
         filterRegistration.setFilter(new WinCasLogoutFilter());
-        filterRegistration.addUrlPatterns("/api/winCas/logout");
+        filterRegistration.addUrlPatterns(WinCasConstant.API_LOGOUT_URL);
         filterRegistration.setOrder(1);
         filterRegistration.setMatchAfter(true);
         return filterRegistration;
@@ -118,13 +116,13 @@ public class WinCasClientConfiguration {
         if (CollectionUtils.isNotEmpty(authenticationUrlPatterns)) {
             authnFilter.setUrlPatterns(authenticationUrlPatterns);
         }
+        List<String> allUrlIgnorePatterns = new ArrayList<>();
+        allUrlIgnorePatterns.add(WinCasConstant.API_LOGOUT_URL);
         List<String> authenticationUrlIgnorePatterns = configProps.getAuthenticationUrlIgnorePatterns();
         if (CollectionUtils.isNotEmpty(authenticationUrlIgnorePatterns)) {
-            authenticationUrlIgnorePatterns.add("/api/winCas/logout");
-            authnFilter.getInitParameters().put(ConfigurationKeys.IGNORE_PATTERN.getName(), String.join("|", authenticationUrlIgnorePatterns));
-        } else {
-            authnFilter.getInitParameters().put(ConfigurationKeys.IGNORE_PATTERN.getName(), "/api/winCas/logout");
+            allUrlIgnorePatterns.addAll(authenticationUrlIgnorePatterns);
         }
+        authnFilter.getInitParameters().put(ConfigurationKeys.IGNORE_PATTERN.getName(), String.join("|", allUrlIgnorePatterns));
         if (configProps.getGateway() != null) {
             authnFilter.getInitParameters().put(ConfigurationKeys.GATEWAY.getName(), String.valueOf(configProps.getGateway()));
         }
