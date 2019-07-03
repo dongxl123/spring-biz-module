@@ -299,4 +299,7 @@
 ### 相关接口文档
 [http://docs.winbaoxian.cn/api/spring-biz-module/](http://docs.winbaoxian.cn/api/spring-biz-module/)
 
+### 项目冲突解决
+- Q:不能找到项目的repository？
   
+  A:增加注解@EnableJpaRepositories(basePackages = {"项目repository文件夹路径", "com.winbaoxian.module.security.repository"})
