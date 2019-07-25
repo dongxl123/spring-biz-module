@@ -16,8 +16,14 @@ spring-biz-module 业务组件项目，目标是5分钟内集成通用业务模�
 - 请求拦截规则：对配置的请求做拦截，未配置的请求默认都可以访问；特殊: winSecurity提供的接口未配置时, 只有用户登录后才能访问
 - 不提供登录、登出接口
 
+> 使用文档参考：win-security/README.md
+
+---
 ## win-cas
+
 > 适用基于springboot或spring创建的项目，依赖spring-webmvc、cas-client-core，与springboot集成较方便
 
 - 提供登出接口
 - 提供注解@EnableWinCasClient
+
+> 使用文档参考：win-cas/README.md
