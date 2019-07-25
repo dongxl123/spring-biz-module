@@ -2,6 +2,7 @@
 
 spring-biz-module 业务组件项目，目标是5分钟内集成通用业务模块，目前已实现权限管理。
 
+---
 ## win-security
 
 > 适用基于springboot或spring创建的项目，依赖spring-data-jpa、shiro，与springboot集成较方便
