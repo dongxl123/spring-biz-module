@@ -42,7 +42,7 @@ public class WinSecuritySysLogAspect {
     @Resource
     private WinSecurityAccessService winSecurityAccessService;
 
-    @Around("within(com.winbaoxian.module.security.controller..*) && @annotation(org.springframework.web.bind.annotation.PostMapping)")
+    @Around("(within(com.winbaoxian.module.security.controller..*) && @annotation(org.springframework.web.bind.annotation.PostMapping))||@annotation(com.winbaoxian.module.security.annotation.EnableSysLog)")
     public Object recordSysLog(ProceedingJoinPoint point) throws Throwable {
         //SYSLOG前置处理，防止业务更新对象，导致数据不准
         StringBuffer sb = new StringBuffer();
