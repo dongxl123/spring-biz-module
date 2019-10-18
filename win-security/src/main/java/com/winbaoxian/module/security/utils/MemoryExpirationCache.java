@@ -86,10 +86,8 @@ public class MemoryExpirationCache<K, V> implements Cache<K, V> {
                 CacheEntry cacheEntry = (CacheEntry) it.next();
                 cacheEntry.invalidate();
             }
-            while (true) {
-                if (this.queue.poll() != null) {
-                    continue;
-                }
+            while (this.queue.poll() != null) {
+                //nothing to do
             }
         }
         this.caches.clear();
