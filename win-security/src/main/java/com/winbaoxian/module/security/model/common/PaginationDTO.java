@@ -1,5 +1,7 @@
 package com.winbaoxian.module.security.model.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -15,6 +17,8 @@ import java.util.List;
  * @Create 2016-10-30 11:03
  */
 public class PaginationDTO<T> extends Pagination {
+
+    private static final Logger log = LoggerFactory.getLogger(PaginationDTO.class);
 
     private List<T> list;
 
@@ -67,7 +71,7 @@ public class PaginationDTO<T> extends Pagination {
                 t = clazz.newInstance();
                 BeanUtils.copyProperties(entity, t);
             } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
+                log.error("BeanUtils.copyProperties error", e);
             }
             dataList.add(t);
         }

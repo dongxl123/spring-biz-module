@@ -20,15 +20,8 @@ public enum WinSecurityResourceTypeEnum {
         return value;
     }
 
-    public void setValue(Integer value) {
-        this.value = value;
-    }
-
     public String getDesc() {
         return desc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 }

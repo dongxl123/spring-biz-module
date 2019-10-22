@@ -80,7 +80,7 @@ public class EntityManagerFactoryAttributesPostProcessor extends InstantiationAw
                     String tablePrefix = enableWinSecurity.getString(EnableWinSecurityAttributeEnum.TABLE_PREFIX.getValue());
                     if (StringUtils.isNotBlank(tablePrefix)) {
                         Map jpaPropertyMap = getBeanProperty(bean, pd.getName());
-                        if (MapUtils.isEmpty(jpaPropertyMap)) {
+                        if (jpaPropertyMap == null) {
                             jpaPropertyMap = new HashMap<>();
                         }
                         boolean needChange = false;
@@ -127,6 +127,9 @@ public class EntityManagerFactoryAttributesPostProcessor extends InstantiationAw
     private <T> T getBeanProperty(Object bean, String fieldName) {
         try {
             Field field = ReflectionUtils.findField(bean.getClass(), fieldName);
+            if (field == null) {
+                return null;
+            }
             field.setAccessible(true);
             return (T) field.get(bean);
         } catch (IllegalAccessException e) {

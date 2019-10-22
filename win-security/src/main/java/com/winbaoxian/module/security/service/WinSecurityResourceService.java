@@ -14,6 +14,7 @@ import com.winbaoxian.module.security.repository.WinSecurityResourceRepository;
 import com.winbaoxian.module.security.repository.WinSecurityRoleRepository;
 import com.winbaoxian.module.security.utils.BeanMergeUtils;
 import com.winbaoxian.module.security.utils.QuerySpecificationUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class WinSecurityResourceService {
 
     @Resource
@@ -170,7 +172,7 @@ public class WinSecurityResourceService {
             try {
                 belongRoleIdList.add(Long.parseLong(belongRoleString));
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Long.parseLong error", e);
             }
         }
         return CollectionUtils.containsAny(belongRoleIdList, roleIdList);
@@ -217,7 +219,7 @@ public class WinSecurityResourceService {
             }
         }
         if (CollectionUtils.isEmpty(toList)) {
-            return null;
+            return new ArrayList<>();
         }
         //SEQ降序排列, 所有数据
         List<WinSecurityResourceDTO> itrList = new ArrayList<>(toList);

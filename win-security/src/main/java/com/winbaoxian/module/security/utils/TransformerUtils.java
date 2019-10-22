@@ -2,6 +2,8 @@ package com.winbaoxian.module.security.utils;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.Map;
  */
 public enum TransformerUtils {
     INSTANCE;
+
+    private static final Logger log = LoggerFactory.getLogger(TransformerUtils.class);
 
     public <T> List<T> transformMapList2ObjectList(List<Map<String, Object>> mapList, Class<T> clazz) {
         if (CollectionUtils.isEmpty(mapList)) {
@@ -33,11 +37,11 @@ public enum TransformerUtils {
             o = clazz.newInstance();
             BeanUtils.populate(o, map);
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            log.error("InstantiationException", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("IllegalAccessException", e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            log.error("InvocationTargetException", e);
         }
         return o;
     }

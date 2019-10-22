@@ -24,7 +24,7 @@ public class WinSecurityAccessController {
      * /**
      *
      * @apiVersion 1.0.0
-     * @api {GET} /api/winSecurity/v1/access/getLoginUserInfo 获取登录用户信息
+     * @api {GET} /api/winSecuity/v1/access/getLoginUserInfo 获取登录用户信息
      * @apiGroup winSecurity
      * @apiName getLoginUserInfo
      * @apiSuccess (响应参数) {Number} id 主键
@@ -145,7 +145,7 @@ public class WinSecurityAccessController {
      * @api {POST} /api/winSecurity/v1/access/login 模拟登陆(非正式接口)
      * @apiGroup winSecurity
      * @apiName login
-     * @apiParam (请求体) {String} userName 登陆名
+     * @apiParam (请求体) {String} userName 登陆名11111
      * @apiParam (请求体) {String} password 密码，{userName}@winbaoxian.com 的md5值（字母大写）
      * @apiParamExample 请求体示例
      * {"userName":"dd","password":"5968DE8F7018AD7C6A44932BF5917C8D"}
