@@ -42,6 +42,7 @@ public class WinSecurityBaseUserDTO implements Serializable {
     private String userName;
 
     /** 用户名 */
+    @SearchParam(compare= SearchParam.COMPARE.like)
     private String name;
 
     /** 手机号 */
