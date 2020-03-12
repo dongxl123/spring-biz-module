@@ -176,8 +176,8 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         if (iUserPageProcessor != null) {
             iUserPageProcessor.customValidateAfterCommon(params);
         }
-        Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
-        Pageable pageable = Pagination.createPageable(pagination, WinSecurityConstant.SORT_COLUMN_ID, Sort.Direction.DESC.name());
+        Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, pagination, winSecurityClassLoaderConfiguration.getUserEntityClass());
+        Pageable pageable = Pagination.createPageable(pagination);
         Page<E> page = winSecurityUserRepository.findAll(specification, pageable);
         PaginationDTO<D> paginationDTO = (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassLoaderConfiguration.getUserDTOClass());
         if (CollectionUtils.isEmpty(paginationDTO.getList())) {
