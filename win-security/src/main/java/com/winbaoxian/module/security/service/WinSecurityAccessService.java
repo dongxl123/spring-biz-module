@@ -1,6 +1,5 @@
 package com.winbaoxian.module.security.service;
 
-import com.alibaba.fastjson.JSON;
 import com.winbaoxian.module.security.model.dto.*;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
@@ -99,32 +98,32 @@ public class WinSecurityAccessService {
     }
 
 
-    public WinSecurityPrincipal getWinSecurityPrincipal() {
+    public CasWinSecurityPrincipal getWinSecurityPrincipal() {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             log.error("WinSecurityUnAuthException, subject:{}", subject == null ? "null" : "isAuthenticated = false");
             throw new WinSecurityUnAuthException("用户未认证");
         }
-        return (WinSecurityPrincipal) subject.getPrincipal();
+        return (CasWinSecurityPrincipal) subject.getPrincipal();
     }
 
     public WinSecurityBaseUserDTO getLoginUserInfo() {
-        WinSecurityPrincipal principal = getWinSecurityPrincipal();
+        CasWinSecurityPrincipal principal = getWinSecurityPrincipal();
         return winSecurityUserService.getUser(principal.getId());
     }
 
     public List<WinSecurityBaseRoleDTO> getLoginUserRoleList() {
-        WinSecurityPrincipal principal = getWinSecurityPrincipal();
+        CasWinSecurityPrincipal principal = getWinSecurityPrincipal();
         return winSecurityRoleService.getValidRoleListByUserId(principal.getId());
     }
 
     public List<WinSecurityResourceDTO> getLoginUserResourceList() {
-        WinSecurityPrincipal principal = getWinSecurityPrincipal();
+        CasWinSecurityPrincipal principal = getWinSecurityPrincipal();
         return winSecurityResourceService.getValidResourceListByUserId(principal.getId());
     }
 
     public WinSecurityUserAllInfoDTO getLoginUserAllInfo() {
-        WinSecurityPrincipal principal = getWinSecurityPrincipal();
+        CasWinSecurityPrincipal principal = getWinSecurityPrincipal();
         WinSecurityUserAllInfoDTO allInfoDTO = new WinSecurityUserAllInfoDTO();
         allInfoDTO.setUserInfo(winSecurityUserService.getUser(principal.getId()));
         allInfoDTO.setRoleList(winSecurityRoleService.getValidRoleListByUserId(principal.getId()));

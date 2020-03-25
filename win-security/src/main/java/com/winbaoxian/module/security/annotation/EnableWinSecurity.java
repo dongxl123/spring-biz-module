@@ -7,11 +7,10 @@ import com.winbaoxian.module.security.config.definition.ControllerEffectiveScope
 import com.winbaoxian.module.security.config.definition.ExtensionClassRegistrar;
 import com.winbaoxian.module.security.config.definition.SysLogSelector;
 import com.winbaoxian.module.security.config.exception.WinSecurityExceptionHandler;
-import com.winbaoxian.module.security.config.shiro.ShiroConfiguration;
-import com.winbaoxian.module.security.config.shiro.ShiroFilterConfiguration;
-import com.winbaoxian.module.security.config.shiro.WinSecurityErrorController;
+import com.winbaoxian.module.security.config.shiro.*;
 import com.winbaoxian.module.security.config.transaction.WinSecurityTransactionConfiguration;
 import com.winbaoxian.module.security.initializer.WinSecuritySpringWebInitializer;
+import com.winbaoxian.module.security.model.dto.CasWinSecurityPrincipal;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
 import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
@@ -36,6 +35,8 @@ import java.lang.annotation.*;
 @Inherited
 @ImportAutoConfiguration({WinSecurityTransactionConfiguration.class,
         WinSecurityExceptionHandler.class,
+        WinCasClientConfigurationProperties.class,
+        CasConfig.class,
         ShiroConfiguration.class,
         ShiroFilterConfiguration.class,
         WinSecurityErrorController.class,

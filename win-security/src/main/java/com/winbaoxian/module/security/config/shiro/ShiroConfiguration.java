@@ -4,6 +4,7 @@ import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import com.winbaoxian.module.security.service.WinSecurityRoleService;
 import com.winbaoxian.module.security.service.WinSecurityUserService;
+import io.buji.pac4j.subject.Pac4jSubjectFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
@@ -43,6 +44,7 @@ public class ShiroConfiguration {
         // 设置realmList
         securityManager.setRealms(realmList);
         securityManager.setSessionManager(sessionManager);
+        securityManager.setSubjectFactory(new Pac4jSubjectFactory());
         return securityManager;
     }
 
@@ -100,7 +102,7 @@ public class ShiroConfiguration {
 
         @Bean
         public Realm realm() {
-            return new WinSecurityRealm(winSecurityUserService, winSecurityRoleService, winSecurityResourceService);
+            return new Pac4jWinSecurityRealm(winSecurityUserService, winSecurityRoleService, winSecurityResourceService);
         }
     }
 
