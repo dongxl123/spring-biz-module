@@ -1,6 +1,7 @@
 package com.winbaoxian.module.security.service;
 
 import com.winbaoxian.module.security.config.loader.WinSecurityClassLoaderConfiguration;
+import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
@@ -24,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -174,7 +176,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         if (iUserPageProcessor != null) {
             iUserPageProcessor.customValidateAfterCommon(params);
         }
-        Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getUserEntityClass());
+        Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, pagination, winSecurityClassLoaderConfiguration.getUserEntityClass());
         Pageable pageable = Pagination.createPageable(pagination);
         Page<E> page = winSecurityUserRepository.findAll(specification, pageable);
         PaginationDTO<D> paginationDTO = (PaginationDTO<D>) PaginationDTO.createNewInstance(page, winSecurityClassLoaderConfiguration.getUserDTOClass());
