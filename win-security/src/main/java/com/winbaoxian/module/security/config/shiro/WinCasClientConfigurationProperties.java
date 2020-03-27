@@ -121,7 +121,7 @@ public class WinCasClientConfigurationProperties {
      * cas登出地址
      */
     @Value("#{@environment['cas.server-logout-url'] ?: null }")
-    private String serverLogoutUrl;
+    private String serverLogoutUrl = "/api/winCas/logout";
 
     /**
      * cas登出后重定向地址

@@ -66,7 +66,7 @@ public class ShiroFilterConfiguration {
             casConfig.getWinCasClientConfigurationProperties().getAuthenticationUrlIgnorePatterns().stream()
                     .forEach(pattern->filterChainDefinitionMap.put(pattern,"anon"));
         }
-        filterChainDefinitionMap.put("/logout", "logout");
+        filterChainDefinitionMap.put(casConfig.getWinCasClientConfigurationProperties().getServerLogoutUrl(), "logout");
         filterChainDefinitionMap.put("/**", "securityFilter");
 
 
