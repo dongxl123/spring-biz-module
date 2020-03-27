@@ -10,6 +10,8 @@ public @interface SearchParam {
 
     String name() default "";
 
+    boolean ignore() default false;
+
     enum COMPARE {
         lt,
         gt,
