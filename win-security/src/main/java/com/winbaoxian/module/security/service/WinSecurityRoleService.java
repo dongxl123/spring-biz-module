@@ -102,13 +102,17 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         }
         winSecurityRoleRepository.save(persistent);
         //资源
-        if (CollectionUtils.isNotEmpty(dto.getResourceIdList())) {
-            List<WinSecurityRoleResourceEntity> persistentResourceEntityList = winSecurityRoleResourceRepository.findByRoleId(id);
-            Set<Long> persistentResourceIdList = trans2ResourceIdList(persistentResourceEntityList);
-            if (!SetUtils.isEqualSet(dto.getResourceIdList(), persistentResourceIdList)) {
+        if (dto.getResourceIdList() != null) {
+            if (dto.getResourceIdList().isEmpty()) {
                 winSecurityRoleResourceRepository.deleteByRoleId(id);
-                List<WinSecurityRoleResourceEntity> roleResourceEntityList = trans2RoleResourceEntityList(id, dto.getResourceIdList());
-                winSecurityRoleResourceRepository.save(roleResourceEntityList);
+            } else {
+                List<WinSecurityRoleResourceEntity> persistentResourceEntityList = winSecurityRoleResourceRepository.findByRoleId(id);
+                Set<Long> persistentResourceIdList = trans2ResourceIdList(persistentResourceEntityList);
+                if (!SetUtils.isEqualSet(dto.getResourceIdList(), persistentResourceIdList)) {
+                    winSecurityRoleResourceRepository.deleteByRoleId(id);
+                    List<WinSecurityRoleResourceEntity> roleResourceEntityList = trans2RoleResourceEntityList(id, dto.getResourceIdList());
+                    winSecurityRoleResourceRepository.save(roleResourceEntityList);
+                }
             }
         }
         D retDto = getRole(id);
