@@ -2,11 +2,14 @@ package com.winbaoxian.module.security.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.winbaoxian.module.security.annotation.SearchParam;
+import com.winbaoxian.module.security.constant.WinSecurityConstant;
+import com.winbaoxian.module.security.model.common.Pagination;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.jpa.criteria.path.RootImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,6 +31,10 @@ public enum QuerySpecificationUtils {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     public <T> Specification<T> getSingleSpecification(Object queryParam, Class<T> entityClass) {
+        return getSingleSpecification(queryParam, null, entityClass);
+    }
+
+    public <T> Specification<T> getSingleSpecification(Object queryParam, Pagination pagination, Class<T> entityClass) {
         if (queryParam == null) {
             return null;
         }
@@ -38,6 +45,16 @@ public enum QuerySpecificationUtils {
                     root = ((RootImpl<T>) root).treatAs(entityClass);
                 }
                 list = getPredicateList(queryParam, root, criteriaBuilder);
+                //排序
+                if (pagination != null) {
+                    String orderProperty = StringUtils.defaultIfBlank(pagination.getOrderProperty(), WinSecurityConstant.SORT_COLUMN_ID);
+                    Sort.Direction orderDirection = StringUtils.isNotBlank(pagination.getOrderDirection()) ? Sort.Direction.fromStringOrNull(pagination.getOrderDirection()) : Sort.Direction.ASC;
+                    if (Sort.Direction.DESC.equals(orderDirection)) {
+                        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(orderProperty)));
+                    } else {
+                        criteriaQuery.orderBy(criteriaBuilder.asc(root.get(orderProperty)));
+                    }
+                }
             } catch (Exception e) {
                 logger.error("QuerySpecificationUtils.getSingleSpecification failed, queryParam:{}", JSON.toJSONString(queryParam), e);
                 return null;
