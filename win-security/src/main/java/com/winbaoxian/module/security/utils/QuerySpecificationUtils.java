@@ -91,6 +91,9 @@ public enum QuerySpecificationUtils {
         if (annotation == null) {
             predicate = criteriaBuilder.equal(root.get(fieldName), value);
         } else {
+            if(annotation.ignore()){
+                return null;
+            }
             if (StringUtils.isNotBlank(annotation.name())) {
                 fieldName = annotation.name();
             }
