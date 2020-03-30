@@ -43,6 +43,7 @@ public class CasConfig {
 
     private CasConfiguration casConfiguration(){
         final CasConfiguration configuration = new CasConfiguration(winCasClientConfigurationProperties.getServerLoginUrl());
+        configuration.setPrefixUrl(winCasClientConfigurationProperties.getServerUrlPrefix());
         return configuration;
     }
 
