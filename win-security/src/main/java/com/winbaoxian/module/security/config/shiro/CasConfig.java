@@ -62,7 +62,6 @@ public class CasConfig {
     public LogoutFilter logoutFilter(){
         LogoutFilter logoutFilter = new LogoutFilter();
         logoutFilter.setConfig(config());
-        logoutFilter.setCentralLogout(true);
         logoutFilter.setDefaultUrl(winCasClientConfigurationProperties.getLogoutRedirectUrl());
         logoutFilter.setCentralLogout(winCasClientConfigurationProperties.getUseSingleSignOut());
         return logoutFilter;
