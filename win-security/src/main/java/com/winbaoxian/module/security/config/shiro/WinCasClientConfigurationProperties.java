@@ -31,7 +31,7 @@ public class WinCasClientConfigurationProperties {
      * CAS server URL E.g. https://example.com/cas or https://cas.example. Required.
      */
     @Value("#{@environment['cas.server-url-prefix'] ?: null }")
-    private String serverUrlPrefix = "/api/winCas/";
+    private String serverUrlPrefix;
 
     /**
      * CAS server login URL E.g. https://example.com/cas/login or https://cas.example/login. Required.
