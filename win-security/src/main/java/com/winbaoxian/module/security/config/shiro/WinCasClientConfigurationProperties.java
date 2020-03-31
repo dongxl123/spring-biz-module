@@ -134,4 +134,10 @@ public class WinCasClientConfigurationProperties {
      */
     @Value("#{@environment['cas.use-single-sign-out'] ?: null }")
     private Boolean useSingleSignOut;
+
+    /**
+     * 当前端和服务端域名不同时，设置一级域名，以便前端获取pac4jCsrfToken
+     */
+    @Value("#{@environment['cas.csrf-cookie-domain'] ?: null }")
+    private String csrfCookieDomain;
 }

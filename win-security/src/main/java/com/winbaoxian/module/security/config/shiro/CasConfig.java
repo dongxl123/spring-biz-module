@@ -2,6 +2,7 @@ package com.winbaoxian.module.security.config.shiro;
 
 import com.winbaoxian.module.security.pac4j.WinCasCallbackLogic;
 import com.winbaoxian.module.security.pac4j.WinCasClient;
+import com.winbaoxian.module.security.pac4j.WinCasMatchingChecker;
 import com.winbaoxian.module.security.pac4j.WinCasRequestResolver;
 import io.buji.pac4j.context.ShiroSessionStore;
 import io.buji.pac4j.filter.CallbackFilter;
@@ -13,7 +14,10 @@ import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.engine.CallbackLogic;
+import org.pac4j.core.engine.DefaultSecurityLogic;
 import org.pac4j.core.http.ajax.AjaxRequestResolver;
+import org.pac4j.core.matching.checker.DefaultMatchingChecker;
+import org.pac4j.core.matching.checker.MatchingChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +60,10 @@ public class CasConfig {
     public SecurityFilter mySecurityFilter(){
         SecurityFilter securityFilter = new SecurityFilter();
         securityFilter.setConfig(config());
+        DefaultSecurityLogic defaultSecurityLogic = DefaultSecurityLogic.INSTANCE;
+        WinCasMatchingChecker matchingChecker = new WinCasMatchingChecker(winCasClientConfigurationProperties.getCsrfCookieDomain());
+        defaultSecurityLogic.setMatchingChecker(matchingChecker);
+        securityFilter.setSecurityLogic(defaultSecurityLogic);
         return securityFilter;
     }
 
