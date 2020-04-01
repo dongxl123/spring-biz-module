@@ -19,6 +19,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.pac4j.core.exception.http.ForbiddenAction;
 import org.pac4j.core.profile.CommonProfile;
 
 import java.util.List;
