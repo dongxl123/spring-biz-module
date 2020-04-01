@@ -4,6 +4,9 @@ import com.winbaoxian.module.security.model.common.JsonResult;
 import com.winbaoxian.module.security.model.enums.JsonResultCodeEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityUnAuthException;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -37,6 +40,27 @@ public class WinSecurityExceptionHandler {
     public Object handleCommonExp(Exception e) {
         logger.error("common exception handler  " + e.getMessage(), e);
         return JsonResult.createErrorResult("服务器内部问题");
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnknownAccountException.class)
+    public Object handleUnknownAccountException(UnknownAccountException e) {
+        logger.error("winSecurity exception handler  " + e.getMessage());
+        return JsonResult.createNewInstance(JsonResultCodeEnum.UNAUTHORIZED,e.getMessage(),null);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(DisabledAccountException.class)
+    public Object handleDisabledAccountException(DisabledAccountException e) {
+        logger.error("winSecurity unAuthException handler  " + e.getMessage());
+        return JsonResult.createNewInstance(JsonResultCodeEnum.UNAUTHORIZED, e.getMessage(), null);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AuthorizationException.class)
+    public Object handleAuthorizationException(AuthorizationException e) {
+        logger.error("common exception handler  " + e.getMessage(), e);
+        return JsonResult.createNewInstance(JsonResultCodeEnum.UNAUTHORIZED, e.getMessage(), null);
     }
 
 }
