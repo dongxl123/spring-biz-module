@@ -1,5 +1,7 @@
 package com.winbaoxian.module.security.pac4j;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationException;
@@ -11,10 +13,15 @@ import org.pac4j.core.exception.http.*;
 import org.pac4j.core.http.adapter.HttpActionAdapter;
 import org.pac4j.core.util.Pac4jConstants;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
+@Getter
+@Setter
 public class WinCasCallbackLogic<R, C extends WebContext> extends DefaultCallbackLogic<R,C> {
+
+    private String forbiddenUrl;
 
     @Override
     public R perform(final C context, final Config config, final HttpActionAdapter<R, C> httpActionAdapter,
@@ -31,15 +38,12 @@ public class WinCasCallbackLogic<R, C extends WebContext> extends DefaultCallbac
     @Override
     protected R handleException(final Exception e, final HttpActionAdapter<R, C> httpActionAdapter, final C context){
         if(httpActionAdapter!=null&&context!=null){
-
             if(e instanceof UnknownAccountException||e instanceof DisabledAccountException){
-                final HttpAction action = ForbiddenAction.INSTANCE;
-                logger.debug("extra HTTP action required in security: {}", action.getCode());
-                return httpActionAdapter.adapt(action, context);
-            }else if (e instanceof AuthorizationException){
-                final HttpAction action = UnauthorizedAction.INSTANCE;
-                logger.debug("extra HTTP action required in security: {}", action.getCode());
-                return httpActionAdapter.adapt(action, context);
+                logger.error("account forbidden!",e);
+                if(!StringUtils.isEmpty(forbiddenUrl)){
+                    final HttpAction action = RedirectionActionHelper.buildRedirectUrlAction(context, forbiddenUrl);
+                    return httpActionAdapter.adapt(action, context);
+                }
             }
         }
         return super.handleException(e,httpActionAdapter,context);

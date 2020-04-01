@@ -140,4 +140,10 @@ public class WinCasClientConfigurationProperties {
      */
     @Value("#{@environment['cas.csrf-cookie-domain'] ?: null }")
     private String csrfCookieDomain;
+
+    /**
+     * 如果账号被禁用跳转到对应页面
+     */
+    @Value("#{@environment['cas.forbidden-redirect-url'] ?: null }")
+    private String forbiddenRedirectUrl;
 }

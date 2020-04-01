@@ -82,7 +82,9 @@ public class CasConfig {
     }
 
     public CallbackLogic callbackLogic(){
-        return new WinCasCallbackLogic();
+        WinCasCallbackLogic winCasCallbackLogic = new WinCasCallbackLogic();
+        winCasCallbackLogic.setForbiddenUrl(winCasClientConfigurationProperties.getForbiddenRedirectUrl());
+        return winCasCallbackLogic;
     }
 
 
