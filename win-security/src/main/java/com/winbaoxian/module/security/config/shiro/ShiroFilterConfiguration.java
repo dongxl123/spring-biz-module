@@ -14,12 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.Filter;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,8 +66,15 @@ public class ShiroFilterConfiguration {
         //拦截
         filterChainDefinitionMap.put(casConfig.getWinCasClientConfigurationProperties().getProxyCallbackUrl(), "callbackFilter");
         if (casConfig.getWinCasClientConfigurationProperties().getAuthenticationUrlIgnorePatterns() != null) {
-            casConfig.getWinCasClientConfigurationProperties().getAuthenticationUrlIgnorePatterns().stream()
-                    .forEach(pattern->filterChainDefinitionMap.put(pattern,"anon"));
+            for (String authenticationUrlIgnorePattern : casConfig.getWinCasClientConfigurationProperties().getAuthenticationUrlIgnorePatterns()) {
+                String[] patterns = authenticationUrlIgnorePattern.split(",");
+                for(String pattern : patterns){
+                    pattern = pattern.trim();
+                    if(!StringUtils.isEmpty(pattern)){
+                        filterChainDefinitionMap.put(pattern,"anon");
+                    }
+                }
+            }
         }
         filterChainDefinitionMap.put(casConfig.getWinCasClientConfigurationProperties().getServerLogoutUrl(), "logout");
         filterChainDefinitionMap.put("/**", "securityFilter");
