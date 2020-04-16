@@ -7,14 +7,19 @@ import com.winbaoxian.module.security.utils.MemoryExpirationCache;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -108,13 +113,38 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
     private boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         Subject subject = SecurityUtils.getSubject();
         String outerLoginUser = WebUtils.toHttp(request).getRemoteUser();
-        if (StringUtils.isBlank(outerLoginUser) && (subject == null || !subject.isAuthenticated())) {
-            //系统全局未登录(X)且shiro未登录(X)
-            WebUtils.toHttp(response).sendError(401);
+        //shiro未登录
+        if (subject == null || !subject.isAuthenticated()) {
+            if (StringUtils.isBlank(outerLoginUser)) {
+                //系统全局未登录(X)且shiro未登录(X), 重新登录
+                WebUtils.toHttp(response).sendError(401);
+            } else {
+                //系统全局登录、shiro未登录， 自动登录
+                try {
+                    AuthenticationToken token = createToken(request, response);
+                    if (token != null) {
+                        subject.login(token);
+                    }
+                    return true;
+                } catch (Exception e) {
+                    log.error("WinSecurityUrlFilter auto login failed", e);
+                    WebUtils.toHttp(response).sendError(403);
+                }
+            }
         } else {
+            // shiro已登录，权限不足
             WebUtils.toHttp(response).sendError(403);
         }
         return false;
+    }
+
+    protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        Principal principal = httpRequest.getUserPrincipal();
+        if (principal != null && principal instanceof AttributePrincipal) {
+            return new UsernamePasswordToken(principal.getName(), (String) null);
+        }
+        return null;
     }
 
     @Override
