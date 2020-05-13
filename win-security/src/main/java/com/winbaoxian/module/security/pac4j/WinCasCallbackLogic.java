@@ -30,6 +30,7 @@ public class WinCasCallbackLogic<R, C extends WebContext> extends DefaultCallbac
         //根据参数设置回调页面
         Optional<String> callbackUrl = context.getRequestParameter("callback");
         if(callbackUrl.isPresent()){
+            logger.info("callback----{}----context---{}",callbackUrl.get(),context);
             context.getSessionStore().set(context, Pac4jConstants.REQUESTED_URL, new FoundAction(callbackUrl.get()));
         }
         return super.perform(context,config,httpActionAdapter,inputDefaultUrl,inputSaveInSession,inputMultiProfile,inputRenewSession,client);
