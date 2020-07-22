@@ -1,51 +1,59 @@
-allprojects {
-    apply plugin: 'maven'
-    group = 'com.winbaoxian.module'
-    version = '1.0.0'
+plugins {
+    id 'org.springframework.boot' version '2.2.5.RELEASE' apply false
+    id 'net.ltgt.apt' version '0.21'
+}
+
+repositories {
+    mavenCentral()
 }
 
 subprojects {
-    buildscript {
-        ext {
-            springBootVersion = '1.5.17.RELEASE'
-            springVersion = '4.3.20.RELEASE'
-            casVersion = '3.4.1'
-        }
-        repositories {
-            mavenCentral()
-        }
-        dependencies {
-            classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        }
-    }
+    apply plugin: 'maven'
     apply plugin: 'java'
     apply plugin: 'idea'
-    sourceCompatibility = 1.8
-
+    apply plugin: 'io.spring.dependency-management'
+    dependencyManagement {
+        imports {
+            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        }
+    }
     repositories {
         mavenLocal()
         maven { url "http://192.168.180.191:8081/nexus/content/repositories/public" }
         maven { url "http://192.168.180.191:8081/nexus/content/repositories/snapshots/" }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         mavenCentral()
     }
-
-    dependencies {
-        compile('org.apache.commons:commons-lang3:3.7')
-        compile('commons-beanutils:commons-beanutils:1.9.3')
-        compile('com.alibaba:fastjson:1.2.58')
-        compile('org.mapstruct:mapstruct-jdk8:1.2.0.Final')
-        compile('org.mapstruct:mapstruct-processor:1.2.0.Final')
-        compileOnly('org.projectlombok:lombok:1.16.22')
+    group = 'com.winbaoxian.module'
+    version = '3.0.0-SNAPSHOT'
+    sourceCompatibility = '1.8'
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
     }
-
-    task "create-dirs" << {
-        sourceSets*.java.srcDirs*.each { it.mkdirs() }
-        sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+    dependencies {
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+        implementation "org.springframework:spring-web"
+        implementation "org.jasig.cas.client:cas-client-core:3.5.1"
+        implementation 'org.apache.shiro:shiro-spring:1.4.2'
+        compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
+        implementation 'org.aspectj:aspectjrt:1.8.13'
+        implementation 'org.aspectj:aspectjweaver:1.8.13'
+        implementation 'org.apache.commons:commons-lang3:3.7'
+        implementation 'commons-beanutils:commons-beanutils:1.9.3'
+        implementation 'com.alibaba:fastjson:1.2.58'
+        compileOnly 'org.mapstruct:mapstruct-jdk8:1.3.1.Final'
+        annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.1.Final'
+        testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.3.1.Final'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
     }
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
     }
 }
+
 
 def isWindows() {
     return org.gradle.internal.os.OperatingSystem.current().isWindows()
@@ -63,11 +71,6 @@ task servicedocs(type: Exec, description: '执行生成servicedoc文档操作') 
     workingDir './'
     def serviceCommand = [servicedocCmd, '-o', './build/servicedocs', '-f', 'java', '--debug', 'true']
     commandLine serviceCommand
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.4'
-    distributionType = 'all'
 }
 
 

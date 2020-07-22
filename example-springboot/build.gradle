@@ -1,7 +1,7 @@
 description = 'module example for springboot'
 
 apply plugin: 'war'
-apply plugin: 'org.springframework.boot'
+//apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile project(":win-security")

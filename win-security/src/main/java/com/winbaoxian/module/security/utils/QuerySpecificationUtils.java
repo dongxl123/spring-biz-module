@@ -6,7 +6,7 @@ import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.common.Pagination;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.jpa.criteria.path.RootImpl;
+import org.hibernate.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -41,14 +41,14 @@ public enum QuerySpecificationUtils {
         return (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = null;
             try {
-                if (root instanceof RootImpl && !((RootImpl) root).getEntityType().getJavaType().equals(entityClass)) {
-                    root = ((RootImpl<T>) root).treatAs(entityClass);
-                }
+//                if (root instanceof RootImpl && !((RootImpl) root).getEntityType().getJavaType().equals(entityClass)) {
+//                    root = ((RootImpl<T>) root).treatAs(entityClass);
+//                }
                 list = getPredicateList(queryParam, root, criteriaBuilder);
                 //排序
                 if (pagination != null) {
                     String orderProperty = StringUtils.defaultIfBlank(pagination.getOrderProperty(), WinSecurityConstant.SORT_COLUMN_ID);
-                    Sort.Direction orderDirection = StringUtils.isNotBlank(pagination.getOrderDirection()) ? Sort.Direction.fromStringOrNull(pagination.getOrderDirection()) : Sort.Direction.ASC;
+                    Sort.Direction orderDirection = StringUtils.isNotBlank(pagination.getOrderDirection()) ? Sort.Direction.fromString(pagination.getOrderDirection()) : Sort.Direction.ASC;
                     if (Sort.Direction.DESC.equals(orderDirection)) {
                         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(orderProperty)));
                     } else {

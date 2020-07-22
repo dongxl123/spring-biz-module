@@ -87,12 +87,12 @@ public class Pagination implements Serializable {
     public static Pageable createPageable(Pagination pagination, String defaultOrderProperty, String defaultOrderDirection) {
         String orderProperty = StringUtils.defaultIfBlank(pagination.getOrderProperty(), defaultOrderProperty);
         String orderDirection = StringUtils.defaultIfBlank(pagination.getOrderDirection(), defaultOrderDirection);
-        Sort sort = new Sort(Sort.Direction.fromStringOrNull(orderDirection), orderProperty);
-        return new PageRequest(pagination.getPageNum() - 1, pagination.getPageSize(), sort);
+        Sort sort = Sort.by(Sort.Direction.fromString(orderDirection), orderProperty);
+        return PageRequest.of(pagination.getPageNum() - 1, pagination.getPageSize(), sort);
     }
 
     public static Pageable createPageable(Pagination pagination) {
-        return new PageRequest(pagination.getPageNum() - 1, pagination.getPageSize());
+        return PageRequest.of(pagination.getPageNum() - 1, pagination.getPageSize());
     }
 
 }

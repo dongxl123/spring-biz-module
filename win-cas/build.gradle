@@ -1,10 +1,9 @@
 description = 'win-cas'
-version = '1.0.0-SNAPSHOT'
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
-    compile("org.springframework:spring-web:${springVersion}")
-    compile("org.jasig.cas.client:cas-client-core:${casVersion}")
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework:spring-web")
+    implementation("org.jasig.cas.client:cas-client-core")
     compileOnly('javax.servlet:javax.servlet-api:3.1.0')
 }
 

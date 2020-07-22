@@ -60,7 +60,7 @@ public class WinSecurityResourceService {
         String globalCode = thisCode;
         Long thisPid = pid;
         while (thisPid != null && thisPid > 0) {
-            WinSecurityResourceEntity pEntity = winSecurityResourceRepository.findOne(thisPid);
+            WinSecurityResourceEntity pEntity = winSecurityResourceRepository.getOne(thisPid);
             if (pEntity != null) {
                 if (StringUtils.isNotBlank(pEntity.getCode())) {
                     globalCode = String.format("%s.%s", pEntity.getCode(), globalCode);
@@ -76,7 +76,7 @@ public class WinSecurityResourceService {
     }
 
     public void deleteResource(Long id) {
-        WinSecurityResourceEntity entity = winSecurityResourceRepository.findOne(id);
+        WinSecurityResourceEntity entity = winSecurityResourceRepository.getOne(id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
@@ -93,7 +93,7 @@ public class WinSecurityResourceService {
                 entity.setDeleted(true);
                 deleteResourceByPid(entity.getId());
             }
-            winSecurityResourceRepository.save(nextList);
+            winSecurityResourceRepository.saveAll(nextList);
         }
     }
 
@@ -102,7 +102,7 @@ public class WinSecurityResourceService {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOne(id);
+        WinSecurityResourceEntity persistent = winSecurityResourceRepository.getOne(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
@@ -129,17 +129,17 @@ public class WinSecurityResourceService {
                 }
                 updateGlobalCodeByPid(entity.getId());
             }
-            winSecurityResourceRepository.save(nextList);
+            winSecurityResourceRepository.saveAll(nextList);
         }
     }
 
     public WinSecurityResourceDTO getResource(Long id) {
-        return WinSecurityResourceMapper.INSTANCE.toResourceDTO(winSecurityResourceRepository.findOne(id));
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTO(winSecurityResourceRepository.getOne(id));
     }
 
     public List<WinSecurityResourceDTO> getResourceList(WinSecurityResourceDTO params) {
         Specification<WinSecurityResourceEntity> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, WinSecurityResourceEntity.class);
-        Sort sort = new Sort(Sort.Direction.ASC, WinSecurityConstant.SORT_COLUMN_SEQ);
+        Sort sort = Sort.by(Sort.Direction.ASC, WinSecurityConstant.SORT_COLUMN_SEQ);
         List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAll(specification, sort);
         return WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
     }
@@ -242,7 +242,7 @@ public class WinSecurityResourceService {
             params.setTargetParentId(0L);
         }
         Long id = params.getId();
-        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOne(id);
+        WinSecurityResourceEntity persistent = winSecurityResourceRepository.getOne(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
@@ -264,11 +264,11 @@ public class WinSecurityResourceService {
     }
 
     private Long reCalculateSequence(Long id, Long targetParentId, Long targetUpId, Long targetDownId) {
-        WinSecurityResourceEntity thisResource = winSecurityResourceRepository.findOne(id);
+        WinSecurityResourceEntity thisResource = winSecurityResourceRepository.getOne(id);
         WinSecurityResourceEntity upResource = null;
         WinSecurityResourceEntity downResource = null;
         if (targetUpId != null) {
-            upResource = winSecurityResourceRepository.findOne(targetUpId);
+            upResource = winSecurityResourceRepository.getOne(targetUpId);
             if (upResource == null) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
             }
@@ -277,7 +277,7 @@ public class WinSecurityResourceService {
             }
         }
         if (targetDownId != null) {
-            downResource = winSecurityResourceRepository.findOne(targetDownId);
+            downResource = winSecurityResourceRepository.getOne(targetDownId);
             if (downResource == null) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
             }
@@ -330,7 +330,7 @@ public class WinSecurityResourceService {
             for (WinSecurityResourceEntity entity : downList) {
                 entity.setSeq(++seq);
             }
-            winSecurityResourceRepository.save(downList);
+            winSecurityResourceRepository.saveAll(downList);
         }
     }
 
@@ -399,7 +399,7 @@ public class WinSecurityResourceService {
             params.setTargetParentId(0L);
         }
         for (Long thisId : params.getIdList()) {
-            WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOne(thisId);
+            WinSecurityResourceEntity persistent = winSecurityResourceRepository.getOne(thisId);
             if (persistent == null) {
                 continue;
             }

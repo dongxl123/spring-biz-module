@@ -10,8 +10,9 @@ spring:
       ddl-auto: none
   datasource:
     citymanager:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://testwinbx.mysql.rds.aliyuncs.com:3306/citymanager?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+      jdbcUrl: jdbc:mysql://testwinbx.mysql.rds.aliyuncs.com:3306/citymanager?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
       username: winbx_test
       password: funcitypt001
       initialSize: 1
@@ -27,8 +28,9 @@ spring:
       poolPreparedStatements: false
       cipherText: vault:v1:Zd7xYEU7kLiUG0THKcFnSjszkEzL67r7MNXYpho1Tu1sEcZZ0nyxOw==
     tob:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://testwinbx.mysql.rds.aliyuncs.com:3306/baoxian2b?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+      jdbcUrl: jdbc:mysql://testwinbx.mysql.rds.aliyuncs.com:3306/baoxian2b?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
       username: winbx_test
       password: funcitypt001
       initialSize: 1

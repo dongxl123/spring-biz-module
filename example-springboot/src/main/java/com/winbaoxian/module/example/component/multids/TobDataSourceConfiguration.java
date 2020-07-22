@@ -1,9 +1,9 @@
 package com.winbaoxian.module.example.component.multids;
 
 import com.winbaoxian.vault.VaultTools;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +46,7 @@ public class TobDataSourceConfiguration {
         return builder
                 .dataSource(dataSourceTob())
                 .packages(new String[]{"com.winbaoxian.module.example.model.entity.tob"})
-                .properties(jpaProperties.getHibernateProperties(dataSourceTob()))
+                .properties(jpaProperties.getProperties())
                 .persistenceUnit("tob")
                 .build();
     }

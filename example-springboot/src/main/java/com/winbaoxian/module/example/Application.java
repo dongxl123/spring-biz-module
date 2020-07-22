@@ -10,7 +10,7 @@ import com.winbaoxian.module.security.annotation.EnableWinSecurity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
  * @ServletComponentScan 开启listner和filter
@@ -28,7 +28,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
         extensionServiceProcessors = {RoleAddProcessorImpl.class, RoleUpdateProcessorImpl.class, UserAddProcessorImpl.class, UserUpdateProcessorImpl.class, UserPageProcessorImpl.class},
         extensionServiceFillers = {UserFillerImpl.class},
         sysLog = true)
-@EnableWinCasClient
+//@EnableWinCasClient
 public class Application extends SpringBootServletInitializer {
 
     @Override

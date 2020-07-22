@@ -1,9 +1,9 @@
 package com.winbaoxian.module.example.component.multids;
 
 import com.winbaoxian.vault.VaultTools;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +33,7 @@ public class CityManagerDataSourceConfiguration {
     private VaultTools vaultTools;
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.citymanager", ignoreNestedProperties = true)
+    @ConfigurationProperties(prefix = "spring.datasource.citymanager")
     public DataSource dataSourceCitymanager() {
         return DataSourceBuilder.create().build();
     }
@@ -43,7 +43,7 @@ public class CityManagerDataSourceConfiguration {
         return builder
                 .dataSource(dataSourceCitymanager())
                 .packages(new String[]{"com.winbaoxian.module.example.model.entity.citymanagerddd"})
-                .properties(jpaProperties.getHibernateProperties(dataSourceCitymanager()))
+                .properties(jpaProperties.getProperties())
                 .persistenceUnit("citymanager")
                 .build();
     }

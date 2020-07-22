@@ -74,7 +74,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
         //角色
         if (CollectionUtils.isNotEmpty(dto.getRoleIdList())) {
             List<WinSecurityUserRoleEntity> userRoleEntityList = trans2UserRoleEntityList(entity.getId(), dto.getRoleIdList());
-            winSecurityUserRoleRepository.save(userRoleEntityList);
+            winSecurityUserRoleRepository.saveAll(userRoleEntityList);
         }
         D retDto = getUser(entity.getId());
         if (iUserAddProcessor != null) {
@@ -84,7 +84,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public void deleteUser(Long id) {
-        E entity = winSecurityUserRepository.findOne(id);
+        E entity = winSecurityUserRepository.getOne(id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
@@ -100,7 +100,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        E persistent = winSecurityUserRepository.findOne(id);
+        E persistent = winSecurityUserRepository.getOne(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
@@ -124,7 +124,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
             if (!SetUtils.isEqualSet(dto.getRoleIdList(), persistentRoleIdList)) {
                 winSecurityUserRoleRepository.deleteByUserId(id);
                 List<WinSecurityUserRoleEntity> userRoleEntityList = trans2UserRoleEntityList(id, dto.getRoleIdList());
-                winSecurityUserRoleRepository.save(userRoleEntityList);
+                winSecurityUserRoleRepository.saveAll(userRoleEntityList);
             }
         }
         D retDto = getUser(id);
@@ -135,7 +135,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public D getUser(Long id) {
-        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOne(id), winSecurityClassLoaderConfiguration.getUserDTOClass());
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.getOne(id), winSecurityClassLoaderConfiguration.getUserDTOClass());
         if (userDTO == null) {
             return null;
         }
