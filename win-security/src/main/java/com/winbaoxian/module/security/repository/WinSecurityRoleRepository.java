@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface WinSecurityRoleRepository<E extends WinSecurityBaseRoleEntity> extends JpaRepository<E, Long>, JpaSpecificationExecutor<E> {
 
+    E findOneById(Long id);
+
     List<E> findAllByDeletedFalseOrderBySeqAsc();
 
     Page<E> findAllByDeletedFalseOrderBySeqAsc(Pageable pageable);

@@ -72,7 +72,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     }
 
     public void deleteRole(Long id) {
-        E entity = winSecurityRoleRepository.getOne(id);
+        E entity = winSecurityRoleRepository.findOneById(id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
         }
@@ -88,7 +88,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        E persistent = winSecurityRoleRepository.getOne(id);
+        E persistent = winSecurityRoleRepository.findOneById(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
         }
@@ -123,7 +123,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     }
 
     public D getRole(Long id) {
-        D roleDTO = (D) WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.getOne(id), winSecurityClassLoaderConfiguration.getRoleDTOClass());
+        D roleDTO = (D) WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.findOneById(id), winSecurityClassLoaderConfiguration.getRoleDTOClass());
         if (roleDTO == null) {
             return null;
         }

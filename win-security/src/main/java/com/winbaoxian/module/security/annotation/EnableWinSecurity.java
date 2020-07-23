@@ -38,7 +38,6 @@ import java.lang.annotation.*;
         WinSecurityExceptionHandler.class,
         ShiroConfiguration.class,
         ShiroFilterConfiguration.class,
-        WinSecurityErrorController.class,
         WinSecurityAccessService.class,
         WinSecurityUserService.class,
         WinSecurityRoleService.class,
@@ -49,6 +48,7 @@ import java.lang.annotation.*;
 @Import({ExtensionClassRegistrar.class,
         SysLogSelector.class,
         ControllerEffectiveScopeSelector.class,
+        WinSecurityErrorController.class,
         AnnotationAttributesRegistrar.class,
         EntityManagerFactoryAttributesPostProcessor.class})
 @EnableJpaRepositories(basePackages = "com.winbaoxian.module.security.repository")

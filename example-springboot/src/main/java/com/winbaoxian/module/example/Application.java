@@ -28,7 +28,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
         extensionServiceProcessors = {RoleAddProcessorImpl.class, RoleUpdateProcessorImpl.class, UserAddProcessorImpl.class, UserUpdateProcessorImpl.class, UserPageProcessorImpl.class},
         extensionServiceFillers = {UserFillerImpl.class},
         sysLog = true)
-//@EnableWinCasClient
+@EnableWinCasClient
 public class Application extends SpringBootServletInitializer {
 
     @Override

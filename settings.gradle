@@ -2,6 +2,4 @@ rootProject.name = 'spring-biz-module'
 include 'win-security'
 include 'win-cas'
 include 'example-springboot'
-//include 'example-spring'
-//
-
+include 'example-spring'

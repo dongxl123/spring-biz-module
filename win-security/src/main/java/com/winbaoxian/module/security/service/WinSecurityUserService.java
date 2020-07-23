@@ -84,7 +84,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public void deleteUser(Long id) {
-        E entity = winSecurityUserRepository.getOne(id);
+        E entity = winSecurityUserRepository.findOneById(id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
@@ -100,7 +100,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        E persistent = winSecurityUserRepository.getOne(id);
+        E persistent = winSecurityUserRepository.findOneById(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
@@ -135,7 +135,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public D getUser(Long id) {
-        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.getOne(id), winSecurityClassLoaderConfiguration.getUserDTOClass());
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneById(id), winSecurityClassLoaderConfiguration.getUserDTOClass());
         if (userDTO == null) {
             return null;
         }

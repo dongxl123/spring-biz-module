@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface WinSecurityResourceRepository extends JpaRepository<WinSecurityResourceEntity, Long>, JpaSpecificationExecutor<WinSecurityResourceEntity> {
 
+    WinSecurityResourceEntity findOneById(Long id);
+
     List<WinSecurityResourceEntity> findAllByDeletedFalse();
 
     List<WinSecurityResourceEntity> findAllByStatusAndDeletedFalseOrderBySeqAsc(Integer status);

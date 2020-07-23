@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface WinSecurityUserRepository<E extends WinSecurityBaseUserEntity> extends JpaRepository<E, Long>, JpaSpecificationExecutor<E> {
 
+    E findOneById(Long id);
+
     boolean existsByUserNameAndDeletedFalse(String userName);
 
     boolean existsByUserNameAndIdNotAndDeletedFalse(String userName, Long id);

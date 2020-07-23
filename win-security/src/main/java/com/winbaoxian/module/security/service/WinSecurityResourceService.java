@@ -60,7 +60,7 @@ public class WinSecurityResourceService {
         String globalCode = thisCode;
         Long thisPid = pid;
         while (thisPid != null && thisPid > 0) {
-            WinSecurityResourceEntity pEntity = winSecurityResourceRepository.getOne(thisPid);
+            WinSecurityResourceEntity pEntity = winSecurityResourceRepository.findOneById(thisPid);
             if (pEntity != null) {
                 if (StringUtils.isNotBlank(pEntity.getCode())) {
                     globalCode = String.format("%s.%s", pEntity.getCode(), globalCode);
@@ -76,7 +76,7 @@ public class WinSecurityResourceService {
     }
 
     public void deleteResource(Long id) {
-        WinSecurityResourceEntity entity = winSecurityResourceRepository.getOne(id);
+        WinSecurityResourceEntity entity = winSecurityResourceRepository.findOneById(id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
@@ -102,7 +102,7 @@ public class WinSecurityResourceService {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        WinSecurityResourceEntity persistent = winSecurityResourceRepository.getOne(id);
+        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOneById(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
@@ -134,7 +134,7 @@ public class WinSecurityResourceService {
     }
 
     public WinSecurityResourceDTO getResource(Long id) {
-        return WinSecurityResourceMapper.INSTANCE.toResourceDTO(winSecurityResourceRepository.getOne(id));
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTO(winSecurityResourceRepository.findOneById(id));
     }
 
     public List<WinSecurityResourceDTO> getResourceList(WinSecurityResourceDTO params) {
@@ -242,7 +242,7 @@ public class WinSecurityResourceService {
             params.setTargetParentId(0L);
         }
         Long id = params.getId();
-        WinSecurityResourceEntity persistent = winSecurityResourceRepository.getOne(id);
+        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOneById(id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
@@ -264,11 +264,11 @@ public class WinSecurityResourceService {
     }
 
     private Long reCalculateSequence(Long id, Long targetParentId, Long targetUpId, Long targetDownId) {
-        WinSecurityResourceEntity thisResource = winSecurityResourceRepository.getOne(id);
+        WinSecurityResourceEntity thisResource = winSecurityResourceRepository.findOneById(id);
         WinSecurityResourceEntity upResource = null;
         WinSecurityResourceEntity downResource = null;
         if (targetUpId != null) {
-            upResource = winSecurityResourceRepository.getOne(targetUpId);
+            upResource = winSecurityResourceRepository.findOneById(targetUpId);
             if (upResource == null) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
             }
@@ -277,7 +277,7 @@ public class WinSecurityResourceService {
             }
         }
         if (targetDownId != null) {
-            downResource = winSecurityResourceRepository.getOne(targetDownId);
+            downResource = winSecurityResourceRepository.findOneById(targetDownId);
             if (downResource == null) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
             }
@@ -399,7 +399,7 @@ public class WinSecurityResourceService {
             params.setTargetParentId(0L);
         }
         for (Long thisId : params.getIdList()) {
-            WinSecurityResourceEntity persistent = winSecurityResourceRepository.getOne(thisId);
+            WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOneById(thisId);
             if (persistent == null) {
                 continue;
             }

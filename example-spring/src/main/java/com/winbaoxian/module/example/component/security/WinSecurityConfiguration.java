@@ -31,7 +31,7 @@ public class WinSecurityConfiguration {
         factoryBean.setDataSource(dataSource);
         factoryBean.setPackagesToScan(new String[]{});
         factoryBean.setPersistenceUnitName("winSecurity");
-        factoryBean.setJpaProperties(sessionFactory.getProperties());
+        factoryBean.setJpaPropertyMap(sessionFactory.getProperties());
         factoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         return factoryBean;
     }
