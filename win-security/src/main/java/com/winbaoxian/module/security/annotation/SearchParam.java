@@ -20,6 +20,7 @@ public @interface SearchParam {
         ne,
         in,
         eq,
-        like
+        like,
+        fastlike
     }
 }

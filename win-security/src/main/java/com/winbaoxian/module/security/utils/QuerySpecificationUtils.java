@@ -6,7 +6,6 @@ import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.common.Pagination;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -114,6 +113,8 @@ public enum QuerySpecificationUtils {
             if (SearchParam.COMPARE.eq.equals(annotation.compare())) {
                 predicate = criteriaBuilder.equal(root.get(fieldName), value);
             } else if (SearchParam.COMPARE.like.equals(annotation.compare())) {
+                predicate = criteriaBuilder.like(root.get(fieldName), "%" + value + "%");
+            }else if (SearchParam.COMPARE.fastlike.equals(annotation.compare())) {
                 predicate = criteriaBuilder.like(root.get(fieldName), value + "%");
             } else if (SearchParam.COMPARE.le.equals(annotation.compare())) {
                 predicate = criteriaBuilder.lessThanOrEqualTo(root.get(fieldName), (Comparable) value);
