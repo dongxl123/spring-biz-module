@@ -114,6 +114,8 @@ public enum QuerySpecificationUtils {
             if (SearchParam.COMPARE.eq.equals(annotation.compare())) {
                 predicate = criteriaBuilder.equal(root.get(fieldName), value);
             } else if (SearchParam.COMPARE.like.equals(annotation.compare())) {
+                predicate = criteriaBuilder.like(root.get(fieldName), "%" + value + "%");
+            }else if (SearchParam.COMPARE.fastlike.equals(annotation.compare())) {
                 predicate = criteriaBuilder.like(root.get(fieldName), value + "%");
             } else if (SearchParam.COMPARE.le.equals(annotation.compare())) {
                 predicate = criteriaBuilder.lessThanOrEqualTo(root.get(fieldName), (Comparable) value);
