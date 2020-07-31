@@ -50,8 +50,10 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
     }
 
     private boolean isAccessAllowed(ServletRequest request, ServletResponse response) throws Exception {
-        List<WinSecurityResourceDTO> resourceList = cache.get(RESOURCE_CACHE_KEY);
-        if (CollectionUtils.isEmpty(resourceList)) {
+        List<WinSecurityResourceDTO> resourceList = null;
+        if (cache.keys().contains(RESOURCE_CACHE_KEY)) {
+            resourceList = cache.get(RESOURCE_CACHE_KEY);
+        } else {
             resourceList = winSecurityResourceService.getAllValidAccessResourceList();
             cache.put(RESOURCE_CACHE_KEY, resourceList);
             log.info("WinSecurityUrlFilter, 时间:{}, 从数据库获取数据", new Date());
