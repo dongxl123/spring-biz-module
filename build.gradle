@@ -35,7 +35,7 @@ subprojects {
         compile('com.alibaba:fastjson:1.2.58')
         compile('org.mapstruct:mapstruct-jdk8:1.2.0.Final')
         compile('org.mapstruct:mapstruct-processor:1.2.0.Final')
-        compileOnly('org.projectlombok:lombok:1.16.22')
+        compileOnly('org.projectlombok:lombok:1.18.8')
     }
 
     task "create-dirs" << {
