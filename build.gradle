@@ -33,15 +33,11 @@ subprojects {
         compile('org.apache.commons:commons-lang3:3.7')
         compile('commons-beanutils:commons-beanutils:1.9.3')
         compile('com.alibaba:fastjson:1.2.58')
-        compile('org.mapstruct:mapstruct-jdk8:1.2.0.Final')
-        compile('org.mapstruct:mapstruct-processor:1.2.0.Final')
-        compileOnly('org.projectlombok:lombok:1.16.22')
+        compile('org.mapstruct:mapstruct-jdk8:1.3.1.Final')
+        compile('org.mapstruct:mapstruct-processor:1.3.1.Final')
+        compileOnly('org.projectlombok:lombok:1.18.12')
     }
 
-    task "create-dirs" << {
-        sourceSets*.java.srcDirs*.each { it.mkdirs() }
-        sourceSets*.resources.srcDirs*.each { it.mkdirs() }
-    }
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
     }
@@ -66,7 +62,7 @@ task servicedocs(type: Exec, description: '执行生成servicedoc文档操作') 
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.4'
+    gradleVersion = '4.8'
     distributionType = 'all'
 }
 

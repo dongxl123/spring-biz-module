@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration;
  * @date 2019-04-12 17:12
  */
 //@Configuration
-@EnableWinCasClient
+//@EnableWinCasClient
 public class WinCasConfiguration {
 }

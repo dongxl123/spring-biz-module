@@ -15,10 +15,9 @@ apply plugin: 'war'
 apply plugin: "com.bmuschko.tomcat"
 
 dependencies {
-    compile project(":win-security")
-    compile project(":win-cas")
     runtime('mysql:mysql-connector-java:5.1.47')
     compile('com.winbaoxian.module:win-security:1.0.0-SNAPSHOT')
+    compile('com.winbaoxian.module:win-cas:1.0.0-SNAPSHOT')
     compile('com.winbaoxian:vault-lib:1.1.0')
     compile("org.springframework:spring-webmvc:${springVersion}")
     compile("org.springframework:spring-web:${springVersion}")
@@ -32,5 +31,5 @@ dependencies {
 
 tomcat{
     httpPort = 9999
-    contextPath = 'example'
-}
+    contextPath = '/'
+ }
