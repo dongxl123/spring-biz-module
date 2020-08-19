@@ -4,7 +4,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework:spring-web")
     implementation("org.jasig.cas.client:cas-client-core:3.5.1")
-    implementation('org.apache.shiro:shiro-spring:1.4.2')
+    implementation('org.apache.shiro:shiro-spring:1.6.0')
 }
 //支持上传到maven nexus库
 uploadArchives {
