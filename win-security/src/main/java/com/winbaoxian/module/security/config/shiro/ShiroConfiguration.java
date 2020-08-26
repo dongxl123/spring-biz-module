@@ -75,6 +75,7 @@ public class ShiroConfiguration {
         public Cookie cookie() {
             Cookie cookie = new SimpleCookie(WinSecurityConstant.SHIRO_COOKIE_NAME);
             cookie.setHttpOnly(true);
+            cookie.setSameSite(null);
             return cookie;
         }
     }
