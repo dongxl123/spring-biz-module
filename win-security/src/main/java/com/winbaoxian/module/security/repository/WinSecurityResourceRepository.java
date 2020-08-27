@@ -15,7 +15,7 @@ public interface WinSecurityResourceRepository extends JpaRepository<WinSecurity
 
     boolean existsByCodeAndPidAndDeletedFalse(String code, Long pid);
 
-    boolean existsByCodeAndPidAndIdNotAndDeletedFalse(String code, Long pid, Long Id);
+    boolean existsByCodeAndPidAndIdNotAndDeletedFalse(String code, Long pid, Long id);
 
     List<WinSecurityResourceEntity> findByPidAndDeletedFalse(Long pid);
 

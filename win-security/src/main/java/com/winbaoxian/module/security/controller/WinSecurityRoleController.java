@@ -55,8 +55,8 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
     @PostMapping(value = "/addRole")
     public JsonResult<D> addRole(@RequestBody String dtoStr) {
         D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassLoaderConfiguration.getRoleDTOClass());
-        D RoleDTO = winSecurityRoleService.addRole(dto);
-        return JsonResult.createSuccessResult(RoleDTO);
+        D roleDTO = winSecurityRoleService.addRole(dto);
+        return JsonResult.createSuccessResult(roleDTO);
     }
 
 
@@ -110,8 +110,8 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
     @PostMapping(value = "/updateRole")
     public JsonResult<D> updateRole(@RequestBody String dtoStr) {
         D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassLoaderConfiguration.getRoleDTOClass());
-        D RoleDTO = winSecurityRoleService.updateRole(dto);
-        return JsonResult.createSuccessResult(RoleDTO);
+        D roleDTO = winSecurityRoleService.updateRole(dto);
+        return JsonResult.createSuccessResult(roleDTO);
     }
 
 
@@ -136,8 +136,8 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
      */
     @GetMapping(value = "/getRole")
     public JsonResult<D> getRole(Long id) {
-        D RoleDTO = winSecurityRoleService.getRole(id);
-        return JsonResult.createSuccessResult(RoleDTO);
+        D roleDTO = winSecurityRoleService.getRole(id);
+        return JsonResult.createSuccessResult(roleDTO);
     }
 
 
@@ -161,8 +161,8 @@ public class WinSecurityRoleController<D extends WinSecurityBaseRoleDTO, E exten
     public JsonResult<List<D>> getRoleList(@RequestParam Map<String, Object> paramsMap) {
         MapFastUtils.INSTANCE.valueEmptyToNull(paramsMap);
         D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getRoleDTOClass());
-        List<D> RoleList = winSecurityRoleService.getRoleList(params);
-        return JsonResult.createSuccessResult(RoleList);
+        List<D> roleList = winSecurityRoleService.getRoleList(params);
+        return JsonResult.createSuccessResult(roleList);
     }
 
 
