@@ -4,7 +4,7 @@ import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.dto.BatchUpdateParamDTO;
 import com.winbaoxian.module.security.model.dto.DragAndDropParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
-import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
+import com.winbaoxian.module.security.model.entity.WinSecurityRoleEntity;
 import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
@@ -149,7 +149,7 @@ public class WinSecurityResourceService {
         if (CollectionUtils.isEmpty(entityList)) {
             return null;
         }
-        List<WinSecurityBaseRoleEntity> roleEntityList = winSecurityRoleRepository.getValidRoleListByUserId(userId);
+        List<WinSecurityRoleEntity> roleEntityList = winSecurityRoleRepository.getValidRoleListByUserId(userId);
         List<Long> roleIdList = null;
         if (CollectionUtils.isNotEmpty(roleEntityList)) {
             roleIdList = roleEntityList.stream().map(o -> o.getId()).collect(Collectors.toList());

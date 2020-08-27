@@ -1,10 +1,10 @@
 package com.winbaoxian.module.security.model.entity;/*
  * Welcome to use the TableGo Tools.
- * 
+ *
  * http://vipbooks.iteye.com
  * http://blog.csdn.net/vipbooks
  * http://www.cnblogs.com/vipbooks
- * 
+ *
  * Author:dongxuanliang252
  * Email:edinsker@163.com
  * Version:5.0.0
@@ -13,59 +13,78 @@ package com.winbaoxian.module.security.model.entity;/*
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 /**
- * 角色(SECURITY_ROLE)
- * 
+ * 用户(SECURITY_USER)
+ *
  * @author dongxuanliang252
  * @version 1.0.0 2018-11-08
  */
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "ROLE")
+@Table(name = "SYSTEM_USER")
 @Data
-public class WinSecurityBaseRoleEntity implements Serializable {
-    /** 版本号 */
-    private static final long serialVersionUID = -8255877523481723896L;
+public class WinSecurityUserEntity implements Serializable {
+    /**
+     * 版本号
+     */
+    private static final long serialVersionUID = -9002339217989625310L;
 
-    /** 主键id */
+    /**
+     * 主键id
+     */
     @Id
     @GeneratedValue
     @Column(name = "ID")
     private Long id;
 
-    /** 创建时间 */
+    /**
+     * 创建时间
+     */
     @Column(name = "CREATE_TIME")
     @CreationTimestamp
     private Date createTime;
 
-    /** 更新时间 */
+    /**
+     * 更新时间
+     */
     @Column(name = "UPDATE_TIME")
     @UpdateTimestamp
     private Date updateTime;
 
-    /** 角色名 */
+    /**
+     * 登陆名
+     */
+    @Column(name = "USER_NAME")
+    private String userName;
+
+    /**
+     * 用户名
+     */
     @Column(name = "NAME")
     private String name;
 
-    /** 简介 */
-    @Column(name = "DESCRIPTION")
-    private String description;
+    /**
+     * 手机号
+     */
+    @Column(name = "MOBILE")
+    private String mobile;
 
-    /** 排序号 */
-    @Column(name = "SEQ")
-    private Long seq;
-
-    /** 状态, 0:无效 , 1:有效 */
+    /**
+     * 用户状态，, 0:无效 , 1:有效
+     */
     @Column(name = "STATUS")
     private Integer status;
+
+    /** 是否是超级管理员 */
+    @Column(name = "SUPER_ADMIN_FLAG")
+    private Boolean superAdminFlag;
 
     /**  */
     @Column(name = "DELETED")

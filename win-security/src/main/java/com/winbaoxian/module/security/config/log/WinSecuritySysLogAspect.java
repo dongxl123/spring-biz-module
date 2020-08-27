@@ -2,8 +2,8 @@ package com.winbaoxian.module.security.config.log;
 
 
 import com.alibaba.fastjson.JSON;
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityRoleDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityUserDTO;
 import com.winbaoxian.module.security.model.dto.WinSecuritySysLogDTO;
 import com.winbaoxian.module.security.service.WinSecurityAccessService;
 import com.winbaoxian.module.security.service.WinSecuritySysLogService;
@@ -75,11 +75,11 @@ public class WinSecuritySysLogAspect {
                     .format("[类名]:%s,[方法]:%s,[请求]:%s,[数据]:%s", className, methodName, requestUrl, sb.toString());
             WinSecuritySysLogDTO sysLog = new WinSecuritySysLogDTO();
             if (winSecurityAccessService.isAuthenticated()) {
-                WinSecurityBaseUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
+                WinSecurityUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
                 if (userDTO != null) {
                     sysLog.setUserName(userDTO.getUserName());
                 }
-                List<WinSecurityBaseRoleDTO> roleDTOList = winSecurityAccessService.getLoginUserRoleList();
+                List<WinSecurityRoleDTO> roleDTOList = winSecurityAccessService.getLoginUserRoleList();
                 if (CollectionUtils.isNotEmpty(roleDTOList)) {
                     List<String> roleNameList = roleDTOList.stream().map(o -> o.getName()).collect(Collectors.toList());
                     sysLog.setRoleName(StringUtils.join(roleNameList, ","));

@@ -1,29 +1,21 @@
 package com.winbaoxian.module.security.model.mapper;
 
-import com.alibaba.fastjson.JSON;
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
-import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
+import com.winbaoxian.module.security.model.dto.WinSecurityUserDTO;
+import com.winbaoxian.module.security.model.entity.WinSecurityUserEntity;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class WinSecurityUserMapper<D extends WinSecurityBaseUserDTO, E extends WinSecurityBaseUserEntity> {
+@Mapper(componentModel = "spring")
 
-    public static final WinSecurityUserMapper INSTANCE = new WinSecurityUserMapper();
+public interface WinSecurityUserMapper {
 
-    public E toUserEntity(D dto, Class<E> entityClass) {
-        return JSON.parseObject(JSON.toJSONString(dto), entityClass);
-    }
+    WinSecurityUserMapper INSTANCE = Mappers.getMapper(WinSecurityUserMapper.class);
 
-    public D toUserDTO(E entity, Class<D> dtoClass) {
-        return JSON.parseObject(JSON.toJSONString(entity), dtoClass);
-    }
+    WinSecurityUserEntity toUserEntity(WinSecurityUserDTO dto);
 
-    public List<D> toUserDTOList(List<E> entityList, Class<D> dtoClass) {
-        List<D> dtoList = new ArrayList<>();
-        for (E e : entityList) {
-            dtoList.add(toUserDTO(e, dtoClass));
-        }
-        return dtoList;
-    }
+    WinSecurityUserDTO toUserDTO(WinSecurityUserEntity entit);
+
+    List<WinSecurityUserDTO> toUserDTOList(List<WinSecurityUserEntity> entityList);
 }

@@ -12,8 +12,8 @@ import java.util.List;
 @Data
 public class WinSecurityUserAllInfoDTO implements Serializable {
 
-    private WinSecurityBaseUserDTO userInfo;
-    private List<WinSecurityBaseRoleDTO> roleList;
+    private WinSecurityUserDTO userInfo;
+    private List<WinSecurityRoleDTO> roleList;
     private List<WinSecurityResourceDTO> resourceList;
 
 }

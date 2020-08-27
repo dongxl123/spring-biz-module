@@ -39,8 +39,8 @@ public class WinSecurityAccessController {
      * {"code":200,"msg":null,"data":{"id":16,"createTime":1541743881000,"updateTime":1541744132000,"userName":"admin1","name":"admin","mobile":"18707173372","status":0,"roleIdList":[2,3]}}
      */
     @GetMapping(value = "/getLoginUserInfo")
-    public JsonResult<WinSecurityBaseUserDTO> getLoginUserInfo() {
-        WinSecurityBaseUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
+    public JsonResult<WinSecurityUserDTO> getLoginUserInfo() {
+        WinSecurityUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
         return JsonResult.createSuccessResult(userDTO);
     }
 
@@ -62,8 +62,8 @@ public class WinSecurityAccessController {
      * {"code":200,"msg":null,"data":[{"id":1,"createTime":1541642375000,"updateTime":1541642375000,"name":"admin","description":"超级管理员","seq":0,"status":0},{"id":2,"createTime":1541642375000,"updateTime":1541642375000,"name":"de","description":"技术部经理","seq":0,"status":0}]}
      */
     @GetMapping(value = "/getLoginUserRoleList")
-    public JsonResult<List<WinSecurityBaseRoleDTO>> getLoginUserRoleList() {
-        List<WinSecurityBaseRoleDTO> roleDTOList = winSecurityAccessService.getLoginUserRoleList();
+    public JsonResult<List<WinSecurityRoleDTO>> getLoginUserRoleList() {
+        List<WinSecurityRoleDTO> roleDTOList = winSecurityAccessService.getLoginUserRoleList();
         return JsonResult.createSuccessResult(roleDTOList);
     }
 

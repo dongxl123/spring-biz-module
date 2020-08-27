@@ -24,7 +24,7 @@ import java.util.Set;
  * @version 1.0.0 2018-11-08
  */
 @Data
-public class WinSecurityBaseUserDTO implements Serializable {
+public class WinSecurityUserDTO implements Serializable {
     /** 版本号 */
     private static final long serialVersionUID = -9002339217989625310L;
 

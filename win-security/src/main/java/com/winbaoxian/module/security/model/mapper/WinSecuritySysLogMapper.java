@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
  * @author dongxuanliang252
  * @date 2018-12-12 11:39
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface WinSecuritySysLogMapper {
 
     WinSecuritySysLogMapper INSTANCE = Mappers.getMapper(WinSecuritySysLogMapper.class);

@@ -1,29 +1,21 @@
 package com.winbaoxian.module.security.model.mapper;
 
-import com.alibaba.fastjson.JSON;
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
-import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
+import com.winbaoxian.module.security.model.dto.WinSecurityRoleDTO;
+import com.winbaoxian.module.security.model.entity.WinSecurityRoleEntity;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class WinSecurityRoleMapper<D extends WinSecurityBaseRoleDTO, E extends WinSecurityBaseRoleEntity> {
+@Mapper(componentModel = "spring")
+public interface WinSecurityRoleMapper {
 
-    public static final WinSecurityRoleMapper INSTANCE = new WinSecurityRoleMapper();
+    WinSecurityRoleMapper INSTANCE = Mappers.getMapper(WinSecurityRoleMapper.class);
 
-    public E toRoleEntity(D dto, Class<E> entityClass) {
-        return JSON.parseObject(JSON.toJSONString(dto), entityClass);
-    }
+    WinSecurityRoleEntity toRoleEntity(WinSecurityRoleDTO dto);
 
-    public D toRoleDTO(E entity, Class<D> dtoClass) {
-        return JSON.parseObject(JSON.toJSONString(entity), dtoClass);
-    }
+    WinSecurityRoleDTO toRoleDTO(WinSecurityRoleEntity entity);
 
-    public List<D> toRoleDTOList(List<E> entityList, Class<D> dtoClass) {
-        List<D> dtoList = new ArrayList<>();
-        for (E e : entityList) {
-            dtoList.add(toRoleDTO(e, dtoClass));
-        }
-        return dtoList;
-    }
+    List<WinSecurityRoleDTO> toRoleDTOList(List<WinSecurityRoleEntity> entityList);
+
 }

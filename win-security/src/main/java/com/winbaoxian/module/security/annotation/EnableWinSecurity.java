@@ -12,12 +12,7 @@ import com.winbaoxian.module.security.config.shiro.ShiroFilterConfiguration;
 import com.winbaoxian.module.security.config.shiro.WinSecurityErrorController;
 import com.winbaoxian.module.security.config.transaction.WinSecurityTransactionConfiguration;
 import com.winbaoxian.module.security.initializer.WinSecuritySpringWebInitializer;
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
-import com.winbaoxian.module.security.model.entity.WinSecurityBaseRoleEntity;
-import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
 import com.winbaoxian.module.security.service.*;
-import com.winbaoxian.module.security.service.extension.IFiller;
 import com.winbaoxian.module.security.service.extension.IProcessor;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Import;
@@ -67,44 +62,12 @@ public @interface EnableWinSecurity {
     String transactionManagerRef() default "transactionManager";
 
     /**
-     * 表前缀
-     */
-    String tablePrefix() default "";
-
-    /**
      * controller层代码生效范围
      *
      * @see ControllerEffectiveScope
      */
     ControllerEffectiveScope[] controllerScopes() default ControllerEffectiveScope.ALL;
 
-    /**
-     * subclass of {@link WinSecurityBaseUserDTO}
-     *
-     * @return
-     */
-    Class<? extends WinSecurityBaseUserDTO> extensionUserDTO() default WinSecurityBaseUserDTO.class;
-
-    /**
-     * subclass of {@link WinSecurityBaseUserEntity}
-     *
-     * @return
-     */
-    Class<? extends WinSecurityBaseUserEntity> extensionUserEntity() default WinSecurityBaseUserEntity.class;
-
-    /**
-     * subclass of {@link WinSecurityBaseRoleDTO}
-     *
-     * @return
-     */
-    Class<? extends WinSecurityBaseRoleDTO> extensionRoleDTO() default WinSecurityBaseRoleDTO.class;
-
-    /**
-     * subclass of {@link WinSecurityBaseRoleEntity}
-     *
-     * @return
-     */
-    Class<? extends WinSecurityBaseRoleEntity> extensionRoleEntity() default WinSecurityBaseRoleEntity.class;
 
     /**
      * implements of {@link com.winbaoxian.module.security.service.extension.IUserAddProcessor} or {@link com.winbaoxian.module.security.service.extension.IUserUpdateProcessor} or {@link com.winbaoxian.module.security.service.extension.IRoleAddProcessor} or {@link com.winbaoxian.module.security.service.extension.IRoleUpdateProcessor }
@@ -112,14 +75,6 @@ public @interface EnableWinSecurity {
      * @return
      */
     Class<? extends IProcessor>[] extensionServiceProcessors() default {};
-
-
-    /**
-     * implements of {@link com.winbaoxian.module.security.service.extension.IUserFiller}
-     *
-     * @return
-     */
-    Class<? extends IFiller>[] extensionServiceFillers() default {};
 
     /**
      * sysLog switch

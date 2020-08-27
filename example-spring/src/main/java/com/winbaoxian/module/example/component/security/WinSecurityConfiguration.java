@@ -17,7 +17,7 @@ import javax.sql.DataSource;
  * @date 2019-04-12 13:46
  */
 @Configuration
-@EnableWinSecurity(transactionManagerRef = "transactionManagerWinSecurity", entityManagerFactoryRef = "entityManagerFactoryWinSecurity", tablePrefix = "security")
+@EnableWinSecurity(transactionManagerRef = "transactionManagerWinSecurity", entityManagerFactoryRef = "entityManagerFactoryWinSecurity")
 public class WinSecurityConfiguration {
 
     @Resource

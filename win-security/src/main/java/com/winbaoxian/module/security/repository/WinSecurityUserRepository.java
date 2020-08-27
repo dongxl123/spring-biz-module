@@ -1,6 +1,6 @@
 package com.winbaoxian.module.security.repository;
 
-import com.winbaoxian.module.security.model.entity.WinSecurityBaseUserEntity;
+import com.winbaoxian.module.security.model.entity.WinSecurityUserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,20 +8,20 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface WinSecurityUserRepository<E extends WinSecurityBaseUserEntity> extends JpaRepository<E, Long>, JpaSpecificationExecutor<E> {
+public interface WinSecurityUserRepository extends JpaRepository<WinSecurityUserEntity, Long>, JpaSpecificationExecutor<WinSecurityUserEntity> {
 
-    E findOneById(Long id);
+    WinSecurityUserEntity findOneById(Long id);
 
     boolean existsByUserNameAndDeletedFalse(String userName);
 
     boolean existsByUserNameAndIdNotAndDeletedFalse(String userName, Long id);
 
-    List<E> findAllByDeletedFalse();
+    List<WinSecurityUserEntity> findAllByDeletedFalse();
 
-    Page<E> findAllByDeletedFalse(Pageable pageable);
+    Page<WinSecurityUserEntity> findAllByDeletedFalse(Pageable pageable);
 
-    E findOneByUserNameAndDeletedFalse(String userName);
+    WinSecurityUserEntity findOneByUserNameAndDeletedFalse(String userName);
 
-    E findOneByMobileAndDeletedFalse(String mobile);
+    WinSecurityUserEntity findOneByMobileAndDeletedFalse(String mobile);
 
 }

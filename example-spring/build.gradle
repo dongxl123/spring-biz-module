@@ -15,8 +15,8 @@ apply plugin: 'war'
 apply plugin: "com.bmuschko.tomcat"
 
 dependencies {
-    implementation('com.winbaoxian.module:win-security:1.2.0-SNAPSHOT')
-    implementation('com.winbaoxian.module:win-cas:1.2.0-SNAPSHOT')
+    implementation('com.winbaoxian.module:win-security:3.2.0-SNAPSHOT')
+    implementation('com.winbaoxian.module:win-cas:3.2.0-SNAPSHOT')
     runtimeOnly('mysql:mysql-connector-java')
     implementation("org.springframework:spring-webmvc")
     implementation("org.springframework:spring-web")

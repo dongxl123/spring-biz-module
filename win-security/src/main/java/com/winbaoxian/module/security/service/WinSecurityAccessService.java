@@ -1,6 +1,5 @@
 package com.winbaoxian.module.security.service;
 
-import com.alibaba.fastjson.JSON;
 import com.winbaoxian.module.security.model.dto.*;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
@@ -37,7 +36,7 @@ public class WinSecurityAccessService {
     }
 
     public void login(Long userId) {
-        WinSecurityBaseUserDTO userDTO = winSecurityUserService.getUser(userId);
+        WinSecurityUserDTO userDTO = winSecurityUserService.getUser(userId);
         if (userDTO == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
@@ -108,12 +107,12 @@ public class WinSecurityAccessService {
         return (WinSecurityPrincipal) subject.getPrincipal();
     }
 
-    public WinSecurityBaseUserDTO getLoginUserInfo() {
+    public WinSecurityUserDTO getLoginUserInfo() {
         WinSecurityPrincipal principal = getWinSecurityPrincipal();
         return winSecurityUserService.getUser(principal.getId());
     }
 
-    public List<WinSecurityBaseRoleDTO> getLoginUserRoleList() {
+    public List<WinSecurityRoleDTO> getLoginUserRoleList() {
         WinSecurityPrincipal principal = getWinSecurityPrincipal();
         return winSecurityRoleService.getValidRoleListByUserId(principal.getId());
     }

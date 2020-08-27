@@ -1,7 +1,7 @@
 package com.winbaoxian.module.security.config.shiro;
 
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseRoleDTO;
-import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityRoleDTO;
+import com.winbaoxian.module.security.model.dto.WinSecurityUserDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityPrincipal;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
@@ -53,7 +53,7 @@ public class WinSecurityRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-        WinSecurityBaseUserDTO user = winSecurityUserService.getUserByUserName(token.getUsername());
+        WinSecurityUserDTO user = winSecurityUserService.getUserByUserName(token.getUsername());
         if (user == null) {
             throw new UnknownAccountException("No account found for user [" + token.getUsername() + "]");
         }
@@ -75,7 +75,7 @@ public class WinSecurityRealm extends AuthorizingRealm {
         WinSecurityPrincipal principal = (WinSecurityPrincipal) getAvailablePrincipal(principals);
         Set<String> roleNames = null;
         Set<String> permissions = null;
-        List<WinSecurityBaseRoleDTO> roleDTOList = winSecurityRoleService.getValidRoleListByUserId(principal.getId());
+        List<WinSecurityRoleDTO> roleDTOList = winSecurityRoleService.getValidRoleListByUserId(principal.getId());
         if (CollectionUtils.isNotEmpty(roleDTOList)) {
             roleNames = roleDTOList.stream().map(o -> o.getName()).collect(Collectors.toSet());
         }

@@ -1,12 +1,7 @@
 package com.winbaoxian.module.security.config;
 
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
-import com.winbaoxian.module.security.strategy.AbstractSecurityPhysicalNamingStrategy;
-import com.winbaoxian.module.security.strategy.AbstractSecurityPhysicalNamingStrategyStandardImpl;
-import com.winbaoxian.module.security.strategy.DefaultSecurityPhysicalNamingStrategyStandardImpl;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -19,13 +14,10 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author dongxuanliang252
@@ -59,14 +51,6 @@ public class EntityManagerFactoryAttributesPostProcessor extends InstantiationAw
                 if (PACKAGES_TO_SCAN.equals(pd.getName())) {
                     //apply @EnableWinSecurity entityClass packages and defaultEntityPackages:ENTITY_PACKAGES
                     String[] allEntityScanPackages = WinSecurityConstant.ENTITY_PACKAGES;
-                    Class extensionUserEntityClass = enableWinSecurity.getClass(EnableWinSecurityAttributeEnum.EXTENSION_USER_ENTITY.getValue());
-                    if (extensionUserEntityClass != null) {
-                        allEntityScanPackages = ArrayUtils.addAll(allEntityScanPackages, ClassUtils.getPackageName(extensionUserEntityClass));
-                    }
-                    Class extensionRoleEntityClass = enableWinSecurity.getClass(EnableWinSecurityAttributeEnum.EXTENSION_ROLE_ENTITY.getValue());
-                    if (extensionRoleEntityClass != null) {
-                        allEntityScanPackages = ArrayUtils.addAll(allEntityScanPackages, ClassUtils.getPackageName(extensionRoleEntityClass));
-                    }
                     if (ArrayUtils.isNotEmpty(allEntityScanPackages)) {
                         String[] basePackages = getPackages(bean, pd.getName());
                         if (ArrayUtils.isNotEmpty(basePackages)) {
@@ -74,40 +58,6 @@ public class EntityManagerFactoryAttributesPostProcessor extends InstantiationAw
                         }
                         log.info("WinSecurity: EntityManagerFactoryAttributesPostProcessor, beanName:{}, propertyName:{}, change propertyValue to:{}", beanName, pd.getName(), allEntityScanPackages);
                         ((MutablePropertyValues) pvs).add(pd.getName(), allEntityScanPackages);
-                    }
-                } else if (JPA_PROPERTY_MAP.equals(pd.getName())) {
-                    //apply @EnableWinSecurity tablePrefix
-                    String tablePrefix = enableWinSecurity.getString(EnableWinSecurityAttributeEnum.TABLE_PREFIX.getValue());
-                    if (StringUtils.isNotBlank(tablePrefix)) {
-                        Map jpaPropertyMap = getBeanProperty(bean, pd.getName());
-                        if (jpaPropertyMap == null) {
-                            jpaPropertyMap = new HashMap<>();
-                        }
-                        boolean needChange = false;
-                        if (jpaPropertyMap.containsKey(JPA_PROPERTY_MAP_PHYSICAL_NAMING_STRATEGY)) {
-                            String physicalNamingStrategyClassName = MapUtils.getString(jpaPropertyMap, JPA_PROPERTY_MAP_PHYSICAL_NAMING_STRATEGY);
-                            if (StringUtils.isBlank(physicalNamingStrategyClassName)) {
-                                needChange = true;
-                            } else {
-                                try {
-                                    Class cls = ClassUtils.forName(physicalNamingStrategyClassName, getClass().getClassLoader());
-                                    if (!ClassUtils.isAssignable(AbstractSecurityPhysicalNamingStrategy.class, cls) && !ClassUtils.isAssignable(AbstractSecurityPhysicalNamingStrategyStandardImpl.class, cls)) {
-                                        needChange = true;
-                                    }
-                                } catch (Exception e) {
-                                    log.error("WinSecurity: class:{} load failed", physicalNamingStrategyClassName, e);
-                                    needChange = true;
-                                }
-                            }
-                        } else {
-                            needChange = true;
-                        }
-                        if (needChange) {
-                            String newPhysicalNamingStrategyClassName = DefaultSecurityPhysicalNamingStrategyStandardImpl.class.getName();
-                            jpaPropertyMap.put(JPA_PROPERTY_MAP_PHYSICAL_NAMING_STRATEGY, newPhysicalNamingStrategyClassName);
-                            log.info("WinSecurity: EntityManagerFactoryAttributesPostProcessor, beanName:{}, propertyName:{}, change propertyValue to:{}", beanName, pd.getName(), jpaPropertyMap);
-                            ((MutablePropertyValues) pvs).add(JPA_PROPERTY_MAP, jpaPropertyMap);
-                        }
                     }
                 }
             }

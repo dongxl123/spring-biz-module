@@ -1,10 +1,6 @@
 package com.winbaoxian.module.example;
 
 import com.winbaoxian.module.cas.annotation.EnableWinCasClient;
-import com.winbaoxian.module.example.model.dto.SecurityRoleDTO;
-import com.winbaoxian.module.example.model.dto.SecurityUserDTO;
-import com.winbaoxian.module.example.model.entity.citymanager.SecurityRoleEntity;
-import com.winbaoxian.module.example.model.entity.citymanager.SecurityUserEntity;
 import com.winbaoxian.module.example.service.*;
 import com.winbaoxian.module.security.annotation.EnableWinSecurity;
 import org.springframework.boot.SpringApplication;
@@ -20,15 +16,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @EnableWinSecurity(
         entityManagerFactoryRef = "entityManagerFactoryCitymanager",
         transactionManagerRef = "transactionManagerCitymanager",
-        tablePrefix = "SECURITY",
-        extensionUserDTO = SecurityUserDTO.class,
-        extensionUserEntity = SecurityUserEntity.class,
-        extensionRoleDTO = SecurityRoleDTO.class,
-        extensionRoleEntity = SecurityRoleEntity.class,
         extensionServiceProcessors = {RoleAddProcessorImpl.class, RoleUpdateProcessorImpl.class, UserAddProcessorImpl.class, UserUpdateProcessorImpl.class, UserPageProcessorImpl.class},
-        extensionServiceFillers = {UserFillerImpl.class},
         sysLog = true)
-@EnableWinCasClient
+//@EnableWinCasClient
 public class Application extends SpringBootServletInitializer {
 
     @Override
