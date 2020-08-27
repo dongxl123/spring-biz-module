@@ -56,8 +56,8 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
     @PostMapping(value = "/addUser")
     public JsonResult<D> addUser(@RequestBody String dtoStr) {
         D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassLoaderConfiguration.getUserDTOClass());
-        D UserDTO = winSecurityUserService.addUser(dto);
-        return JsonResult.createSuccessResult(UserDTO);
+        D userDTO = winSecurityUserService.addUser(dto);
+        return JsonResult.createSuccessResult(userDTO);
     }
 
 
@@ -111,8 +111,8 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
     @PostMapping(value = "/updateUser")
     public JsonResult<D> updateUser(@RequestBody String dtoStr) {
         D dto = JSON.parseObject(dtoStr, (Type) winSecurityClassLoaderConfiguration.getUserDTOClass());
-        D UserDTO = winSecurityUserService.updateUser(dto);
-        return JsonResult.createSuccessResult(UserDTO);
+        D userDTO = winSecurityUserService.updateUser(dto);
+        return JsonResult.createSuccessResult(userDTO);
     }
 
 
@@ -137,8 +137,8 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
      */
     @GetMapping(value = "/getUser")
     public JsonResult<D> getUser(Long id) {
-        D UserDTO = winSecurityUserService.getUser(id);
-        return JsonResult.createSuccessResult(UserDTO);
+        D userDTO = winSecurityUserService.getUser(id);
+        return JsonResult.createSuccessResult(userDTO);
     }
 
 
@@ -162,8 +162,8 @@ public class WinSecurityUserController<D extends WinSecurityBaseUserDTO, E exten
     public JsonResult<List<D>> getUserList(@RequestParam Map<String, Object> paramsMap) {
         MapFastUtils.INSTANCE.valueEmptyToNull(paramsMap);
         D params = (D) TransformerUtils.INSTANCE.transformMap2Object(paramsMap, winSecurityClassLoaderConfiguration.getUserDTOClass());
-        List<D> UserList = winSecurityUserService.getUserList(params);
-        return JsonResult.createSuccessResult(UserList);
+        List<D> userList = winSecurityUserService.getUserList(params);
+        return JsonResult.createSuccessResult(userList);
     }
 
 
