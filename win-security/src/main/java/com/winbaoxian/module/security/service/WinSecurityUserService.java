@@ -1,5 +1,6 @@
 package com.winbaoxian.module.security.service;
 
+import com.winbaoxian.module.security.config.AnnotationAttributesHolder;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityUserDTO;
@@ -52,7 +53,7 @@ public class WinSecurityUserService {
         if (iUserAddProcessor != null) {
             iUserAddProcessor.preProcess(dto);
         }
-        if (winSecurityUserRepository.existsByUserNameAndDeletedFalse(dto.getUserName())) {
+        if (winSecurityUserRepository.existsByAppCodeAndUserNameAndDeletedFalse(AnnotationAttributesHolder.INSTANCE.getAppCode(), dto.getUserName())) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
         if (iUserAddProcessor != null) {
@@ -62,6 +63,7 @@ public class WinSecurityUserService {
         if (iUserAddProcessor != null) {
             iUserAddProcessor.customMappingAfterCommon(dto, entity);
         }
+        entity.setAppCode(AnnotationAttributesHolder.INSTANCE.getAppCode());
         winSecurityUserRepository.save(entity);
         //角色
         if (CollectionUtils.isNotEmpty(dto.getRoleIdList())) {
@@ -76,7 +78,7 @@ public class WinSecurityUserService {
     }
 
     public void deleteUser(Long id) {
-        WinSecurityUserEntity entity = winSecurityUserRepository.findOneById(id);
+        WinSecurityUserEntity entity = winSecurityUserRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
@@ -92,12 +94,12 @@ public class WinSecurityUserService {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        WinSecurityUserEntity persistent = winSecurityUserRepository.findOneById(id);
+        WinSecurityUserEntity persistent = winSecurityUserRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
         //登录名更新时，判断是否重复
-        if (StringUtils.isNoneBlank(dto.getUserName()) && winSecurityUserRepository.existsByUserNameAndIdNotAndDeletedFalse(dto.getUserName(), id)) {
+        if (StringUtils.isNoneBlank(dto.getUserName()) && winSecurityUserRepository.existsByAppCodeAndUserNameAndIdNotAndDeletedFalse(AnnotationAttributesHolder.INSTANCE.getAppCode(), dto.getUserName(), id)) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
         if (iUserUpdateProcessor != null) {
@@ -127,7 +129,7 @@ public class WinSecurityUserService {
     }
 
     public WinSecurityUserDTO getUser(Long id) {
-        WinSecurityUserDTO userDTO = WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneById(id));
+        WinSecurityUserDTO userDTO = WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), id));
         if (userDTO == null) {
             return null;
         }
@@ -137,8 +139,9 @@ public class WinSecurityUserService {
     }
 
     public List<WinSecurityUserDTO> getUserList(WinSecurityUserDTO params) {
+        params.setAppCode(AnnotationAttributesHolder.INSTANCE.getAppCode());
         if (winSecurityAccessService.isAuthenticated()) {
-            com.winbaoxian.module.security.model.dto.WinSecurityUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
+            WinSecurityUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
             if (userDTO != null && BooleanUtils.isNotTrue(userDTO.getSuperAdminFlag())) {
                 params.setSuperAdminFlag(false);
             }
@@ -150,6 +153,7 @@ public class WinSecurityUserService {
     }
 
     public PaginationDTO<WinSecurityUserDTO> getUserPage(WinSecurityUserDTO params, Pagination pagination) {
+        params.setAppCode(AnnotationAttributesHolder.INSTANCE.getAppCode());
         if (iUserPageProcessor != null) {
             iUserPageProcessor.preProcess(params);
         }
@@ -200,7 +204,7 @@ public class WinSecurityUserService {
     }
 
     public WinSecurityUserDTO getUserByUserName(String userName) {
-        WinSecurityUserDTO userDTO =  WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByUserNameAndDeletedFalse(userName));
+        WinSecurityUserDTO userDTO = WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByAppCodeAndUserNameAndDeletedFalse(AnnotationAttributesHolder.INSTANCE.getAppCode(), userName));
         if (userDTO == null) {
             return null;
         }
@@ -210,7 +214,7 @@ public class WinSecurityUserService {
     }
 
     public WinSecurityUserDTO getUserByMobile(String mobile) {
-        WinSecurityUserDTO userDTO =  WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByMobileAndDeletedFalse(mobile));
+        WinSecurityUserDTO userDTO = WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByAppCodeAndMobileAndDeletedFalse(AnnotationAttributesHolder.INSTANCE.getAppCode(), mobile));
         if (userDTO == null) {
             return null;
         }

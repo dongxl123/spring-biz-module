@@ -48,6 +48,10 @@ import java.lang.annotation.*;
         EntityManagerFactoryAttributesPostProcessor.class})
 @EnableJpaRepositories(basePackages = "com.winbaoxian.module.security.repository")
 public @interface EnableWinSecurity {
+    /**
+     * winSecurity 应用编码
+     */
+    String appCode() default "";
 
     /**
      * winSecurity entityManagerFactory
@@ -67,7 +71,6 @@ public @interface EnableWinSecurity {
      * @see ControllerEffectiveScope
      */
     ControllerEffectiveScope[] controllerScopes() default ControllerEffectiveScope.ALL;
-
 
     /**
      * implements of {@link com.winbaoxian.module.security.service.extension.IUserAddProcessor} or {@link com.winbaoxian.module.security.service.extension.IUserUpdateProcessor} or {@link com.winbaoxian.module.security.service.extension.IRoleAddProcessor} or {@link com.winbaoxian.module.security.service.extension.IRoleUpdateProcessor }

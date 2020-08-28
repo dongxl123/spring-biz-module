@@ -1,11 +1,12 @@
 package com.winbaoxian.module.security.service;
 
+import com.winbaoxian.module.security.config.AnnotationAttributesHolder;
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.dto.BatchUpdateParamDTO;
 import com.winbaoxian.module.security.model.dto.DragAndDropParamDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
-import com.winbaoxian.module.security.model.entity.WinSecurityRoleEntity;
 import com.winbaoxian.module.security.model.entity.WinSecurityResourceEntity;
+import com.winbaoxian.module.security.model.entity.WinSecurityRoleEntity;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
@@ -44,12 +45,13 @@ public class WinSecurityResourceService {
             dto.setPid(0L);
         }
         if (StringUtils.isNotBlank(dto.getCode())) {
-            if (winSecurityResourceRepository.existsByCodeAndPidAndDeletedFalse(dto.getCode(), dto.getPid())) {
+            if (winSecurityResourceRepository.existsByAppCodeAndCodeAndPidAndDeletedFalse(AnnotationAttributesHolder.INSTANCE.getAppCode(), dto.getCode(), dto.getPid())) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_EXISTS);
             }
             dto.setGlobalCode(getGlobalCode(dto.getCode(), dto.getPid()));
         }
         WinSecurityResourceEntity entity = WinSecurityResourceMapper.INSTANCE.toResourceEntity(dto);
+        entity.setAppCode(AnnotationAttributesHolder.INSTANCE.getAppCode());
         winSecurityResourceRepository.save(entity);
         entity.setSeq(entity.getId());
         winSecurityResourceRepository.save(entity);
@@ -60,7 +62,7 @@ public class WinSecurityResourceService {
         String globalCode = thisCode;
         Long thisPid = pid;
         while (thisPid != null && thisPid > 0) {
-            WinSecurityResourceEntity pEntity = winSecurityResourceRepository.findOneById(thisPid);
+            WinSecurityResourceEntity pEntity = winSecurityResourceRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), thisPid);
             if (pEntity != null) {
                 if (StringUtils.isNotBlank(pEntity.getCode())) {
                     globalCode = String.format("%s.%s", pEntity.getCode(), globalCode);
@@ -76,7 +78,7 @@ public class WinSecurityResourceService {
     }
 
     public void deleteResource(Long id) {
-        WinSecurityResourceEntity entity = winSecurityResourceRepository.findOneById(id);
+        WinSecurityResourceEntity entity = winSecurityResourceRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), id);
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
@@ -87,7 +89,7 @@ public class WinSecurityResourceService {
     }
 
     private void deleteResourceByPid(Long thisId) {
-        List<WinSecurityResourceEntity> nextList = winSecurityResourceRepository.findByPidAndDeletedFalse(thisId);
+        List<WinSecurityResourceEntity> nextList = winSecurityResourceRepository.findByAppCodeAndPidAndDeletedFalse(AnnotationAttributesHolder.INSTANCE.getAppCode(), thisId);
         if (CollectionUtils.isNotEmpty(nextList)) {
             for (WinSecurityResourceEntity entity : nextList) {
                 entity.setDeleted(true);
@@ -102,14 +104,14 @@ public class WinSecurityResourceService {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOneById(id);
+        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
         String preCode = persistent.getCode();
         BeanMergeUtils.INSTANCE.copyProperties(dto, persistent);
         if (StringUtils.isNotBlank(persistent.getCode()) && !persistent.getCode().equals(preCode)) {
-            if (winSecurityResourceRepository.existsByCodeAndPidAndIdNotAndDeletedFalse(persistent.getCode(), persistent.getPid(), persistent.getId())) {
+            if (winSecurityResourceRepository.existsByAppCodeAndCodeAndPidAndIdNotAndDeletedFalse(AnnotationAttributesHolder.INSTANCE.getAppCode(), persistent.getCode(), persistent.getPid(), persistent.getId())) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_EXISTS);
             }
             persistent.setGlobalCode(getGlobalCode(persistent.getCode(), persistent.getPid()));
@@ -121,7 +123,7 @@ public class WinSecurityResourceService {
     }
 
     private void updateGlobalCodeByPid(Long thisId) {
-        List<WinSecurityResourceEntity> nextList = winSecurityResourceRepository.findByPidAndDeletedFalse(thisId);
+        List<WinSecurityResourceEntity> nextList = winSecurityResourceRepository.findByAppCodeAndPidAndDeletedFalse(AnnotationAttributesHolder.INSTANCE.getAppCode(), thisId);
         if (CollectionUtils.isNotEmpty(nextList)) {
             for (WinSecurityResourceEntity entity : nextList) {
                 if (StringUtils.isNotBlank(entity.getCode())) {
@@ -134,10 +136,11 @@ public class WinSecurityResourceService {
     }
 
     public WinSecurityResourceDTO getResource(Long id) {
-        return WinSecurityResourceMapper.INSTANCE.toResourceDTO(winSecurityResourceRepository.findOneById(id));
+        return WinSecurityResourceMapper.INSTANCE.toResourceDTO(winSecurityResourceRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), id));
     }
 
     public List<WinSecurityResourceDTO> getResourceList(WinSecurityResourceDTO params) {
+        params.setAppCode(AnnotationAttributesHolder.INSTANCE.getAppCode());
         Specification<WinSecurityResourceEntity> specification = QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, WinSecurityResourceEntity.class);
         Sort sort = Sort.by(Sort.Direction.ASC, WinSecurityConstant.SORT_COLUMN_SEQ);
         List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAll(specification, sort);
@@ -145,11 +148,11 @@ public class WinSecurityResourceService {
     }
 
     public List<WinSecurityResourceDTO> getValidResourceListByUserId(Long userId) {
-        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.getValidResourceListByUserId(userId);
+        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.getValidResourceListByUserId(AnnotationAttributesHolder.INSTANCE.getAppCode(), userId);
         if (CollectionUtils.isEmpty(entityList)) {
             return null;
         }
-        List<WinSecurityRoleEntity> roleEntityList = winSecurityRoleRepository.getValidRoleListByUserId(userId);
+        List<WinSecurityRoleEntity> roleEntityList = winSecurityRoleRepository.getValidRoleListByUserId(AnnotationAttributesHolder.INSTANCE.getAppCode(), userId);
         List<Long> roleIdList = null;
         if (CollectionUtils.isNotEmpty(roleEntityList)) {
             roleIdList = roleEntityList.stream().map(o -> o.getId()).collect(Collectors.toList());
@@ -179,7 +182,7 @@ public class WinSecurityResourceService {
     }
 
     public List<WinSecurityResourceDTO> getAllValidAccessResourceList() {
-        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAllByStatusAndDeletedFalseOrderBySeqAsc(WinSecurityStatusEnum.ENABLED.getValue());
+        List<WinSecurityResourceEntity> entityList = winSecurityResourceRepository.findAllByAppCodeAndStatusAndDeletedFalseOrderBySeqAsc(AnnotationAttributesHolder.INSTANCE.getAppCode(), WinSecurityStatusEnum.ENABLED.getValue());
         List<WinSecurityResourceDTO> resourceList = WinSecurityResourceMapper.INSTANCE.toResourceDTOList(entityList);
         if (CollectionUtils.isEmpty(resourceList)) {
             return null;
@@ -242,14 +245,14 @@ public class WinSecurityResourceService {
             params.setTargetParentId(0L);
         }
         Long id = params.getId();
-        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOneById(id);
+        WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), id);
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
         }
         //pid更改，更新自身和下级元素的globalCode
         if (!params.getTargetParentId().equals(persistent.getPid())) {
             //判断同级下的code是否重复
-            if (StringUtils.isNotBlank(persistent.getCode()) && winSecurityResourceRepository.existsByCodeAndPidAndIdNotAndDeletedFalse(persistent.getCode(), params.getTargetParentId(), id)) {
+            if (StringUtils.isNotBlank(persistent.getCode()) && winSecurityResourceRepository.existsByAppCodeAndCodeAndPidAndIdNotAndDeletedFalse(AnnotationAttributesHolder.INSTANCE.getAppCode(), persistent.getCode(), params.getTargetParentId(), id)) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_EXISTS);
             }
             persistent.setGlobalCode(getGlobalCode(persistent.getCode(), params.getTargetParentId()));
@@ -264,11 +267,11 @@ public class WinSecurityResourceService {
     }
 
     private Long reCalculateSequence(Long id, Long targetParentId, Long targetUpId, Long targetDownId) {
-        WinSecurityResourceEntity thisResource = winSecurityResourceRepository.findOneById(id);
+        WinSecurityResourceEntity thisResource = winSecurityResourceRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), id);
         WinSecurityResourceEntity upResource = null;
         WinSecurityResourceEntity downResource = null;
         if (targetUpId != null) {
-            upResource = winSecurityResourceRepository.findOneById(targetUpId);
+            upResource = winSecurityResourceRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), targetUpId);
             if (upResource == null) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
             }
@@ -277,7 +280,7 @@ public class WinSecurityResourceService {
             }
         }
         if (targetDownId != null) {
-            downResource = winSecurityResourceRepository.findOneById(targetDownId);
+            downResource = winSecurityResourceRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), targetDownId);
             if (downResource == null) {
                 throw new WinSecurityException(WinSecurityErrorEnum.COMMON_RESOURCE_NOT_EXISTS);
             }
@@ -287,7 +290,7 @@ public class WinSecurityResourceService {
         }
         Long seq = thisResource.getSeq() == null ? NumberUtils.LONG_ZERO : thisResource.getSeq();
         //兼容前端代码
-        List<WinSecurityResourceEntity> resourceEntityList = winSecurityResourceRepository.findByPidAndDeletedFalseOrderBySeqAscIdAsc(targetParentId);
+        List<WinSecurityResourceEntity> resourceEntityList = winSecurityResourceRepository.findByAppCodeAndPidAndDeletedFalseOrderBySeqAscIdAsc(AnnotationAttributesHolder.INSTANCE.getAppCode(), targetParentId);
         if (CollectionUtils.isEmpty(resourceEntityList)) {
             return seq;
         }
@@ -399,7 +402,7 @@ public class WinSecurityResourceService {
             params.setTargetParentId(0L);
         }
         for (Long thisId : params.getIdList()) {
-            WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOneById(thisId);
+            WinSecurityResourceEntity persistent = winSecurityResourceRepository.findOneByAppCodeAndId(AnnotationAttributesHolder.INSTANCE.getAppCode(), thisId);
             if (persistent == null) {
                 continue;
             }

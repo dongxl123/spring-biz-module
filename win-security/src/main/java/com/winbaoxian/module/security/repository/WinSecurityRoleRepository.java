@@ -1,8 +1,6 @@
 package com.winbaoxian.module.security.repository;
 
 import com.winbaoxian.module.security.model.entity.WinSecurityRoleEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -11,21 +9,17 @@ import java.util.List;
 
 public interface WinSecurityRoleRepository extends JpaRepository<WinSecurityRoleEntity, Long>, JpaSpecificationExecutor<WinSecurityRoleEntity> {
 
-    WinSecurityRoleEntity findOneById(Long id);
+    WinSecurityRoleEntity findOneByAppCodeAndId(String appCode, Long id);
 
-    List<WinSecurityRoleEntity> findAllByDeletedFalseOrderBySeqAsc();
+    @Query("select a from WinSecurityRoleEntity a,WinSecurityUserRoleEntity b WHERE a.id= b.roleId and a.appCode=?1 and b.userId =?2 and a.deleted=false")
+    List<WinSecurityRoleEntity> getRoleListByUserId(String appCode, Long userId);
 
-    Page<WinSecurityRoleEntity> findAllByDeletedFalseOrderBySeqAsc(Pageable pageable);
+    WinSecurityRoleEntity findByAppCodeAndNameAndDeletedFalse(String appCode, String name);
 
-    @Query("select a from WinSecurityRoleEntity a,WinSecurityUserRoleEntity b WHERE a.id= b.roleId and b.userId =?1 and a.deleted=false")
-    List<WinSecurityRoleEntity> getRoleListByUserId(Long userId);
+    @Query("select a from WinSecurityRoleEntity a,WinSecurityUserRoleEntity b WHERE a.id= b.roleId and a.appCode=?1 and b.userId =?2 and a.deleted=false")
+    WinSecurityRoleEntity getRoleByUserId(String appCode, Long userId);
 
-    WinSecurityRoleEntity findByNameAndDeletedFalse(String name);
-
-    @Query("select a from WinSecurityRoleEntity a,WinSecurityUserRoleEntity b WHERE a.id= b.roleId and b.userId =?1 and a.deleted=false")
-    WinSecurityRoleEntity getRoleByUserId(Long userId);
-
-    @Query("select a from WinSecurityRoleEntity a,WinSecurityUserRoleEntity b WHERE a.id= b.roleId and b.userId =?1 and a.deleted=false and a.status = 1")
-    List<WinSecurityRoleEntity> getValidRoleListByUserId(Long userId);
+    @Query("select a from WinSecurityRoleEntity a,WinSecurityUserRoleEntity b WHERE a.id= b.roleId and a.appCode=?1 and b.userId =?2 and a.deleted=false and a.status = 1")
+    List<WinSecurityRoleEntity> getValidRoleListByUserId(String appCode, Long userId);
 
 }

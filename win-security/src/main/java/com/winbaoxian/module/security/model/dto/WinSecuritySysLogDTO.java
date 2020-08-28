@@ -17,7 +17,10 @@ public class WinSecuritySysLogDTO implements Serializable {
 
     /** 创建时间 */
     private Date createTime;
-
+    /**
+     * 应用编码
+     */
+    private String appCode;
     /** 登陆名 */
     private String userName;
 

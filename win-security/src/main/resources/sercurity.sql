@@ -17,7 +17,7 @@
 -- Table structure for application
 -- ----------------------------
 CREATE TABLE `application`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `app_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用名称',
   `app_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用编码',
   `description` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用描述',
@@ -34,7 +34,7 @@ CREATE TABLE `application`  (
 -- Table structure for resource
 -- ----------------------------
 CREATE TABLE `resource`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `app_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用编码',
@@ -63,7 +63,7 @@ CREATE TABLE `resource`  (
 -- Table structure for role
 -- ----------------------------
 CREATE TABLE `role`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `app_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用编码',
@@ -83,7 +83,7 @@ CREATE TABLE `role`  (
 -- Table structure for role_resource
 -- ----------------------------
 CREATE TABLE `role_resource`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `role_id` bigint(20) NOT NULL COMMENT '角色id',
   `resource_id` bigint(20) NOT NULL COMMENT '资源id',
   PRIMARY KEY (`id`) USING BTREE,
@@ -94,7 +94,7 @@ CREATE TABLE `role_resource`  (
 -- Table structure for system_log
 -- ----------------------------
 CREATE TABLE `system_log`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `app_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用编码',
   `user_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登陆名',
@@ -109,7 +109,7 @@ CREATE TABLE `system_log`  (
 -- Table structure for system_user
 -- ----------------------------
 CREATE TABLE `system_user`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `app_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用编码',

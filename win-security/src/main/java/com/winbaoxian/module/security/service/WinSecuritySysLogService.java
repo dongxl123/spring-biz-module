@@ -1,5 +1,6 @@
 package com.winbaoxian.module.security.service;
 
+import com.winbaoxian.module.security.config.AnnotationAttributesHolder;
 import com.winbaoxian.module.security.model.dto.WinSecuritySysLogDTO;
 import com.winbaoxian.module.security.model.entity.WinSecuritySysLogEntity;
 import com.winbaoxian.module.security.model.mapper.WinSecuritySysLogMapper;
@@ -20,6 +21,7 @@ public class WinSecuritySysLogService {
 
     public WinSecuritySysLogDTO addSysLog(WinSecuritySysLogDTO dto) {
         WinSecuritySysLogEntity entity = WinSecuritySysLogMapper.INSTANCE.toSysLogEntity(dto);
+        entity.setAppCode(AnnotationAttributesHolder.INSTANCE.getAppCode());
         WinSecuritySysLogEntity retEntity = winSecuritySysLogRepository.save(entity);
         return WinSecuritySysLogMapper.INSTANCE.toSysLogDTO(retEntity);
     }

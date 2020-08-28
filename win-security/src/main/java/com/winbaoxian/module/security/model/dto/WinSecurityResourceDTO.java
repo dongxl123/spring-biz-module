@@ -34,7 +34,10 @@ public class WinSecurityResourceDTO implements Serializable {
 
     /** 更新时间 */
     private Date updateTime;
-
+    /**
+     * 应用编码
+     */
+    private String appCode;
     /** 资源名称 */
     private String name;
 

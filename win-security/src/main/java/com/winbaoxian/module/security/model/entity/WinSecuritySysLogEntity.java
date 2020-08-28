@@ -48,7 +48,11 @@ public class WinSecuritySysLogEntity implements Serializable {
     /** 登陆名 */
     @Column(name = "USER_NAME")
     private String userName;
-
+    /**
+     * 应用编码
+     */
+    @Column(name = "APP_CODE")
+    private String appCode;
     /** 角色名 */
     @Column(name = "ROLE_NAME")
     private String roleName;

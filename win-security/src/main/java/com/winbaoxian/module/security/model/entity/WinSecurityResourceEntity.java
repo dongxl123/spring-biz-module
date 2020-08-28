@@ -50,7 +50,11 @@ public class WinSecurityResourceEntity implements Serializable {
     @Column(name = "UPDATE_TIME")
     @UpdateTimestamp
     private Date updateTime;
-
+    /**
+     * 应用编码
+     */
+    @Column(name = "APP_CODE")
+    private String appCode;
     /** 资源名称 */
     @Column(name = "NAME")
     private String name;

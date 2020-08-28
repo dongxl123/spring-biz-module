@@ -14,6 +14,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  */
 @SpringBootApplication
 @EnableWinSecurity(
+        appCode = "SPRINGBOOTDEMO",
         entityManagerFactoryRef = "entityManagerFactoryCitymanager",
         transactionManagerRef = "transactionManagerCitymanager",
         extensionServiceProcessors = {RoleAddProcessorImpl.class, RoleUpdateProcessorImpl.class, UserAddProcessorImpl.class, UserUpdateProcessorImpl.class, UserPageProcessorImpl.class},

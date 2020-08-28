@@ -57,6 +57,11 @@ public class WinSecurityUserEntity implements Serializable {
     @Column(name = "UPDATE_TIME")
     @UpdateTimestamp
     private Date updateTime;
+    /**
+     * 应用编码
+     */
+    @Column(name = "APP_CODE")
+    private String appCode;
 
     /**
      * 登陆名
@@ -89,5 +94,9 @@ public class WinSecurityUserEntity implements Serializable {
     /**  */
     @Column(name = "DELETED")
     private Boolean deleted;
-
+    /**
+     * 扩展属性
+     */
+    @Column(name = "EXT_ATTRIBUTE")
+    private String extAttribute;
 }

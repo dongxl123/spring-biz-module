@@ -19,4 +19,9 @@ public enum AnnotationAttributesHolder {
     public void setEnableWinSecurity(AnnotationAttributes enableWinSecurity) {
         this.enableWinSecurity = enableWinSecurity;
     }
+
+    public String getAppCode() {
+        return enableWinSecurity.getString(EnableWinSecurityAttributeEnum.APP_CODE.getValue());
+    }
+
 }

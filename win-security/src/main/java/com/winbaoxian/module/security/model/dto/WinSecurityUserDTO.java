@@ -36,7 +36,10 @@ public class WinSecurityUserDTO implements Serializable {
 
     /** 更新时间 */
     private Date updateTime;
-
+    /**
+     * 应用编码
+     */
+    private String appCode;
     /** 登陆名 */
     @SearchParam(compare= SearchParam.COMPARE.like)
     private String userName;
@@ -59,5 +62,8 @@ public class WinSecurityUserDTO implements Serializable {
     private Boolean superAdminFlag;
 
     private Boolean deleted;
-
+    /**
+     * 扩展属性
+     */
+    private String extAttribute;
 }

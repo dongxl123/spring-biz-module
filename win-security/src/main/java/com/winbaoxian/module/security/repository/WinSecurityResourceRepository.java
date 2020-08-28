@@ -9,21 +9,19 @@ import java.util.List;
 
 public interface WinSecurityResourceRepository extends JpaRepository<WinSecurityResourceEntity, Long>, JpaSpecificationExecutor<WinSecurityResourceEntity> {
 
-    WinSecurityResourceEntity findOneById(Long id);
+    WinSecurityResourceEntity findOneByAppCodeAndId(String appCode, Long id);
 
-    List<WinSecurityResourceEntity> findAllByDeletedFalse();
+    List<WinSecurityResourceEntity> findAllByAppCodeAndStatusAndDeletedFalseOrderBySeqAsc(String appCode, Integer status);
 
-    List<WinSecurityResourceEntity> findAllByStatusAndDeletedFalseOrderBySeqAsc(Integer status);
+    boolean existsByAppCodeAndCodeAndPidAndDeletedFalse(String appCode, String code, Long pid);
 
-    boolean existsByCodeAndPidAndDeletedFalse(String code, Long pid);
+    boolean existsByAppCodeAndCodeAndPidAndIdNotAndDeletedFalse(String appCode, String code, Long pid, Long id);
 
-    boolean existsByCodeAndPidAndIdNotAndDeletedFalse(String code, Long pid, Long id);
+    List<WinSecurityResourceEntity> findByAppCodeAndPidAndDeletedFalse(String appCode, Long pid);
 
-    List<WinSecurityResourceEntity> findByPidAndDeletedFalse(Long pid);
+    @Query("select distinct a from WinSecurityResourceEntity a,WinSecurityRoleResourceEntity b,WinSecurityUserRoleEntity c,WinSecurityRoleEntity d WHERE a.id= b.resourceId and b.roleId = c.roleId and b.roleId=d.id and a.appCode=?1 and c.userId=?2 and a.deleted=false and a.status=1 and d.status=1 order by a.seq asc ")
+    List<WinSecurityResourceEntity> getValidResourceListByUserId(String appCode, Long userId);
 
-    @Query("select distinct a from WinSecurityResourceEntity a,WinSecurityRoleResourceEntity b,WinSecurityUserRoleEntity c,WinSecurityRoleEntity d WHERE a.id= b.resourceId and b.roleId = c.roleId and b.roleId=d.id and c.userId=?1 and a.deleted=false and a.status=1 and d.status=1 order by a.seq asc ")
-    List<WinSecurityResourceEntity> getValidResourceListByUserId(Long userId);
-
-    List<WinSecurityResourceEntity> findByPidAndDeletedFalseOrderBySeqAscIdAsc(Long pid);
+    List<WinSecurityResourceEntity> findByAppCodeAndPidAndDeletedFalseOrderBySeqAscIdAsc(String appCode, Long pid);
 
 }
