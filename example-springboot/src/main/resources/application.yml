@@ -8,8 +8,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
-    properties:
-      hibernate.id.new_generator_mappings: false
   datasource:
     citymanager:
       driver-class-name: com.mysql.cj.jdbc.Driver
