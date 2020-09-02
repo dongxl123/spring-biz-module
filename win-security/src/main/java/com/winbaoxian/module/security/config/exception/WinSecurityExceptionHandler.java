@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * 全局存在唯一个，当项目中已经定义了，改类无作用
  */
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.winbaoxian.module.security.controller")
 public class WinSecurityExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(WinSecurityExceptionHandler.class);
 
