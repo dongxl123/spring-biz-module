@@ -1,10 +1,13 @@
 package com.winbaoxian.module.security.filter;
 
+import com.winbaoxian.module.security.config.AnnotationAttributesHolder;
+import com.winbaoxian.module.security.config.EnableWinSecurityAttributeEnum;
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import com.winbaoxian.module.security.utils.MemoryExpirationCache;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -50,6 +53,17 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
     }
 
     private boolean isAccessAllowed(ServletRequest request, ServletResponse response) throws Exception {
+        String path = WebUtils.toHttp(request).getRequestURI();
+        log.info("WinSecurityUrlFilter, 请求路径, path:{}", path);
+        String[] excludePatterns = AnnotationAttributesHolder.INSTANCE.getEnableWinSecurity().getStringArray(EnableWinSecurityAttributeEnum.EXCLUDE_PATH_PATTERNS.getValue());
+        if (ArrayUtils.isNotEmpty(excludePatterns)) {
+            for (String excludePattern : excludePatterns) {
+                if (pathsMatch(excludePattern, path)) {
+                    log.info("WinSecurityUrlFilter, 匹配到排除路径, path:{}, excludePattern:{}", path, excludePattern);
+                     return true;
+                }
+            }
+        }
         List<WinSecurityResourceDTO> resourceList = null;
         if (cache.keys().contains(RESOURCE_CACHE_KEY)) {
             resourceList = cache.get(RESOURCE_CACHE_KEY);
@@ -58,8 +72,6 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
             cache.put(RESOURCE_CACHE_KEY, resourceList);
             log.info("WinSecurityUrlFilter, 时间:{}, 从数据库获取数据", new Date());
         }
-        String path = WebUtils.toHttp(request).getRequestURI();
-        log.info("WinSecurityUrlFilter, 请求路径, path:{}", path);
         Long resourceId = null;
         if (CollectionUtils.isNotEmpty(resourceList)) {
             for (WinSecurityResourceDTO resourceDTO : resourceList) {
@@ -79,15 +91,11 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
         Subject subject = SecurityUtils.getSubject();
         //无权限配置
         if (resourceId == null) {
-            if (isSpecialResource(path)) {
-                //无权限配置（特殊路径），登录用户有权访问
-                if (subject != null && subject.isAuthenticated()) {
-                    return true;
-                }
-                return false;
+            //无权限配置（特殊路径+非特殊路径），登录用户有权访问
+            if (subject != null && subject.isAuthenticated()) {
+                return true;
             }
-            //无权限配置（非特殊路径），直接通过
-            return true;
+            return false;
         }
         //有权限配置，登录用户有该权限通过
         if (subject != null && subject.isAuthenticated()) {
