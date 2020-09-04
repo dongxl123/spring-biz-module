@@ -11,6 +11,7 @@ public enum EnableWinSecurityAttributeEnum {
     CONTROLLER_SCOPES("controllerScopes"),
     EXTENSION_SERVICE_PROCESSORS("extensionServiceProcessors"),
     SYS_LOG("sysLog"),
+    EXCLUDE_PATH_PATTERNS("excludePathPatterns"),
     APP_CODE("appCode"),
     ;
 
