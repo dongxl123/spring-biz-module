@@ -82,24 +82,20 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
         Subject subject = SecurityUtils.getSubject();
         //无权限配置
         if (resourceId == null) {
-            if (isSpecialResource(path)) {
-                //无权限配置（特殊路径），登录用户有权访问
-                if (subject != null && subject.isAuthenticated()) {
-                    return true;
-                }
-                return false;
-            }else {
-                //无权限配置（非特殊路径），排除路径，直接通过
-                String[] excludePatterns = AnnotationAttributesHolder.INSTANCE.getEnableWinSecurity().getStringArray(EnableWinSecurityAttributeEnum.EXCLUDE_PATH_PATTERNS.getValue());
-                if (ArrayUtils.isNotEmpty(excludePatterns)) {
-                    for (String excludePattern : excludePatterns) {
-                        if (pathsMatch(excludePattern, path)) {
-                            return true;
-                        }
+            //无权限配置（特殊路径+非特殊路径），登录用户有权访问
+            if (subject != null && subject.isAuthenticated()) {
+                return true;
+            }
+            //匹配到排除路径，直接通过
+            String[] excludePatterns = AnnotationAttributesHolder.INSTANCE.getEnableWinSecurity().getStringArray(EnableWinSecurityAttributeEnum.EXCLUDE_PATH_PATTERNS.getValue());
+            if (ArrayUtils.isNotEmpty(excludePatterns)) {
+                for (String excludePattern : excludePatterns) {
+                    if (pathsMatch(excludePattern, path)) {
+                        return true;
                     }
                 }
-                return false;
             }
+            return false;
         }
         //有权限配置，登录用户有该权限通过
         if (subject != null && subject.isAuthenticated()) {
