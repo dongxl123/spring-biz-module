@@ -17,6 +17,7 @@ public enum EnableWinSecurityAttributeEnum {
     EXTENSION_SERVICE_PROCESSORS("extensionServiceProcessors"),
     EXTENSION_SERVICE_FILLERS("extensionServiceFillers"),
     SYS_LOG("sysLog"),
+    EXCLUDE_PATH_PATTERNS("excludePathPatterns"),
     ;
 
     private final String value;
