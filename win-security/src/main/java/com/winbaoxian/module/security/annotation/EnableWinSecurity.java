@@ -86,6 +86,11 @@ public @interface EnableWinSecurity {
      */
     boolean sysLog() default false;
 
+    /**
+     * excludePathPatterns
+     */
+    String[] excludePathPatterns() default {};
+
 }
 
 
