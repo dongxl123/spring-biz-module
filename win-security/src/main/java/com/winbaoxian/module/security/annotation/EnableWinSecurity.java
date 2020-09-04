@@ -89,7 +89,7 @@ public @interface EnableWinSecurity {
     /**
      * excludePathPatterns
      */
-    String[] excludePathPatterns() default {};
+    String[] excludePathPatterns() default {"/**"};
 
 }
 
