@@ -18,6 +18,7 @@
  */
 package com.winbaoxian.module.security.filter;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -92,6 +93,7 @@ public class WinCasFilter extends PathMatchingFilter {
             AuthenticationToken token = createToken(request, response);
             if (token != null) {
                 subject.login(token);
+                logger.debug("cas tryLogin success,{}", JSON.toJSONString(token.getPrincipal()));
             }
         } catch (AuthenticationException e) {
             logger.error("cas tryLogin failed", e);
