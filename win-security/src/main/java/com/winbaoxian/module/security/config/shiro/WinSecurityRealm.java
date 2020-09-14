@@ -4,6 +4,7 @@ import com.winbaoxian.module.security.model.dto.WinSecurityRoleDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityUserDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityPrincipal;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
+import com.winbaoxian.module.security.model.enums.LoginType;
 import com.winbaoxian.module.security.model.enums.WinSecurityStatusEnum;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import com.winbaoxian.module.security.service.WinSecurityRoleService;
@@ -63,6 +64,7 @@ public class WinSecurityRealm extends AuthorizingRealm {
         WinSecurityPrincipal principal = new WinSecurityPrincipal();
         principal.setId(user.getId());
         principal.setUserName(user.getUserName());
+        principal.setLoginType(LoginType.valueOf(token.getHost()));
         return new SimpleAuthenticationInfo(principal, null, getName());
     }
 

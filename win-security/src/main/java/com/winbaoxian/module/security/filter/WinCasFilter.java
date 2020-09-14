@@ -19,13 +19,13 @@
 package com.winbaoxian.module.security.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.winbaoxian.module.security.model.enums.LoginType;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.PathMatchingFilter;
-import org.apache.shiro.web.util.WebUtils;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +74,7 @@ public class WinCasFilter extends PathMatchingFilter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         Principal principal = httpRequest.getUserPrincipal();
         if (principal != null && principal instanceof AttributePrincipal) {
-            return new UsernamePasswordToken(principal.getName(), (String) null);
+            return new UsernamePasswordToken(principal.getName(), (String) null, LoginType.CAS.name());
         }
         return null;
     }
