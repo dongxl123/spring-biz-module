@@ -1,7 +1,7 @@
 package com.winbaoxian.module.security.service;
 
-import com.alibaba.fastjson.JSON;
 import com.winbaoxian.module.security.model.dto.*;
+import com.winbaoxian.module.security.model.enums.LoginType;
 import com.winbaoxian.module.security.model.enums.WinSecurityErrorEnum;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityException;
 import com.winbaoxian.module.security.model.exceptions.WinSecurityUnAuthException;
@@ -61,7 +61,7 @@ public class WinSecurityAccessService {
     private void loginInternal(String userName, String password) {
         try {
             Subject subject = SecurityUtils.getSubject();
-            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password);
+            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password, LoginType.LOCAL.name());
             //进行验证，这里可以捕获异常，然后返回对应信息
             subject.login(usernamePasswordToken);
         } catch (ExcessiveAttemptsException e) {
