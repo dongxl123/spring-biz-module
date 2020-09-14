@@ -1,5 +1,6 @@
 package com.winbaoxian.module.security.model.dto;
 
+import com.winbaoxian.module.security.model.enums.LoginType;
 import lombok.Data;
 
 /**
@@ -11,5 +12,6 @@ public class WinSecurityPrincipal {
 
     private Long id;
     private String userName;
+    private LoginType loginType;
 
 }

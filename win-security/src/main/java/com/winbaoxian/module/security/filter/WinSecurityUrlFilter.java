@@ -4,6 +4,7 @@ import com.winbaoxian.module.security.config.AnnotationAttributesHolder;
 import com.winbaoxian.module.security.config.EnableWinSecurityAttributeEnum;
 import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.dto.WinSecurityResourceDTO;
+import com.winbaoxian.module.security.model.enums.LoginType;
 import com.winbaoxian.module.security.service.WinSecurityResourceService;
 import com.winbaoxian.module.security.utils.MemoryExpirationCache;
 import org.apache.commons.collections.CollectionUtils;
@@ -154,7 +155,7 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         Principal principal = httpRequest.getUserPrincipal();
         if (principal != null && principal instanceof AttributePrincipal) {
-            return new UsernamePasswordToken(principal.getName(), (String) null);
+            return new UsernamePasswordToken(principal.getName(), (String) null, LoginType.CAS.name());
         }
         return null;
     }
