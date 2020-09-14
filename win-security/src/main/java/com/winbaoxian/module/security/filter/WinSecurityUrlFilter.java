@@ -55,17 +55,6 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
     private boolean isAccessAllowed(ServletRequest request, ServletResponse response) throws Exception {
         String path = WebUtils.toHttp(request).getRequestURI();
         log.info("WinSecurityUrlFilter, 请求路径, path:{}", path);
-        if (!isSpecialResource(path)) {
-            //匹配到排除路径，直接通过
-            String[] excludePatterns = AnnotationAttributesHolder.INSTANCE.getEnableWinSecurity().getStringArray(EnableWinSecurityAttributeEnum.EXCLUDE_PATH_PATTERNS.getValue());
-            if (ArrayUtils.isNotEmpty(excludePatterns)) {
-                for (String excludePattern : excludePatterns) {
-                    if (pathsMatch(excludePattern, path)) {
-                        return true;
-                    }
-                }
-            }
-        }
         List<WinSecurityResourceDTO> resourceList = null;
         if (cache.keys().contains(RESOURCE_CACHE_KEY)) {
             resourceList = cache.get(RESOURCE_CACHE_KEY);
@@ -96,6 +85,17 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
             //无权限配置（特殊路径+非特殊路径），登录用户有权访问
             if (subject != null && subject.isAuthenticated()) {
                 return true;
+            }
+            if (!isSpecialResource(path)) {
+                //匹配到排除路径，直接通过
+                String[] excludePatterns = AnnotationAttributesHolder.INSTANCE.getEnableWinSecurity().getStringArray(EnableWinSecurityAttributeEnum.EXCLUDE_PATH_PATTERNS.getValue());
+                if (ArrayUtils.isNotEmpty(excludePatterns)) {
+                    for (String excludePattern : excludePatterns) {
+                        if (pathsMatch(excludePattern, path)) {
+                            return true;
+                        }
+                    }
+                }
             }
             return false;
         }
