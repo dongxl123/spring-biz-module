@@ -90,6 +90,7 @@ public class WinSecurityUrlFilter extends PathMatchingFilter {
             if (!isSpecialResource(path)) {
                 //匹配到排除路径，直接通过
                 String[] excludePatterns = AnnotationAttributesHolder.INSTANCE.getEnableWinSecurity().getStringArray(EnableWinSecurityAttributeEnum.EXCLUDE_PATH_PATTERNS.getValue());
+                excludePatterns = ArrayUtils.add(excludePatterns, WinSecurityConstant.CAS_API_LOGOUT_URL);
                 if (ArrayUtils.isNotEmpty(excludePatterns)) {
                     for (String excludePattern : excludePatterns) {
                         if (pathsMatch(excludePattern, path)) {

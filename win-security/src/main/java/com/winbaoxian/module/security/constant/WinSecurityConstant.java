@@ -13,5 +13,6 @@ public interface WinSecurityConstant {
     String[] ENTITY_PACKAGES = {"com.winbaoxian.module.security.model.entity"};
     String BEAN_NAME_SHIRO_FILTER = "shiroFilter";
     String SHIRO_COOKIE_NAME = "SHIRO_COOKIE";
-
+    String CAS_API_AUTH_URL = "/**/api/winCas/auth";
+    String CAS_API_LOGOUT_URL = "/**/api/winCas/logout";
 }
