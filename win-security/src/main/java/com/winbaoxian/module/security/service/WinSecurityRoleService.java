@@ -175,7 +175,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     }
 
     public List<D> getValidRoleListByUserId(Long userId) {
-        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.getValidRoleListByUserIdAndAppId(userId), winSecurityClassLoaderConfiguration.getRoleDTOClass());
+        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.getValidRoleListByUserId(userId), winSecurityClassLoaderConfiguration.getRoleDTOClass());
     }
 
 }
