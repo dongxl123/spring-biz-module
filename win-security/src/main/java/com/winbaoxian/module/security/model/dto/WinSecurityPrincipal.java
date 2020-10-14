@@ -11,6 +11,7 @@ import lombok.Data;
 public class WinSecurityPrincipal {
 
     private Long id;
+    private Long appId;
     private String userName;
     private LoginType loginType;
 

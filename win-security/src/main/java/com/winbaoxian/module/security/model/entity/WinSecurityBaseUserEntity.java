@@ -65,6 +65,12 @@ public class WinSecurityBaseUserEntity implements Serializable {
     private String userName;
 
     /**
+     * 商户ID
+     */
+    @Column(name = "APP_ID")
+    private Long appId;
+
+    /**
      * 用户名
      */
     @Column(name = "NAME")

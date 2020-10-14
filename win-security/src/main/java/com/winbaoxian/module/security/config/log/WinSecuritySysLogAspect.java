@@ -77,6 +77,7 @@ public class WinSecuritySysLogAspect {
             if (winSecurityAccessService.isAuthenticated()) {
                 WinSecurityBaseUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
                 if (userDTO != null) {
+                    sysLog.setAppId(userDTO.getAppId());
                     sysLog.setUserName(userDTO.getUserName());
                 }
                 List<WinSecurityBaseRoleDTO> roleDTOList = winSecurityAccessService.getLoginUserRoleList();

@@ -1,4 +1,4 @@
-description = 'win-cas'
+description = 'win-cas-tob'
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
@@ -19,7 +19,7 @@ uploadArchives {
             pom.project {
                 name = project.name
                 packaging = 'jar'
-                description = 'win cas'
+                description = 'win cas tob'
             }
         }
     }

@@ -51,6 +51,12 @@ public class WinSecurityBaseRoleEntity implements Serializable {
     @UpdateTimestamp
     private Date updateTime;
 
+    /**
+     * 商户ID
+     */
+    @Column(name = "APP_ID")
+    private Long appId;
+
     /** 角色名 */
     @Column(name = "NAME")
     private String name;

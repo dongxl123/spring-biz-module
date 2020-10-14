@@ -11,19 +11,7 @@ import java.util.List;
 
 public interface WinSecurityRoleRepository<E extends WinSecurityBaseRoleEntity> extends JpaRepository<E, Long>, JpaSpecificationExecutor<E> {
 
-    E findOneById(Long id);
-
-    List<E> findAllByDeletedFalseOrderBySeqAsc();
-
-    Page<E> findAllByDeletedFalseOrderBySeqAsc(Pageable pageable);
-
-    @Query("select a from WinSecurityBaseRoleEntity a,WinSecurityUserRoleEntity b WHERE a.id= b.roleId and b.userId =?1 and a.deleted=false")
-    List<E> getRoleListByUserId(Long userId);
-
-    E findByNameAndDeletedFalse(String name);
-
-    @Query("select a from WinSecurityBaseRoleEntity a,WinSecurityUserRoleEntity b WHERE a.id= b.roleId and b.userId =?1 and a.deleted=false")
-    E getRoleByUserId(Long userId);
+    E findOneByIdAndAppId(Long id, Long appId);
 
     @Query("select a from WinSecurityBaseRoleEntity a,WinSecurityUserRoleEntity b WHERE a.id= b.roleId and b.userId =?1 and a.deleted=false and a.status = 1")
     List<E> getValidRoleListByUserId(Long userId);

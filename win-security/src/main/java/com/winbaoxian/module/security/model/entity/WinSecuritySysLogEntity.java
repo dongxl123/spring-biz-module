@@ -45,6 +45,12 @@ public class WinSecuritySysLogEntity implements Serializable {
     @CreationTimestamp
     private Date createTime;
 
+    /**
+     * 商户ID
+     */
+    @Column(name = "APP_ID")
+    private Long appId;
+
     /** 登陆名 */
     @Column(name = "USER_NAME")
     private String userName;

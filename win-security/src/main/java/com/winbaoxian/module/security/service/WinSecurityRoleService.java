@@ -44,8 +44,11 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     private IRoleAddProcessor<D, E> iRoleAddProcessor;
     @Autowired(required = false)
     private IRoleUpdateProcessor<D, E> iRoleUpdateProcessor;
+    @Resource
+    private WinSecurityAccessService winSecurityAccessService;
 
     public D addRole(D dto) {
+        dto.setAppId(winSecurityAccessService.getLoginAppId());
         if (iRoleAddProcessor != null) {
             iRoleAddProcessor.preProcess(dto);
         }
@@ -72,7 +75,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     }
 
     public void deleteRole(Long id) {
-        E entity = winSecurityRoleRepository.findOneById(id);
+        E entity = winSecurityRoleRepository.findOneByIdAndAppId(id, winSecurityAccessService.getLoginAppId());
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
         }
@@ -88,7 +91,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        E persistent = winSecurityRoleRepository.findOneById(id);
+        E persistent = winSecurityRoleRepository.findOneByIdAndAppId(id, winSecurityAccessService.getLoginAppId());
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_ROLE_NOT_EXISTS);
         }
@@ -123,7 +126,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     }
 
     public D getRole(Long id) {
-        D roleDTO = (D) WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.findOneById(id), winSecurityClassLoaderConfiguration.getRoleDTOClass());
+        D roleDTO = (D) WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.findOneByIdAndAppId(id, winSecurityAccessService.getLoginAppId()), winSecurityClassLoaderConfiguration.getRoleDTOClass());
         if (roleDTO == null) {
             return null;
         }
@@ -133,6 +136,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     }
 
     public List<D> getRoleList(D params) {
+        params.setAppId(winSecurityAccessService.getLoginAppId());
         Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getRoleEntityClass());
         Sort sort = Sort.by(Sort.Direction.ASC, WinSecurityConstant.SORT_COLUMN_SEQ);
         List<E> roleList = winSecurityRoleRepository.findAll(specification, sort);
@@ -141,6 +145,7 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
     }
 
     public PaginationDTO<D> getRolePage(D params, Pagination pagination) {
+        params.setAppId(winSecurityAccessService.getLoginAppId());
         Specification<E> specification = (Specification<E>) QuerySpecificationUtils.INSTANCE.getSingleSpecification(params, winSecurityClassLoaderConfiguration.getRoleEntityClass());
         Pageable pageable = Pagination.createPageable(pagination, WinSecurityConstant.SORT_COLUMN_SEQ, Sort.Direction.ASC.name());
         Page<E> page = winSecurityRoleRepository.findAll(specification, pageable);
@@ -169,20 +174,8 @@ public class WinSecurityRoleService<D extends WinSecurityBaseRoleDTO, E extends 
         return resourceIdList;
     }
 
-    public List<D> getRoleListByUserId(Long userId) {
-        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.getRoleListByUserId(userId), winSecurityClassLoaderConfiguration.getRoleDTOClass());
-    }
-
     public List<D> getValidRoleListByUserId(Long userId) {
-        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.getValidRoleListByUserId(userId), winSecurityClassLoaderConfiguration.getRoleDTOClass());
-    }
-
-    public D getRoleByName(String name) {
-        return (D) WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.findByNameAndDeletedFalse(name), winSecurityClassLoaderConfiguration.getRoleDTOClass());
-    }
-
-    public D getRoleByUserId(Long userId) {
-        return (D) WinSecurityRoleMapper.INSTANCE.toRoleDTO(winSecurityRoleRepository.getRoleByUserId(userId), winSecurityClassLoaderConfiguration.getRoleDTOClass());
+        return WinSecurityRoleMapper.INSTANCE.toRoleDTOList(winSecurityRoleRepository.getValidRoleListByUserIdAndAppId(userId), winSecurityClassLoaderConfiguration.getRoleDTOClass());
     }
 
 }

@@ -1,7 +1,6 @@
 package com.winbaoxian.module.security.service;
 
 import com.winbaoxian.module.security.config.loader.WinSecurityClassLoaderConfiguration;
-import com.winbaoxian.module.security.constant.WinSecurityConstant;
 import com.winbaoxian.module.security.model.common.Pagination;
 import com.winbaoxian.module.security.model.common.PaginationDTO;
 import com.winbaoxian.module.security.model.dto.WinSecurityBaseUserDTO;
@@ -25,7 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -57,10 +55,11 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     private IUserFiller<D> iUserFiller;
 
     public D addUser(D dto) {
+        dto.setAppId(winSecurityAccessService.getLoginAppId());
         if (iUserAddProcessor != null) {
             iUserAddProcessor.preProcess(dto);
         }
-        if (winSecurityUserRepository.existsByUserNameAndDeletedFalse(dto.getUserName())) {
+        if (winSecurityUserRepository.existsByUserNameAndAppIdAndDeletedFalse(dto.getUserName(), winSecurityAccessService.getLoginAppId())) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
         if (iUserAddProcessor != null) {
@@ -84,7 +83,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public void deleteUser(Long id) {
-        E entity = winSecurityUserRepository.findOneById(id);
+        E entity = winSecurityUserRepository.findOneByIdAndAppId(id, winSecurityAccessService.getLoginAppId());
         if (entity == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
@@ -100,12 +99,12 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_PARAM_NOT_EXISTS);
         }
         Long id = dto.getId();
-        E persistent = winSecurityUserRepository.findOneById(id);
+        E persistent = winSecurityUserRepository.findOneByIdAndAppId(id, winSecurityAccessService.getLoginAppId());
         if (persistent == null) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_NOT_EXISTS);
         }
         //登录名更新时，判断是否重复
-        if (StringUtils.isNoneBlank(dto.getUserName()) && winSecurityUserRepository.existsByUserNameAndIdNotAndDeletedFalse(dto.getUserName(), id)) {
+        if (StringUtils.isNoneBlank(dto.getUserName()) && winSecurityUserRepository.existsByUserNameAndIdNotAndAppIdAndDeletedFalse(dto.getUserName(), id, winSecurityAccessService.getLoginAppId())) {
             throw new WinSecurityException(WinSecurityErrorEnum.COMMON_USER_EXISTS);
         }
         if (iUserUpdateProcessor != null) {
@@ -135,7 +134,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public D getUser(Long id) {
-        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneById(id), winSecurityClassLoaderConfiguration.getUserDTOClass());
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByIdAndAppId(id, winSecurityAccessService.getLoginAppId()), winSecurityClassLoaderConfiguration.getUserDTOClass());
         if (userDTO == null) {
             return null;
         }
@@ -148,6 +147,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public List<D> getUserList(D params) {
+        params.setAppId(winSecurityAccessService.getLoginAppId());
         if (winSecurityAccessService.isAuthenticated()) {
             WinSecurityBaseUserDTO userDTO = winSecurityAccessService.getLoginUserInfo();
             if (userDTO != null && BooleanUtils.isNotTrue(userDTO.getSuperAdminFlag())) {
@@ -164,6 +164,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public PaginationDTO<D> getUserPage(D params, Pagination pagination) {
+        params.setAppId(winSecurityAccessService.getLoginAppId());
         if (iUserPageProcessor != null) {
             iUserPageProcessor.preProcess(params);
         }
@@ -217,7 +218,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public D getUserByUserName(String userName) {
-        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByUserNameAndDeletedFalse(userName), winSecurityClassLoaderConfiguration.getUserDTOClass());
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByUserNameAndAppIdAndDeletedFalse(userName, winSecurityAccessService.getLoginAppId()), winSecurityClassLoaderConfiguration.getUserDTOClass());
         if (userDTO == null) {
             return null;
         }
@@ -227,7 +228,7 @@ public class WinSecurityUserService<D extends WinSecurityBaseUserDTO, E extends 
     }
 
     public D getUserByMobile(String mobile) {
-        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByMobileAndDeletedFalse(mobile), winSecurityClassLoaderConfiguration.getUserDTOClass());
+        D userDTO = (D) WinSecurityUserMapper.INSTANCE.toUserDTO(winSecurityUserRepository.findOneByMobileAndAppIdAndDeletedFalse(mobile, winSecurityAccessService.getLoginAppId()), winSecurityClassLoaderConfiguration.getUserDTOClass());
         if (userDTO == null) {
             return null;
         }

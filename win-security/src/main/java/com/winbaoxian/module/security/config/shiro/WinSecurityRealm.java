@@ -64,6 +64,7 @@ public class WinSecurityRealm extends AuthorizingRealm {
         WinSecurityPrincipal principal = new WinSecurityPrincipal();
         principal.setId(user.getId());
         principal.setUserName(user.getUserName());
+        principal.setAppId(user.getAppId());
         principal.setLoginType(LoginType.valueOf(token.getHost()));
         return new SimpleAuthenticationInfo(principal, null, getName());
     }

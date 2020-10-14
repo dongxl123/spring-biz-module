@@ -48,6 +48,7 @@ CREATE TABLE `{prefix}_role` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `app_id` bigint(20) NOT NULL COMMENT '商户号ID',
   `name` varchar(64) NOT NULL COMMENT '角色名',
   `description` varchar(255) DEFAULT NULL COMMENT '简介',
   `seq` bigint(20) NOT NULL DEFAULT '0' COMMENT '排序号',
@@ -75,6 +76,7 @@ CREATE TABLE `{prefix}_role_resource` (
 CREATE TABLE `{prefix}_sys_log` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `app_id` bigint(20) NOT NULL COMMENT '商户号ID',
   `user_name` varchar(255) DEFAULT NULL COMMENT '登陆名',
   `role_name` varchar(255) DEFAULT NULL COMMENT '角色名',
   `opt_content` text COMMENT '内容',
@@ -89,6 +91,7 @@ CREATE TABLE `{prefix}_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `app_id` bigint(20) NOT NULL COMMENT '商户号ID',
   `user_name` varchar(64) NOT NULL COMMENT '登陆名',
   `name` varchar(64) DEFAULT NULL COMMENT '用户名',
   `mobile` varchar(20) DEFAULT NULL COMMENT '手机号',

@@ -132,4 +132,9 @@ public class WinSecurityAccessService {
         return allInfoDTO;
     }
 
+    public Long getLoginAppId() {
+        WinSecurityPrincipal principal = getWinSecurityPrincipal();
+        return principal.getAppId();
+    }
+
 }

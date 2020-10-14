@@ -36,7 +36,11 @@ public class WinSecurityBaseRoleDTO implements Serializable {
 
     /** 更新时间 */
     private Date updateTime;
-
+    /**
+     * 商户ID
+     */
+    private Long appId;
+    
     /** 角色名 */
     @SearchParam(compare= SearchParam.COMPARE.like)
     private String name;

@@ -10,18 +10,14 @@ import java.util.List;
 
 public interface WinSecurityUserRepository<E extends WinSecurityBaseUserEntity> extends JpaRepository<E, Long>, JpaSpecificationExecutor<E> {
 
-    E findOneById(Long id);
+    E findOneByIdAndAppId(Long id, Long appId);
 
-    boolean existsByUserNameAndDeletedFalse(String userName);
+    boolean existsByUserNameAndAppIdAndDeletedFalse(String userName, Long appId);
 
-    boolean existsByUserNameAndIdNotAndDeletedFalse(String userName, Long id);
+    boolean existsByUserNameAndIdNotAndAppIdAndDeletedFalse(String userName, Long id, Long appId);
 
-    List<E> findAllByDeletedFalse();
+    E findOneByUserNameAndAppIdAndDeletedFalse(String userName, Long appId);
 
-    Page<E> findAllByDeletedFalse(Pageable pageable);
-
-    E findOneByUserNameAndDeletedFalse(String userName);
-
-    E findOneByMobileAndDeletedFalse(String mobile);
+    E findOneByMobileAndAppIdAndDeletedFalse(String mobile, Long appId);
 
 }
