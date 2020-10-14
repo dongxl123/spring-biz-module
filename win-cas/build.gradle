@@ -1,4 +1,4 @@
-description = 'win-cas-tob'
+description = 'win-cas'
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")

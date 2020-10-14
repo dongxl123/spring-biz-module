@@ -1,4 +1,4 @@
-description = 'win-security-tob'
+description = 'win-security'
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

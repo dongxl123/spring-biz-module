@@ -4,8 +4,8 @@ apply plugin: 'war'
 //apply plugin: 'org.springframework.boot'
 
 dependencies {
-    implementation('com.winbaoxian.module:win-security-tob:1.0.0-SNAPSHOT')
-    implementation('com.winbaoxian.module:win-cas-tob:1.0.0-SNAPSHOT')
+    implementation('com.winbaoxian.module:win-security:1.0.0-tob-SNAPSHOT')
+    implementation('com.winbaoxian.module:win-cas:1.0.0-tob-SNAPSHOT')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     implementation('org.springframework.boot:spring-boot-starter-web')
     runtimeOnly('mysql:mysql-connector-java')
